@@ -1,0 +1,192 @@
+/**
+ * Style sheet
+ * @author ilGhera
+ * @package wc-restaurant-booking/css
+ * @version 0.0.9
+ */
+
+.wprb-admin {
+	display: none;
+}
+
+.wprb-form {
+	margin:3rem 0 0 0;
+}
+
+.one-of {
+	padding-bottom: 3rem;
+	border-bottom: 1px solid #ccc;
+}
+
+#premium-check {
+	margin:20px 0;
+}
+
+.premium-message {
+	width: 280px;
+	max-width: 100%;
+	font-family: 'Raleway', 'Open Sans',sans-serif;
+	font-size: 20px;
+	font-weight: 300;
+	text-align: center;
+	margin:20px 0 70px;
+	padding: 12px 20px;
+	color: #FFF;
+	text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25);
+	background-color: #F29400;
+	background-repeat: no-repeat;
+	background-position: 10px 2px;
+	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
+.premium-message.active {
+	background-color: #5BB75B;
+	background-image: url('../images/active.png');
+	padding: 12px 20px 12px 100px;
+}
+
+a.message {
+	text-decoration: none;
+}
+
+#premium-check #premium-key {
+	width: 300px;
+	color:#777;
+	font-size: 18px;
+	padding:6px;
+}
+
+#submit-key, #submit-key:focus {
+	height:auto;
+	padding:5px 15px 5px 15px !important;
+	top: -2px;
+	margin:0;
+	position: relative;
+}
+
+#submit-key:active {
+	top: 2px;
+}
+
+.nav-tab.not-available, .nav-tab.not-available:hover {
+	border-width: 1px 1px medium;
+    border-style: solid solid none;
+    border-color: #CCC #CCC -moz-use-text-color;
+    -moz-border-top-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    border-image: none;
+    background: #E4E4E4 none repeat scroll 0% 0%;
+    display: inline-block;
+    text-decoration: none;
+    opacity:0.4;
+}
+
+#wprb-orders span.wprb-copy-url {
+	display: inline-block;
+	margin-left: 10px;
+	padding: 4px 10px;
+	color: #FFF;
+	text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25);
+	background-color: #5BB75B;
+	background-image: linear-gradient(to bottom, #62C462, #51A351);
+	background-repeat: repeat-x;
+	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
+.wprb {
+	list-style: inside disc;	
+}
+
+.wprb li {
+	padding-left:15px;	
+}
+
+h3.wprb {
+	font-size: 1.3em;
+	margin: 2em 0px 1em 0;
+}
+
+h3.wprb.main {
+	font-size: 32px;
+	font-weight: 200;
+	line-height: 35px;
+}
+
+.wrap-left {
+	float: left;
+	width: 70%;
+}
+
+.wrap-right {
+	float:left; 
+	width:30%; 
+	text-align:center; 
+	padding-top:3rem;
+}
+
+.clearer {
+	clear:both;
+}
+
+form#wprb-premium-key {
+	margin: 2rem 0;
+}
+
+form#wprb-premium-key label {
+	font-size: 14px;
+	font-weight: bold;
+	display: block;
+	margin-bottom: 0.5rem;
+}
+
+
+form#wprb-premium-key input[type="text"] {
+	width: 560px;
+}
+
+form#wprb-premium-key input.button {
+	margin-top: 1rem;
+}
+
+.wprb-set-reservations-day {
+	margin-bottom: 1.3rem;
+}
+
+.wprb-col {
+	float: left;
+	width: 25%;
+}
+
+.wprb-col input {
+	max-width: 94%;
+	margin: 0;
+}
+
+.wprb-set-reservations h4 {
+	margin: 0.5rem 0;
+}
+
+.wprb-set-reservations lable {
+	font-style: italic;
+	display: inline-block;
+}
+
+
+@media screen and (max-width: 1000px) {
+
+	.wrap-left {
+		float: none;
+		width: 100%;
+	}
+
+	.wrap-right {
+		float: none; 
+		width: 100%; 
+		text-align: center; 
+		padding-top: 3rem;
+	}
+
+
+}
