@@ -12,10 +12,15 @@ class WPRB_Admin {
 	/**
 	 * Class constructor
 	 */
-	public function __construct() {
+	public function __construct( $init = false ) {
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'wprb_admin_scripts' ) );
-		add_action( 'admin_menu', array( $this, 'wprb_add_menu' ) );
+		if ( $init ) {
+			
+			add_action( 'admin_enqueue_scripts', array( $this, 'wprb_admin_scripts' ) );
+			add_action( 'admin_menu', array( $this, 'wprb_add_menu' ) );
+			add_action( 'wp_ajax_wprb-add-hours', array( $this, 'hours_element' ) );
+
+		}
 
 	}
 
@@ -42,6 +47,19 @@ class WPRB_Admin {
 			wp_enqueue_script( 'chosen', WPRB_URI . '/vendor/harvesthq/chosen/chosen.jquery.min.js' );
 			wp_enqueue_script( 'tzcheckbox', WPRB_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.js', array( 'jquery' ) );
 
+			/*Nonce*/
+			$add_hours_nonce = wp_create_nonce( 'wprb-add-hours' );
+
+			/*Pass data to the script file*/
+			wp_localize_script(
+				'wprb-js',
+				'wprbSettings',
+				array(
+					'addHoursNonce' => $add_hours_nonce,
+				)
+			);
+
+
 		}
 
 	}
@@ -55,6 +73,48 @@ class WPRB_Admin {
 		$wprb_page = add_menu_page( 'WP Restaurant Booking', 'WPRB Options', 'manage_options', 'wp-restaurant-booking', array( $this, 'wprb_options' ), 'dashicons-food', 59 );
 
 		return $wprb_page;
+
+	}
+
+
+	/**
+	 * Return a single hours element as ajax callback
+	 */
+	public function hours_element_callback() {
+
+		if( isset( $_POST['number'], $_POST['wprb-add-hours-nonce'] ) && wp_verify_nonce( $_POST['wprb-add-hours-nonce'], 'wprb-add-hours' ) ) {
+
+			$number = sanitize_text_field( wp_unslash( $_POST['number'] ) );
+
+			$this->hours_element( $number );
+
+		}
+
+		exit;
+
+	}
+
+
+	/**
+	 * Display a single hours element
+	 */
+	public function hours_element( $number = 1 ) {
+
+		echo '<div class="wprb-hours-element-1">';
+					
+			echo '<label for="wprb-bookable-hours-from-' . esc_attr( wp_unslash( $number ) ) . '">' . esc_html( wp_unslash( __( 'From', 'wprb' ) ) ) . '</label>';
+			echo '<input type="time" name="wprb-bookable-hours-from-' . esc_attr( wp_unslash( $number ) ) . '" id="wprb-bookable-hours-from" class="wprb-bookable-hours-from" min="12:00" max="23:00">'; // temp.					
+			
+			echo '<label for="wprb-bookable-hours-to-' . esc_attr( wp_unslash( $number ) ) . '">' . esc_html( wp_unslash( __( 'to', 'wprb' ) ) ) . '</label>';
+			echo '<input type="time" name="wprb-bookable-hours-to-' . esc_attr( wp_unslash( $number ) ) . '" id="wprb-bookable-hours-to" class="wprb-bookable-hours-to" min="12:00" max="23:00">'; // temp.					
+			
+			echo '<label for="wprb-bookable-hours-every-' . esc_attr( wp_unslash( $number ) ) . '">' . esc_html( wp_unslash( __( 'every (minutes)', 'wprb' ) ) ) . '</label>';
+			echo '<input type="number" name="wprb-bookable-hours-every-' . esc_attr( wp_unslash( $number ) ) . '" id="wprb-bookable-hours-every" class="wprb-bookable-hours-every" min="5" max="60" step="5">'; // temp.					
+			echo '<div class="wprb-add-hours-container">';
+				echo '<img class="add-hours" src="' . esc_url( wp_unslash( WPRB_URI . 'images/add-icon.png' ) ) . '">';
+    			echo '<img class="add-hours-hover" src="' . esc_url( wp_unslash( WPRB_URI . 'images/add-icon-hover.png' ) ) . '">';
+			echo '</div>';
+		echo '</div>';
 
 	}
 
@@ -124,4 +184,4 @@ class WPRB_Admin {
 	}
 
 }
-new WPRB_Admin();
+new WPRB_Admin( true );

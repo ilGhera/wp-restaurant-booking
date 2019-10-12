@@ -173,6 +173,37 @@ form#wprb-premium-key input.button {
 	display: inline-block;
 }
 
+[class*="wprb-hours-element-"] {
+	display: block;
+}
+
+.wprb-add-hours-container,
+.wprb-remove-hours-container {
+	display: inline;
+	position: relative;
+	top: 0.3rem;
+	cursor: pointer;
+}
+
+.add-hours-hover,
+.remove-hours-hover {
+	display: none;
+}
+
+.remove-hours, 
+.remove-hours-hover {
+	margin-left: 2px;
+}
+
+.wprb-add-hours-container:hover .add-hours,
+.wprb-remove-hours-container:hover .remove-hours {
+	display: none;
+}
+
+.wprb-add-hours-container:hover .add-hours-hover,
+.wprb-remove-hours-container:hover .remove-hours-hover {
+	display: inline;
+}
 
 @media screen and (max-width: 1000px) {
 

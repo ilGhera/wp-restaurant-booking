@@ -15,6 +15,7 @@ var wprbController = function() {
 		self.wprb_pagination();
 		self.tzCheckbox();
 		self.external_seats();
+		self.add_hours();
 	}
 
 	/**
@@ -138,10 +139,55 @@ var wprbController = function() {
 
 	}
 
+	self.add_hours = function() {
+
+		jQuery(function($){
+
+			$(document).on('click', '.add-hours-hover', function(){
+
+
+				var count = $('#wprb-bookable-hours').length;
+				var prev  = $('wprb-hours-element-' + count);
+				var next  = count + 1;
+				var data  = {
+					'action': 'wprb-add-hours',
+					'wprb-add-hours-nonce': wprbSettings.addHoursNonce,
+					'number': next
+				}
+
+				$.post(ajaxurl, data, function(response){
+
+					$(prev).next(response);
+
+					console.log(response);
+
+				})
+
+
+				// var images_f  = wprbSettings.imagesFolderURL;
+				// var container = '<div class="wprb-hours-element-' + next + '"></div>';
+				// var field     = '<input type="time" name="wprb-bookable-hours-' + next + '" id="wprb-bookable-hours" class="wprb-bookable-hours" min="12:00" max="23:00">';
+				// var del_el    = '<div class="wprb-remove-hours-container">';
+	   //  			del_el   += '<img class="remove-hours" src="' + images_f + '/remove-icon.png">';
+	   //  			del_el   += '<img class="remove-hours-hover" src="' + images_f + '/remove-icon-hover.png">';
+	   //  			del_el   += '</div>';
+
+				// $('.wprb-hours-element-' + count).after(container);
+				// $(field).appendTo('.wprb-hours-element-' + next);
+				// $(del_el).appendTo('.wprb-hours-element-' + next);
+
+				// console.log( next );
+
+			})
+
+		})
+
+	}
+
 }
 
 /**
- * Class starter with onLoad method
+ * Class starter with onLoad method+
  */
 jQuery(document).ready(function($) {
 	
