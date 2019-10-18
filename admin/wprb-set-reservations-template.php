@@ -7,11 +7,10 @@
  * @since 0.9.0
  */
 
+$admin = new WPRB_Admin();
 $external_seats = get_option( 'wprb-activate-external-seats' );
-if ( isset( $_POST['wprb-set-reservations-sent'], $_POST['wprb-set-reservations-nonce'] ) && wp_verify_nonce( $_POST['wprb-set-reservations-nonce'], 'wprb-set-reservations' ) ) {
-	$external_seats = isset( $_POST['wprb-activate-external-seats'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-activate-external-seats'] ) ) : 0;
-	update_option( 'wprb-activate-external-seats', $external_seats );
-}
+$bookable       = get_option( 'wprb-bookable' );
+$hours          = get_option( 'wprb-hours' );
 ?>
 <!-- Form -->
 <form name="wprb-set-reservations" class="wprb-set-reservations wprb-form"  method="post" action="">
@@ -28,16 +27,7 @@ if ( isset( $_POST['wprb-set-reservations-sent'], $_POST['wprb-set-reservations-
 			<th scope="row"><?php esc_html_e( 'Reservations', 'wprb' ); ?></th>
 			<td>
 				<?php
-				$week = array(
-					'mon' => __( 'Monday', 'wprb' ),
-					'tue' => __( 'Tuesday', 'wprb' ),
-					'wed' => __( 'Wednesday', 'wprb' ),
-					'thu' => __( 'Thursday', 'wprb' ),
-					'fri' => __( 'Friday', 'wprb' ),
-					'sat' => __( 'Saturday', 'wprb' ),
-					'sun' => __( 'Sunday', 'wprb' ),
-				);
-				foreach ( $week as $key => $value ) {
+				foreach ( $admin->week() as $key => $value ) {
 					echo '<div class="wprb-set-reservations-day">';
 
 						/*The cols name*/
@@ -51,11 +41,19 @@ if ( isset( $_POST['wprb-set-reservations-sent'], $_POST['wprb-set-reservations-
 						echo '<lable for="wprb-bookable-seats">' . esc_html( $value ) . '</lable><br>';
 
 						echo '<div class="wprb-col">';
-							echo '<input type="number" name="wprb-bookable-seats ' . esc_attr( $key ) . '" id="wprb-bookable-seats ' . esc_attr( $key ) . '" placeholder="0">';
+
+							/*Single data from the db*/
+							$bookable_value = isset( $bookable[ $key ]['bookable'] ) ? $bookable[ $key ]['bookable'] : null;
+
+							echo '<input type="number" name="wprb-bookable-seats-' . esc_attr( $key ) . '" id="wprb-bookable-seats" class="' . esc_attr( $key ) . '" placeholder="0" value="' . $bookable_value . '">';
 						echo '</div>';
 
 						echo '<div class="wprb-col external">';
-							echo '<input type="number" name="wprb-external-seats ' . esc_attr( $key ) . '" id="wprb-external-seats ' . esc_attr( $key ) . '" placeholder="0">';
+
+							/*Single data from the db*/
+							$externals_value = isset( $bookable[ $key ]['externals'] ) ? $bookable[ $key ]['externals'] : null;
+
+							echo '<input type="number" name="wprb-external-seats-' . esc_attr( $key ) . '" id="wprb-external-seats" class="' . esc_attr( $key ) . '" placeholder="0" value="' . $externals_value . '">';
 						echo '</div>';
 	
 						echo '<div class="wprb-col">';
@@ -73,13 +71,12 @@ if ( isset( $_POST['wprb-set-reservations-sent'], $_POST['wprb-set-reservations-
 			</td>
 		</tr>
 		<tr>
-			<th scope="row"><?php esc_html_e( 'Daily schedules', 'wprb' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Daily hours', 'wprb' ); ?></th>
 			<td>
 				<?php
-				$admin = new WPRB_Admin();
-				$admin->hours_element();
+				$admin->display_hours_elements();
 				?>
-				<p class="description"><?php esc_html_e( 'Times available every day for reservations..', 'wprb' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Times available every day for reservations.', 'wprb' ); ?></p>
 			</td>
 		</tr>
 	</table>

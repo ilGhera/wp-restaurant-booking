@@ -36,7 +36,7 @@ function load_wp_restaurant_booking() {
 
 	/*Files required*/
 	require( WPRB_ADMIN . 'class-wprb-admin.php' );
-	// require( WPRB_INCLUDES . 'wprb-functions.php' );
+	require( WPRB_INCLUDES . 'class-wprb-reservations.php' );
 	// require( WPRB_INCLUDES . 'class-wprb-settings.php' );
 
 }

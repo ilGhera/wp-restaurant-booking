@@ -1,5 +1,5 @@
 /**
- * Style sheet
+ * Admin Style Sheet
  * @author ilGhera
  * @package wc-restaurant-booking/css
  * @version 0.0.9
@@ -177,6 +177,14 @@ form#wprb-premium-key input.button {
 	display: block;
 }
 
+.hours-element label {
+	padding: 0 0.5rem;
+}
+
+label[for=wprb-bookable-hours-from] {
+	padding-left: 0;
+}
+
 .wprb-add-hours-container,
 .wprb-remove-hours-container {
 	display: inline;
@@ -190,6 +198,8 @@ form#wprb-premium-key input.button {
 	display: none;
 }
 
+.add-hours, 
+.add-hours-hover,
 .remove-hours, 
 .remove-hours-hover {
 	margin-left: 2px;

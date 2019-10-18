@@ -18,7 +18,8 @@ class WPRB_Admin {
 			
 			add_action( 'admin_enqueue_scripts', array( $this, 'wprb_admin_scripts' ) );
 			add_action( 'admin_menu', array( $this, 'wprb_add_menu' ) );
-			add_action( 'wp_ajax_wprb-add-hours', array( $this, 'hours_element' ) );
+			add_action( 'wp_ajax_wprb-add-hours', array( $this, 'hours_element_callback' ) );
+			add_action( 'admin_init', array( $this, 'save_reservations_settings' ) );
 
 		}
 
@@ -38,12 +39,12 @@ class WPRB_Admin {
 		if ( 'toplevel_page_wp-restaurant-booking' === $admin_page->base ) {
 
 			/*css*/
-			wp_enqueue_style( 'wprb-style', WPRB_URI . 'css/wp-restaurant-booking.css' );
+			wp_enqueue_style( 'wprb-admin-style', WPRB_URI . 'css/wprb-admin.css' );
 			wp_enqueue_style( 'chosen-style', WPRB_URI . '/vendor/harvesthq/chosen/chosen.min.css' );
 			wp_enqueue_style( 'tzcheckbox-style', WPRB_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.css' );
 
 			/*js*/
-			wp_enqueue_script( 'wprb-js', WPRB_URI . 'js/wprb.js', array( 'jquery' ), '1.0', true );
+			wp_enqueue_script( 'wprb-admin-js', WPRB_URI . 'js/wprb-admin.js', array( 'jquery' ), '1.0', true );
 			wp_enqueue_script( 'chosen', WPRB_URI . '/vendor/harvesthq/chosen/chosen.jquery.min.js' );
 			wp_enqueue_script( 'tzcheckbox', WPRB_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.js', array( 'jquery' ) );
 
@@ -52,7 +53,7 @@ class WPRB_Admin {
 
 			/*Pass data to the script file*/
 			wp_localize_script(
-				'wprb-js',
+				'wprb-admin-js',
 				'wprbSettings',
 				array(
 					'addHoursNonce' => $add_hours_nonce,
@@ -78,6 +79,26 @@ class WPRB_Admin {
 
 
 	/**
+	 * The days of the week
+	 *
+	 * @return array
+	 */
+	public function week() {
+
+		return array(
+			'mon' => __( 'Monday', 'wprb' ),
+			'tue' => __( 'Tuesday', 'wprb' ),
+			'wed' => __( 'Wednesday', 'wprb' ),
+			'thu' => __( 'Thursday', 'wprb' ),
+			'fri' => __( 'Friday', 'wprb' ),
+			'sat' => __( 'Saturday', 'wprb' ),
+			'sun' => __( 'Sunday', 'wprb' ),
+		);
+
+	}
+
+
+	/**
 	 * Return a single hours element as ajax callback
 	 */
 	public function hours_element_callback() {
@@ -97,24 +118,138 @@ class WPRB_Admin {
 
 	/**
 	 * Display a single hours element
+	 *
+	 * @param int   $number the number of hours element.
+	 * @param array $data single element data coming from the db.
 	 */
-	public function hours_element( $number = 1 ) {
+	public function hours_element( $number = 1, $data = array() ) {
 
-		echo '<div class="wprb-hours-element-1">';
+		$from  = isset( $data['from'] ) ? $data['from'] : ''; 
+		$to    = isset( $data['to'] ) ? $data['to'] : '';
+		$every = isset( $data['every'] ) ? $data['every'] : ''; 
+
+		echo '<div class="wprb-hours-element-' . esc_attr( wp_unslash( $number ) ) . ' hours-element">';
 					
-			echo '<label for="wprb-bookable-hours-from-' . esc_attr( wp_unslash( $number ) ) . '">' . esc_html( wp_unslash( __( 'From', 'wprb' ) ) ) . '</label>';
-			echo '<input type="time" name="wprb-bookable-hours-from-' . esc_attr( wp_unslash( $number ) ) . '" id="wprb-bookable-hours-from" class="wprb-bookable-hours-from" min="12:00" max="23:00">'; // temp.					
+			echo '<label for="wprb-bookable-hours-from">' . esc_html( wp_unslash( __( 'From', 'wprb' ) ) ) . '</label>';
+			echo '<input type="time" name="wprb-bookable-hours-from-' . esc_attr( wp_unslash( $number ) ) . '" id="wprb-bookable-hours-from" class="wprb-bookable-hours-from" min="12:00" max="23:00" value="' . $from . '" required>'; // temp.					
 			
-			echo '<label for="wprb-bookable-hours-to-' . esc_attr( wp_unslash( $number ) ) . '">' . esc_html( wp_unslash( __( 'to', 'wprb' ) ) ) . '</label>';
-			echo '<input type="time" name="wprb-bookable-hours-to-' . esc_attr( wp_unslash( $number ) ) . '" id="wprb-bookable-hours-to" class="wprb-bookable-hours-to" min="12:00" max="23:00">'; // temp.					
+			echo '<label for="wprb-bookable-hours-to">' . esc_html( wp_unslash( __( 'to', 'wprb' ) ) ) . '</label>';
+			echo '<input type="time" name="wprb-bookable-hours-to-' . esc_attr( wp_unslash( $number ) ) . '" id="wprb-bookable-hours-to" class="wprb-bookable-hours-to" min="12:00" max="23:00" value="' . $to . '" required>'; // temp.					
 			
-			echo '<label for="wprb-bookable-hours-every-' . esc_attr( wp_unslash( $number ) ) . '">' . esc_html( wp_unslash( __( 'every (minutes)', 'wprb' ) ) ) . '</label>';
-			echo '<input type="number" name="wprb-bookable-hours-every-' . esc_attr( wp_unslash( $number ) ) . '" id="wprb-bookable-hours-every" class="wprb-bookable-hours-every" min="5" max="60" step="5">'; // temp.					
-			echo '<div class="wprb-add-hours-container">';
-				echo '<img class="add-hours" src="' . esc_url( wp_unslash( WPRB_URI . 'images/add-icon.png' ) ) . '">';
-    			echo '<img class="add-hours-hover" src="' . esc_url( wp_unslash( WPRB_URI . 'images/add-icon-hover.png' ) ) . '">';
-			echo '</div>';
+			echo '<label for="wprb-bookable-hours-every">' . esc_html( wp_unslash( __( 'every (minutes)', 'wprb' ) ) ) . '</label>';
+			echo '<input type="number" name="wprb-bookable-hours-every-' . esc_attr( wp_unslash( $number ) ) . '" id="wprb-bookable-hours-every" class="wprb-bookable-hours-every" min="5" max="60" step="5" value="15" value="' . $every . '" required>'; // temp.
+
+			if ( 1 === $number ) {
+				
+				echo '<div class="wprb-add-hours-container">';
+					echo '<img class="add-hours" src="' . esc_url( wp_unslash( WPRB_URI . 'images/add-icon.png' ) ) . '">';
+	    			echo '<img class="add-hours-hover" src="' . esc_url( wp_unslash( WPRB_URI . 'images/add-icon-hover.png' ) ) . '">';
+				echo '</div>';
+
+			} else {
+
+				echo '<div class="wprb-remove-hours-container">';
+					echo '<img class="remove-hours" src="' . esc_url( wp_unslash( WPRB_URI . 'images/remove-icon.png' ) ) . '">';
+	    			echo '<img class="remove-hours-hover" src="' . esc_url( wp_unslash( WPRB_URI . 'images/remove-icon-hover.png' ) ) . '">';
+				echo '</div>';
+
+			}
+
 		echo '</div>';
+
+	}
+
+
+	public function display_hours_elements() {
+
+		$saved_hours = get_option( 'wprb-hours' );
+
+		if ( $saved_hours ) {
+
+			error_log( 'SAVED HOURS: ' . print_r( $saved_hours, true ) );
+
+			for ( $i=1; $i <= count( $saved_hours ) ; $i++ ) { 
+
+				$this->hours_element( $i, $saved_hours[ $i ] );
+
+			}
+
+		} else {
+			
+			$this->hours_element();
+
+		}
+
+	}
+
+
+	/**
+	 * Save the serervation oprion in the db
+	 */
+	public function save_reservations_settings() {
+
+		if ( isset( $_POST['wprb-set-reservations-sent'], $_POST['wprb-set-reservations-nonce'] ) && wp_verify_nonce( $_POST['wprb-set-reservations-nonce'], 'wprb-set-reservations' ) ) {
+
+			/*External seats option*/
+			$external_seats = isset( $_POST['wprb-activate-external-seats'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-activate-external-seats'] ) ) : 0;
+			
+			update_option( 'wprb-activate-external-seats', $external_seats );
+
+			
+			/*Bookable seats*/
+			$save_bookable = array();
+
+			$days = array_keys( $this->week() );
+
+			foreach ( $days as $day ) {
+				
+				$bookable = isset( $_POST[ 'wprb-bookable-seats-' . $day ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-bookable-seats-' . $day ] ) ) : 0;
+
+				$save_bookable[ $day ]['bookable'] = $bookable;
+
+				if ( $external_seats ) {
+
+					$externals = isset( $_POST[ 'wprb-external-seats-' . $day ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-external-seats-' . $day ] ) ) : 0;
+
+					$save_bookable[ $day ]['externals'] = $externals;
+
+				}
+
+			}
+			
+			update_option( 'wprb-bookable', $save_bookable );
+
+			/*Hours*/
+			$save_hours = array();
+
+
+			for ($i=1; $i <= 20; $i++) { // temp.
+
+				$from = isset( $_POST[ 'wprb-bookable-hours-from-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-bookable-hours-from-' . $i ] ) ) : null;
+
+				$to = isset( $_POST[ 'wprb-bookable-hours-to-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-bookable-hours-to-' . $i ] ) ) : null;
+
+				$every = isset( $_POST[ 'wprb-bookable-hours-every-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-bookable-hours-every-' . $i ] ) ) : null;
+
+				if ( $from && $to && $every ) {
+					
+					$save_hours[ $i ] = array(
+						'from'  => $from,
+						'to'    => $to,
+						'every' => $every,
+					);
+
+				} else {
+
+					break;
+
+				}
+
+			}			
+			
+			update_option( 'wprb-hours', $save_hours );
+
+		}
 
 	}
 

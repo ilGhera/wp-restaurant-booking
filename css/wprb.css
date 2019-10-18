@@ -1,0 +1,94 @@
+/**
+ * Style Sheet
+ * @author ilGhera
+ * @package wc-restaurant-booking/css
+ * @version 0.0.9
+ */
+
+.padding-2 {
+	padding: 2rem;
+}
+
+.wprb-booking-button {
+	position: fixed;
+	/*box-shadow: 2px 0px 10px 1px #fff;*/
+	display: inline-block;
+	padding: 0.5rem 2rem; 
+	top: 1rem;
+	left: 1rem;
+	background: #f5b016;
+	border-radius: 5px;
+	cursor: pointer;
+    pointer-events: auto;
+    z-index: 999999;
+}
+
+.wprb-booking-button:hover {
+	webkit-filter: brightness(110%);
+	filter: brightness(110%);
+}
+
+.wprb-booking-button a,
+.wprb-booking-button a:hover {
+	color: #fff !important;
+	text-decoration: none; 
+}
+
+#wprb-booking-modal {
+	padding: 0 0 2rem;
+}
+
+#wprb-booking-modal h2 {
+	text-align: center;
+}
+
+.booking-label {
+	font-weight: bold;
+}
+
+#wprb-booking-modal .header-bar {
+	display: block;
+	background: #f5b016;
+	min-height: 100px;
+}
+
+#wprb-booking-modal ul {
+	list-style: none;
+	margin: 2rem 0 0;
+	padding: 2rem 0;
+}
+
+#wprb-booking-modal ul li {
+	float: left;
+	width: 25%;
+	text-align: center;
+}
+
+#wprb-booking-modal ul li span {
+	text-align: center;
+	background-color: #f5b016;
+	width: 44px;
+	height: 44px;
+	display: inline-block;
+	border-radius: 50%;
+	margin-bottom: 0.5rem;
+	cursor: pointer;
+	opacity: 0.5; 
+}
+
+#wprb-booking-modal ul li span.active {
+	opacity: 1;
+	background-color: #fff;
+	border: 2px solid #f0a417;
+}
+
+#wprb-booking-modal ul li i {
+	font-size: 24px; 
+	padding-top: 8px;
+}
+
+
+@media screen and (max-width: 1000px) {
+
+
+}
