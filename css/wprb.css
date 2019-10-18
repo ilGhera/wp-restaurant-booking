@@ -34,8 +34,14 @@
 	text-decoration: none; 
 }
 
+.jquery-modal.blocker.current {
+	z-index: 999999;
+}
+
 #wprb-booking-modal {
 	padding: 0 0 2rem;
+	width: 320px;
+	z-index: 9999999;
 }
 
 #wprb-booking-modal h2 {
@@ -87,6 +93,20 @@
 	padding-top: 8px;
 }
 
+.booking-people {
+	padding-bottom: 2rem;
+	margin-bottom: 4rem;
+	border-bottom: 1px solid #d7d7d7;
+}
+
+.booking-date {
+	text-align: center;
+	opacity: 0.5;
+}
+
+.booking-date .datepicker {
+	margin: 0 auto;
+}
 
 @media screen and (max-width: 1000px) {
 

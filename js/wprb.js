@@ -12,23 +12,23 @@ var wprbController = function() {
 
 	self.onLoad = function() {
 
-		self.open_modal();
+		self.people_check();
 
 	}
 
 
-	self.open_modal = function() {
+	self.people_check = function() {
 
 		jQuery(function($){
 
-			$('.booking-steps li span').on('hover', function(){
+			var datepicker = $('.datepicker-here').datepicker().data('datepicker');
 
-				// $(this).hide();
+			$('.datepicker').on('click', function(){
 
-				$(this).animate({
-					'widht': '55px',
-					'heigh': '55px'
-				})
+				datepicker.clear();
+
+				alert('Please select people first');
+
 			})
 
 			// $('#wprb-booking-modal').modal({
