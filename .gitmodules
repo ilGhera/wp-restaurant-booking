@@ -1,0 +1,4 @@
+[submodule "js/air-datepicker"]
+	path = js/air-datepicker
+	url = https://github.com/ilGhera/air-datepicker.git
+	branch = italian
