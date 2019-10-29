@@ -101,7 +101,7 @@ class WPRB_Admin {
 				'hierarchical'       => false,
 				'menu_icon'          => 'dashicons-food',
 				'menu_position'      => 59,
-				'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' )
+				'supports'           => array( 'title', 'editor' )
 			);
 
 			register_post_type( 'reservation', $args );
@@ -143,7 +143,10 @@ class WPRB_Admin {
 	    $hook = add_menu_page( 'WP Restaurant Booking', $menu_label, 'manage_options', 'edit.php?post_type=reservation', null, 'dashicons-food', 59 );
 	    
 	    /*Reservations*/
-	    add_submenu_page( 'edit.php?post_type=reservation', __( 'Reservations', 'wprb' ), __( 'Reservations', 'wprb' ), 'manage_options', 'edit.php?post_type=reservation' );
+	    add_submenu_page( 'edit.php?post_type=reservation', __( 'All reservations', 'wprb' ), __( 'All reservations', 'wprb' ), 'manage_options', 'edit.php?post_type=reservation' );
+
+	    /*New Reservation*/
+	    add_submenu_page( 'edit.php?post_type=reservation', __( 'Add New', 'wprb' ), __( 'Add New', 'wprb' ), 'manage_options', 'post-new.php?post_type=reservation' );
 	    
 	    /*Options*/
 	    add_submenu_page( 'edit.php?post_type=reservation', __( 'Settings', 'wprb' ), __( 'Settings', 'wprb' ), 'manage_options', 'wprb-settings', array( $this, 'wprb_settings' ) );
