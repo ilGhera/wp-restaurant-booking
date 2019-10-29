@@ -15,11 +15,11 @@ class WPRB_Admin {
 	public function __construct( $init = false ) {
 
 		if ( $init ) {
-			
-			add_action( 'admin_enqueue_scripts', array( $this, 'wprb_admin_scripts' ) );
-			add_action( 'admin_menu', array( $this, 'wprb_add_menu' ) );
-			add_action( 'wp_ajax_wprb-add-hours', array( $this, 'hours_element_callback' ) );
+			add_action( 'init', array( $this, 'register_post_type' ) );
 			add_action( 'admin_init', array( $this, 'save_reservations_settings' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'wprb_admin_scripts' ) );
+			add_action( 'admin_menu', array( $this, 'register_wprb_admin' ) );
+			add_action( 'wp_ajax_wprb-add-hours', array( $this, 'hours_element_callback' ) );
 
 		}
 
@@ -36,7 +36,7 @@ class WPRB_Admin {
 
 		$admin_page = get_current_screen();
 
-		if ( 'toplevel_page_wp-restaurant-booking' === $admin_page->base ) {
+		if ( 'wprb_page_wprb-settings' === $admin_page->base ) {
 
 			/*css*/
 			wp_enqueue_style( 'wprb-admin-style', WPRB_URI . 'css/wprb-admin.css' );
@@ -67,13 +67,86 @@ class WPRB_Admin {
 
 
 	/**
-	 * Plugin menu item
+	 * Custom post type reservation
 	 */
-	public function wprb_add_menu() {
+	public function register_post_type() {
 
-		$wprb_page = add_menu_page( 'WP Restaurant Booking', 'WPRB Options', 'manage_options', 'wp-restaurant-booking', array( $this, 'wprb_options' ), 'dashicons-food', 59 );
+		$labels = array(
+				'name'               => __( 'Reservations', 'wprb' ),
+				'singular_name'      => __( 'Reservation', 'wprb' ),
+				'menu_name'          => __( 'Reservations', 'wprb' ),
+				'name_admin_bar'     => __( 'Reservation', 'wprb' ),
+				'add_new'            => __( 'New reservation', 'wprb' ),
+				'add_new_item'       => __( 'New reservation', 'wprb' ),
+				'new_item'           => __( 'New reservation', 'wprb' ),
+				'edit_item'          => __( 'Edit reservation', 'wprb' ),
+				'view_item'          => __( 'View reservation', 'wprb' ),
+				'all_items'          => __( 'All reservations', 'wprb' ),
+				'search_items'       => __( 'Search reservation', 'wprb' ),
+				'parent_item_colon'  => __( 'Parent reservation:', 'wprb' ),
+				'not_found'          => __( 'No reservations found.', 'wprb' ),
+				'not_found_in_trash' => __( 'No reservations found in Trash.', 'wprb' )
+			);
 
-		return $wprb_page;
+			$args = array(
+				'labels'             => $labels,
+				'description'        => __( 'Description.', 'wprb' ),
+				'public'             => false,
+				'publicly_queryable' => true,
+				'show_ui'            => true,
+				'show_in_menu'       => false,
+				'query_var'          => true,
+				'capability_type'    => 'post',
+				'has_archive'        => true,
+				'hierarchical'       => false,
+				'menu_icon'          => 'dashicons-food',
+				'menu_position'      => 59,
+				'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' )
+			);
+
+			register_post_type( 'reservation', $args );
+
+	}
+
+
+	/**
+	 * Get the unread reservations
+	 *
+	 * @return int
+	 */
+	public function get_unread_reservations() {
+		
+		global $wpdb;
+		
+		// $query = "
+		// 	SELECT * FROM " . $wpdb->prefix . "wprb_support_reservations WHERE status = 1
+		// ";
+		
+		// $reservations = $wpdb->get_results($query);
+
+		// return count($reservations);
+		return 3;
+	}
+
+
+	/**
+	 * Add all plugin admin pages and menu items	
+	 */
+	public function register_wprb_admin() {
+
+		$unread_reservations = $this->get_unread_reservations();
+		$bouble_count = '<span class="update-plugins count-' . $unread_reservations . '" title="' . $unread_reservations . '""><span class="update-count">' . $unread_reservations . '</span></span>';
+	    
+	    $menu_label = sprintf( 'WPRB %s', $bouble_count );
+
+	    /*Main menu item*/
+	    $hook = add_menu_page( 'WP Restaurant Booking', $menu_label, 'manage_options', 'edit.php?post_type=reservation', null, 'dashicons-food', 59 );
+	    
+	    /*Reservations*/
+	    add_submenu_page( 'edit.php?post_type=reservation', __( 'Reservations', 'wprb' ), __( 'Reservations', 'wprb' ), 'manage_options', 'edit.php?post_type=reservation' );
+	    
+	    /*Options*/
+	    add_submenu_page( 'edit.php?post_type=reservation', __( 'Settings', 'wprb' ), __( 'Settings', 'wprb' ), 'manage_options', 'wprb-settings', array( $this, 'wprb_settings' ) );
 
 	}
 
@@ -166,8 +239,6 @@ class WPRB_Admin {
 
 		if ( $saved_hours ) {
 
-			error_log( 'SAVED HOURS: ' . print_r( $saved_hours, true ) );
-
 			for ( $i=1; $i <= count( $saved_hours ) ; $i++ ) { 
 
 				$this->hours_element( $i, $saved_hours[ $i ] );
@@ -257,7 +328,7 @@ class WPRB_Admin {
 	/**
 	 * Options page
 	 */
-	public function wprb_options() {
+	public function wprb_settings() {
 
 		/*Right of access*/
 		if ( ! current_user_can( 'manage_options' ) ) {

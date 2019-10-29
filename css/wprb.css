@@ -46,10 +46,25 @@
 
 #wprb-booking-modal h2 {
 	text-align: center;
+	background: #f5b016;
+	margin: 0;
+	padding: 1rem;
+	color: #fff;
+	-webkit-border-radius: 8px 8px 0 0;
+	-moz-border-radius: 8px 8px 0 0;
+	-o-border-radius: 8px 8px 0 0;
+	-ms-border-radius: 8px 8px 0 0;
+	border-radius: 8px 8px 0 0;
 }
 
 .booking-label {
 	font-weight: bold;
+}
+
+.left-20 {
+	padding-top: 4px;
+	float: left;
+	width: 20%;
 }
 
 #wprb-booking-modal .header-bar {
@@ -60,7 +75,7 @@
 
 #wprb-booking-modal ul {
 	list-style: none;
-	margin: 2rem 0 0;
+	margin: 0;
 	padding: 2rem 0;
 }
 
@@ -68,6 +83,23 @@
 	float: left;
 	width: 25%;
 	text-align: center;
+	position: relative;
+}
+
+.header-bar_steps li:first-child::before {
+	content: '';
+	display: none;
+}
+
+.header-bar_steps li::before {
+	content: '';
+	position: absolute;
+	top: 20px;
+	left: -15px;
+	width: 30px;
+	height: 2px;
+	background: #000;
+	opacity: 0.3;
 }
 
 #wprb-booking-modal ul li span {
@@ -78,19 +110,32 @@
 	display: inline-block;
 	border-radius: 50%;
 	margin-bottom: 0.5rem;
-	cursor: pointer;
 	opacity: 0.5; 
 }
 
-#wprb-booking-modal ul li span.active {
+#wprb-booking-modal ul li.active span {
 	opacity: 1;
 	background-color: #fff;
 	border: 2px solid #f0a417;
+	cursor: pointer;
 }
 
 #wprb-booking-modal ul li i {
 	font-size: 24px; 
 	padding-top: 8px;
+}
+
+.booking-step {
+	display: none;
+}
+
+.booking-step.active {
+	display: block;
+}
+
+p.wprb-step-description {
+	text-align: center;
+	font-weight: bold;
 }
 
 .booking-people {
@@ -99,13 +144,165 @@
 	border-bottom: 1px solid #d7d7d7;
 }
 
+#wprb-booking-modal ul.booking-people_numbers {
+	margin: 0;
+	padding: 0 0 2rem;
+	float: right;
+}
+
+#wprb-booking-modal ul.booking-people_numbers li {
+	width: auto;
+	margin-left: 10px;
+}
+
+.people .value {
+	display: inline;
+	padding-right: 2px;
+}
+
+.booking-people_numbers__number input {
+	width: 30px;
+	height: 30px;
+	background-color: #fff !important;
+	border-radius: 50% !important;
+	border: 1px solid #cdcdcd !important;
+	font-size: 10px !important; 
+}
+
+.booking-people_numbers__number input:hover,
+.booking-people_numbers__number input.active {
+	background: #f5b016 !important;
+	color: #fff; 	
+}
+
+.booking-people_numbers__number:last-child {
+	position: relative;
+	width: 55px;
+	height: 30px;
+	transition: all 0.1s linear;
+}
+
+.booking-people_numbers__number:last-child::after{
+	border-top: 5px solid #f8b333;
+	content: '';
+	position: absolute;
+	width: 0;
+	height: 0;
+	top: 13.5px;
+	right: 10px;
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-radius: 0;
+	z-index: 1;
+	pointer-events: none;
+}
+
+.booking-people_numbers__number select {
+	outline: none;
+	box-shadow: none;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	border-radius: 15px;
+	padding: 0 15px;
+	font-size: 14px;
+}
+
+.booking-people_numbers__number.active select {
+	background: #f5b016;
+	color: #fff;
+}
+
+.booking-people_numbers__number.active::after {
+	border-top: 5px solid #fff;
+}
+
 .booking-date {
 	text-align: center;
-	opacity: 0.5;
+}
+
+.datepicker-here {
+	opacity: 0.3;
+}
+
+.datepicker-here.active {
+	opacity: 1;
 }
 
 .booking-date .datepicker {
 	margin: 0 auto;
+}
+
+.booking-hours ul {
+	height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.booking-hours ul li {
+	width: 25%;
+	text-align: center;
+}
+
+.booking-hours ul li input {
+	border: 1px solid #cdcdcd; /*temp*/
+	box-shadow: none;
+	width: 90%;
+	height: 30px;
+	margin-bottom: 8px;
+	cursor: pointer;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-color: #fff;
+	border-radius: 20px;
+	font-size: 12px;
+	text-align: center;
+	color: #212121;
+}
+
+.booking-hours ul li input:hover,
+.booking-hours ul li input.active {
+	color: #fff;
+	background: #f5b016;
+}
+
+#wprb-reservation input {
+	border: 1px solid #cdcdcd;
+	outline: none;
+	box-shadow: none;
+	width: 100%;
+	height: 40px;
+	cursor: pointer;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-color:#fff;
+	border-radius: 2px;
+	font-size: 14px;
+	text-align: center;
+	color: #212121;	
+	margin-bottom: 10px;
+}
+
+#wprb-reservation input.error {
+	border: 1px solid red;	
+}
+
+#wprb-reservation input[type="submit"] {
+	background-color: #333;
+	color: #fff;
+	text-transform: uppercase;
+	opacity: 0.8;
+	cursor: pointer;
+}
+
+#wprb-reservation input[type="submit"]:hover {
+	opacity: 1;
 }
 
 @media screen and (max-width: 1000px) {
