@@ -11,11 +11,13 @@ class WPRB_Admin {
 
 	/**
 	 * Class constructor
+	 *
+	 * @param bool $init if true execute the hooks
 	 */
 	public function __construct( $init = false ) {
 
 		if ( $init ) {
-			add_action( 'init', array( $this, 'register_post_type' ) );
+
 			add_action( 'admin_init', array( $this, 'save_reservations_settings' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'wprb_admin_scripts' ) );
 			add_action( 'admin_menu', array( $this, 'register_wprb_admin' ) );
@@ -35,8 +37,10 @@ class WPRB_Admin {
 		wp_enqueue_style( 'wprb-dashicons', WPRB_URI . 'css/wprb-dashicons.css' );
 
 		$admin_page = get_current_screen();
+		
+		$pages = array( 'wprb_page_wprb-settings', 'reservation' );
 
-		if ( 'wprb_page_wprb-settings' === $admin_page->base ) {
+		if ( in_array(  $admin_page->id, $pages ) ) {
 
 			/*css*/
 			wp_enqueue_style( 'wprb-admin-style', WPRB_URI . 'css/wprb-admin.css' );
@@ -62,49 +66,6 @@ class WPRB_Admin {
 
 
 		}
-
-	}
-
-
-	/**
-	 * Custom post type reservation
-	 */
-	public function register_post_type() {
-
-		$labels = array(
-				'name'               => __( 'Reservations', 'wprb' ),
-				'singular_name'      => __( 'Reservation', 'wprb' ),
-				'menu_name'          => __( 'Reservations', 'wprb' ),
-				'name_admin_bar'     => __( 'Reservation', 'wprb' ),
-				'add_new'            => __( 'New reservation', 'wprb' ),
-				'add_new_item'       => __( 'New reservation', 'wprb' ),
-				'new_item'           => __( 'New reservation', 'wprb' ),
-				'edit_item'          => __( 'Edit reservation', 'wprb' ),
-				'view_item'          => __( 'View reservation', 'wprb' ),
-				'all_items'          => __( 'All reservations', 'wprb' ),
-				'search_items'       => __( 'Search reservation', 'wprb' ),
-				'parent_item_colon'  => __( 'Parent reservation:', 'wprb' ),
-				'not_found'          => __( 'No reservations found.', 'wprb' ),
-				'not_found_in_trash' => __( 'No reservations found in Trash.', 'wprb' )
-			);
-
-			$args = array(
-				'labels'             => $labels,
-				'description'        => __( 'Description.', 'wprb' ),
-				'public'             => false,
-				'publicly_queryable' => true,
-				'show_ui'            => true,
-				'show_in_menu'       => false,
-				'query_var'          => true,
-				'capability_type'    => 'post',
-				'has_archive'        => true,
-				'hierarchical'       => false,
-				'menu_icon'          => 'dashicons-food',
-				'menu_position'      => 59,
-				'supports'           => array( 'title', 'editor' )
-			);
-
-			register_post_type( 'reservation', $args );
 
 	}
 
@@ -360,9 +321,9 @@ class WPRB_Admin {
 				echo '<form id="wprb-premium-key" method="post" action="">';
 				echo '<label>' . esc_html( __( 'Premium Key', 'wprb' ) ) . '</label>';
 				echo '<input type="text" class="regular-text code" name="wprb-premium-key" id="wprb-premium-key" placeholder="' . esc_html( __( 'Add your Premium Key', 'wprb' ) ) . '" value="' . esc_attr( $key ) . '" />';
-				echo '<p class="description">' . esc_html( __( 'Add your Premium Key and keep update your copy of Woocommerce Exporter for Reviso - Premium.', 'wprb' ) ) . '</p>';
+				echo '<p class="description">' . esc_html( __( 'Add your Premium Key and keep update your copy of WP Restaurant Booking - Premium.', 'wprb' ) ) . '</p>';
 				wp_nonce_field( 'wprb-premium-key', 'wprb-premium-key-nonce' );
-				echo '<input type="submit" class="button button-primary" value="' . esc_html( __( 'Save ', 'wprb' ) ) . '" />';
+				echo '<input type="submit" class="button button-primary" value="' . esc_html( __( 'Save settings', 'wprb' ) ) . '" />';
 				echo '</form>';
 
 				/*Plugin options menu*/

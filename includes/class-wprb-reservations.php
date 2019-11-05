@@ -1,6 +1,6 @@
 <?php
 /**
- * Reservation class
+ * The single reservation handle 
  *
  * @author ilGhera
  * @package wp-restaurant-booking/includes
@@ -8,298 +8,160 @@
  */
 class WPRB_Reservations {
 
-
 	/**
 	 * Class constructor
+	 *
+	 * @param bool $init if true execute the hooks
 	 */
 	public function __construct( $init = false ) {
 
-		add_action( 'wp_enqueue_scripts', array( $this, 'wprb_scripts' ) );
-		add_action( 'wp_head', array( $this, 'booking_button' ) );
-		add_action( 'wp_footer', array( $this, 'booking_modal' ) );
+		if ( $init ) {
 
-		add_action( 'wp_ajax_wprb-reservation', array( $this, 'wprb_reservation' ) );
-		add_action( 'wp_ajax_nopriv_wprb-reservation', array( $this, 'wprb_reservation' ) );
+			add_action( 'init', array( $this, 'register_post_type' ) );
+			add_action( 'add_meta_boxes', array( $this, 'wprb_add_meta_box' ) );
+			add_action( 'save_post', array( __CLASS__, 'save_single_reservation' ), 10, 1 );
+
+		}
 
 	}
 
 
 	/**
-	 * Scripts and style
+	 * Custom post type reservation
 	 */
-	public function wprb_scripts() {
+	public function register_post_type() {
 
-		/*css*/
-		wp_enqueue_style( 'wprb-style', WPRB_URI . 'css/wprb.css' );
-		wp_enqueue_style( 'modal-style', WPRB_URI . 'css/jquery.modal.min.css' );
-	    wp_enqueue_style( 'font-awesome', '//use.fontawesome.com/releases/v5.8.1/css/all.css' );
-		wp_enqueue_style( 'datepicker-css', WPRB_URI . 'js/air-datepicker/dist/css/datepicker.min.css' );
-		// wp_enqueue_style( 'font-awesome', WPRB_URI . 'css/all.min.css' );
+		$labels = array(
+				'name'               => __( 'Reservations', 'wprb' ),
+				'singular_name'      => __( 'Reservation', 'wprb' ),
+				'menu_name'          => __( 'Reservations', 'wprb' ),
+				'name_admin_bar'     => __( 'Reservation', 'wprb' ),
+				'add_new'            => __( 'New reservation', 'wprb' ),
+				'add_new_item'       => __( 'New reservation', 'wprb' ),
+				'new_item'           => __( 'New reservation', 'wprb' ),
+				'edit_item'          => __( 'Edit reservation', 'wprb' ),
+				'view_item'          => __( 'View reservation', 'wprb' ),
+				'all_items'          => __( 'All reservations', 'wprb' ),
+				'search_items'       => __( 'Search reservation', 'wprb' ),
+				'parent_item_colon'  => __( 'Parent reservation:', 'wprb' ),
+				'not_found'          => __( 'No reservations found.', 'wprb' ),
+				'not_found_in_trash' => __( 'No reservations found in Trash.', 'wprb' )
+			);
 
-		/*js*/
-		wp_enqueue_script( 'modal-js', WPRB_URI . 'js/jquery.modal.min.js', array( 'jquery' ), '0.9.1', true );
-		wp_enqueue_script( 'wprb-js', WPRB_URI . 'js/wprb.js', array( 'jquery' ), '1.0', true );
-		wp_enqueue_script( 'datepicker-js', WPRB_URI . 'js/air-datepicker/dist/js/datepicker.min.js', array( 'jquery' ), '2.2.3', true );
-		wp_enqueue_script( 'datepicker-eng', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.en.js', array( 'jquery' ), '2.2.3', true );
-		wp_enqueue_script( 'datepicker-it', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.it.js', array( 'jquery' ), '2.2.3', true );
-		// wp_enqueue_script( 'font-awsome-js', 'https://kit.fontawesome.com/cd62aa417e.js', '1.0', true );
+			$args = array(
+				'labels'             => $labels,
+				'description'        => __( 'Description.', 'wprb' ),
+				'public'             => false,
+				'publicly_queryable' => true,
+				'show_ui'            => true,
+				'show_in_menu'       => false,
+				'query_var'          => true,
+				'capability_type'    => 'post',
+				'has_archive'        => true,
+				'hierarchical'       => false,
+				'menu_icon'          => 'dashicons-food',
+				'menu_position'      => 59,
+				'supports'           => array( 'title' )
+			);
 
-		$nonce = wp_create_nonce( 'wprb-reservation' );
-		/*Pass data to the script file*/
-		wp_localize_script(
-			'wprb-js',
-			'wprbSettings',
-			array(
-				'ajaxURL' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => $nonce,
-			)
+			register_post_type( 'reservation', $args );
+
+	}
+
+
+	/**
+	 * Add meta box
+	 *
+	 * @param  string $post_type reservations
+	 */
+	public function wprb_add_meta_box( $post_type ) {
+
+		add_meta_box( 'wprb-box', __( 'Reservation details', 'wprb' ), array( $this, 'wprb_add_meta_box_callback' ), 'reservation' );
+		
+	}
+
+
+	/**
+	 * The meta box content for reservation
+	 */
+	public function wprb_add_meta_box_callback() {
+
+		echo '<div class="wrap">';
+
+			include( WPRB_INCLUDES . 'wprb-reservation-template.php' );
+		
+		echo '</div>';
+
+	}
+
+
+	/**
+	 * Generate the reservation title if empty
+	 * 
+	 * @param  int    $post_id    the post id.
+	 * @param  string $first_name the customer first name.
+	 * @param  string $last_name  the customer last name.
+	 * @param  int    $people     the number of people for the current reservation.
+	 * @param  string $date       the booking gate.
+	 * @return void
+	 */
+	public static function default_reservation_title( $post_id, $first_name, $last_name, $people, $date ) {
+
+		$post_title  = $first_name . ' ';
+		$post_title .= $last_name . ' - ';
+		$post_title .= __( 'People = ', 'wprb' );
+		$post_title .= $people;
+		$post_title .= __(' Date = ', 'wprb' );
+		$post_title .= date( 'Y-m-d', strtotime( $date ) );
+
+		$args = array( 
+			'ID'         => $post_id,
+			'post_title' => $post_title,
 		);
 
-	}
-	
+		remove_action( 'save_post', array( __CLASS__, 'save_single_reservation' ) );
 
-	/**
-	 * The boking button
-	 */
-	public function booking_button() {
+		wp_update_post( $args );
 
-		echo '<div class="wprb-booking-button">';
-			echo '<a href="#wprb-booking-modal" rel="modal:open">' . esc_html( wp_unslash( __( 'Book now', 'wprb' ) ) ) . '</a>';
-		echo '</div>';
-	
+		add_action( 'save_post', array( __CLASS__, 'save_single_reservation' ) );
+
 	}
 
 
 	/**
-	 * First step reservation
+	 * Save the single reservations
 	 *
-	 * Includes number of people and calendar
+	 * @param  int $post_id the post id.
+	 * @return void
 	 */
-	public function step_1() {
+	public static function save_single_reservation( $post_id ) {
 
-		/*People*/
-		echo '<div class="booking-step booking-people active">';
+		if ( isset( $_POST['wprb-first-name'] ) || isset( $_POST['wprb-people'] ) ) {
 
-			echo '<div class="booking-label left-20">' . esc_html( wp_unslash( __( 'People', 'wprb' ) ) ) . '</div>';
-
-			echo '<ul class="booking-people_numbers">';
-				echo '<li class="booking-people_numbers__number"><input type="button" value="1"></li>';
-				echo '<li class="booking-people_numbers__number"><input type="button" value="2"></li>';
-				echo '<li class="booking-people_numbers__number"><input type="button" value="3"></li>';
-				echo '<li class="booking-people_numbers__number">';
-					echo '<select>';
-						echo '<option value="" style="display: none;">+</option>';
-						for ($i=4; $i < 13; $i++) { 
-							echo '<option value="' . $i . '">' . $i . '</option>';
-						}
-					echo '</select>';
-				echo '</li>';
-			echo '</ul>';
-			echo '<div class="clear"></div>';
-
-		echo '</div>';
-
-		/*Date*/
-		echo '<div class="booking-step booking-date active">';
-
-			echo '<div class="datepicker-here" data-language="it" data-inline="true"></div>';
-
-		echo '</div>';
-
-	}
-
-
-	/**
-	 * Second step reservation
-	 *
-	 * Includes time
-	 */
-	public function step_2() {
-
-		echo '<div class="booking-step booking-hours">';
-
-			echo '<p class="wprb-step-description">' . esc_html( wp_unslash( __( 'Select the time' , 'wprb' ) ) ) . '</p>';
-
-			$hours = get_option( 'wprb-hours' );
-
-			// error_log( 'HOURS: ' . print_r( $hours, true ) );
-
-			if ( is_array( $hours ) ) {
-				
-				echo '<ul>';
-					foreach ($hours as $hour) {
-
-						if ( isset( $hour['from'] ) && isset( $hour['to'] ) && isset( $hour['every'] ) ) {
-
-							$begin    = new DateTime( $hour['from'] );
-							$end      = new DateTime( $hour['to'] );
-
-							/*Modify the end to include it*/
-							$end 	  = $end->modify( '+1 min' ); 
-							
-							$interval = DateInterval::createFromDateString( $hour['every'] . ' min' );
-							$times    = new DatePeriod($begin, $interval, $end);
-
-							foreach ($times as $time) {
-
-								echo '<li class="wprb-hour"><input type="button" value="' . $time->format( 'H:i' ) . '"></li>';
-
-							}
-
-						}
-						
-					}
-				echo '</ul>';
-
-			}
-
-		echo '</div>';
-		
-	}
-
-
-	/**
-	 * Third step reservation
-	 *
-	 * Includes the form with the customer informations
-	 */
-	public function step_3() {
-
-		echo '<div class="booking-step booking-complete">';
-
-			echo '<p class="wprb-step-description">' . esc_html( wp_unslash( __(  'Complete your reservation', 'wprb' ) ) ) . '</p>';
-
-			echo '<form id="wprb-reservation">';
+			$post_title = isset( $_POST['post_title'] ) ? sanitize_text_field( wp_unslash( $_POST['post_title'] ) ) : '';
+			$first_name = isset( $_POST['wprb-first-name'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-first-name'] ) ) : '';
+			$last_name  = isset( $_POST['wprb-last-name'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-last-name'] ) ) : '';
+			$email      = isset( $_POST['wprb-email'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-email'] ) ) : '';
+			$phone      = isset( $_POST['wprb-phone'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-phone'] ) ) : '';
+			$people     = isset( $_POST['wprb-people'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-people'] ) ) : '';
+			$date       = isset( $_POST['wprb-date'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-date'] ) ) : '';
+			$time       = isset( $_POST['wprb-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-time'] ) ) : '';
 			
-				echo '<input type="text" name="first-name-field" required placeholder="' . esc_html( wp_unslash( __( 'First name*', 'wprb' ) ) ) . '" value="">';
-				echo '<input type="text" name="last-name-field" required placeholder="' . esc_html( wp_unslash( __( 'Last name*', 'wprb' ) ) ) . '" value="">';
-				echo '<input type="email" name="email-field" required placeholder="' . esc_html( wp_unslash( __( 'Email*', 'wprb' ) ) ) . '" value="">';
-				echo '<input type="tel" name="phone-field" required placeholder="' . esc_html( wp_unslash( __( 'Phone number*', 'wprb' ) ) ) . '" value="">';
+			update_post_meta( $post_id, 'wprb-first-name', $first_name );
+			update_post_meta( $post_id, 'wprb-last-name', $last_name );
+			update_post_meta( $post_id, 'wprb-email', $email );
+			update_post_meta( $post_id, 'wprb-phone', $phone );
+			update_post_meta( $post_id, 'wprb-people', $people );
+			update_post_meta( $post_id, 'wprb-date', $date );
+			update_post_meta( $post_id, 'wprb-time', $time );
 
-				echo '<input type="hidden" name="people-field" class="people-field" value="">';
-				echo '<input type="hidden" name="date-field" class="date-field" value="">';
-				echo '<input type="hidden" name="time-field" class="time-field" value="">';
-				
-				echo '<input type="submit" class="wprb-complete-reservation" value="' . esc_html( wp_unslash( __( 'Book now' , 'wprb' ) ) ) . '">';
-			
-			echo '</form>';
+			if ( ! $post_title ) {
 
-		echo '</div>';
-		
-	}
-
-
-	/**
-	 * The modal window 
-	 */
-	public function booking_modal() {
-
-		echo '<div id="wprb-booking-modal" class="wprb_modal">';
-			
-			echo '<h2>' . esc_html( wp_unslash( __( 'Book now', 'wprb' ) ) ) . '</h2>';
-
-			/*Header*/
-			echo '<div class="header-bar">';
-
-				echo '<ul class="header-bar_steps">';
-
-					/*People*/
-					echo '<li class="people active" data-step="booking-people">';
-						echo '<span>';
-							echo '<i class="fas fa-user-friends"></i>';
-						echo '</span><br>';
-						echo '<div class="value"></div>';
-						echo esc_html( wp_unslash( __( 'People', 'wprb' ) ) );
-					echo '</li>';
-
-					/*Date*/
-					echo '<li class="date" data-step="booking-date">';
-						echo '<span>';
-							echo '<i class="far fa-calendar-alt"></i>';
-						echo '</span><br>';
-						echo '<div class="value">' . esc_html( wp_unslash( __( 'Date', 'wprb' ) ) ) . '</div>';
-					echo '</li>';
-					
-					/*Time*/
-					echo '<li class="time" data-step="booking-hours">';
-						echo '<span>';
-							echo '<i class="far fa-clock"></i>';
-						echo '</span><br>';
-						echo '<div class="value">' . esc_html( wp_unslash( __( 'Time', 'wprb' ) ) ) . '</div>';
-					echo '</li>';
-
-					/*Complete*/
-					echo '<li class="complete" data-step="booking-complete">';
-						echo '<span>';
-							echo '<i class="fas fa-check-circle"></i>';
-						echo '</span><br>';
-						echo '<div class="value">' . esc_html( wp_unslash( __( 'Complete', 'wprb' ) ) ) . '</div>';
-					echo '</li>';
-
-					echo '<div class="clear"></div>';
-
-				echo '</ul>';
-			
-			echo '</div>';
-
-			echo '<div class="padding-2">';
-
-				$this->step_1();
-				$this->step_2();
-				$this->step_3();
-
-			echo '</div>';
-
-	
-			// echo '<a href="#" rel="modal:close">Close</a>';
-		echo '</div>';
-
-	}
-
-
-	/**
-	 * Returns the new field data
-	 *
-	 * @param  array $values the multy-dimensional array coming from js.
-	 * @return array
-	 */
-	public function prepare_values( $values ) {
-
-		$output = array();
-
-		if ( is_array( $values ) && ! empty( $values ) ) {
-
-			foreach ( $values as $value ) {
-
-				$key   = sanitize_text_field( wp_unslash( $value['name'] ) );
-				$value = sanitize_text_field( wp_unslash( $value['value'] ) );
-
-				if ( ! in_array( $key, array( 'wprb-reservation-nonce', '_wp_http_referer' ) ) ) {
-
-					$output[ $key ] = $value;
-
-				}
+				self::default_reservation_title( $post_id, $first_name, $last_name, $people, $date );
 
 			}
 
 		}
-
-		return $output;
-
-	}
-
-
-	public function wprb_reservation() {
-
-		if ( isset( $_POST['values'], $_POST['wprb-reservation-nonce'] ) && wp_verify_nonce( $_POST['wprb-reservation-nonce'], 'wprb-reservation' )) {
-
-			$values = $this->prepare_values( $_POST['values'] );
-
-			error_log( 'VALUES: ' . print_r( $values, true ) );
-
-		}
-
-		exit;
 
 	}
 

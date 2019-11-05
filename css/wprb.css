@@ -305,6 +305,18 @@ p.wprb-step-description {
 	opacity: 1;
 }
 
+.wprb-confirmation-email {
+	color: #888;
+	display: block;
+	margin: 1.5rem 0;
+}
+
+.booking-end .fa-check-circle {
+	font-size: 400%;
+	color: #f5b016; /*temp*/
+	margin-bottom: 1.5rem;
+}
+
 @media screen and (max-width: 1000px) {
 
 

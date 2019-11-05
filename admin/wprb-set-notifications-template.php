@@ -9,7 +9,6 @@
 
 ?>
 
-<!-- Export form -->
 <form name="wprb-set-notifications" class="wprb-form"  method="post" action="">
 
 	<table class="form-table">

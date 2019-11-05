@@ -77,6 +77,12 @@ var wprbController = function() {
 				$(number).removeClass('active');
 				$(this).closest('li').addClass('active');
 
+				/*Activate date element*/
+				$('.date').addClass('active');
+
+				/*Activate the calendar*/
+				$(calendar).addClass('active');
+
 				/*Add data*/
 				$('li.people .value').html($(this).val());
 				$('.people-field').val($(this).val());
@@ -299,6 +305,9 @@ var wprbController = function() {
 
 		jQuery(function($){
 
+			var title     = $('.wprb-widget-title');
+			var container = ('#wprb-booking-modal .padding-2');
+
 			/*General fields check*/
 			self.fields_check();
 
@@ -328,6 +337,12 @@ var wprbController = function() {
 				$.post(wprbSettings.ajaxURL, data, function(response){
 
 					console.log(response);
+
+					$(title).text('Reservation completed'); //temp
+
+					$(container).html(response);
+
+					$('.header-bar_steps li span').css('cursor', 'default');
 
 				})
 

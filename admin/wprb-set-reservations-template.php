@@ -32,8 +32,8 @@ $hours          = get_option( 'wprb-hours' );
 
 						/*The cols name*/
 						if( 'mon' === $key ) {
-							echo '<div class="wprb-col"><h4>' . esc_html( 'Bookable seats', 'wprb' ) . '</h4></div>';
-							echo '<div class="wprb-col external"><h4>' . esc_html( 'External seats', 'wprb' ) . '</h4></div>';
+							echo '<div class="wprb-col"><h4>' . esc_html__( 'Bookable seats', 'wprb' ) . '</h4></div>';
+							echo '<div class="wprb-col external"><h4>' . esc_html__( 'External seats', 'wprb' ) . '</h4></div>';
 							echo '<div class="clear"></div>';
 						}
 
