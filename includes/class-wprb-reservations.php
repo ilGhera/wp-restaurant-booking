@@ -112,12 +112,7 @@ class WPRB_Reservations {
 	 */
 	public static function default_reservation_title( $post_id, $first_name, $last_name, $people, $date ) {
 
-		$post_title  = $first_name . ' ';
-		$post_title .= $last_name . ' - ';
-		$post_title .= __( 'People = ', 'wprb' );
-		$post_title .= $people;
-		$post_title .= __(' Date = ', 'wprb' );
-		$post_title .= date( 'Y-m-d', strtotime( $date ) );
+		$post_title  = $first_name . ' ' . $last_name;
 
 		$args = array( 
 			'ID'         => $post_id,
