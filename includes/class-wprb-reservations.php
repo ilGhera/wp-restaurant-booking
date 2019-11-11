@@ -17,6 +17,7 @@ class WPRB_Reservations {
 
 		if ( $init ) {
 
+			add_action( 'admin_enqueue_scripts', array( $this, 'wprb_edit_scripts' ) );
 			add_action( 'init', array( $this, 'register_post_type' ) );
 			add_action( 'add_meta_boxes', array( $this, 'wprb_add_meta_box' ) );
 			add_action( 'save_post', array( __CLASS__, 'save_single_reservation' ), 10, 1 );
@@ -24,7 +25,41 @@ class WPRB_Reservations {
 			add_action( 'manage_reservation_posts_custom_column', array( $this, 'manage_reservation_columns' ), 10, 2 );
 			add_filter( 'manage_edit-reservation_sortable_columns', array( $this, 'reservation_sortable_columns' ) );
 			add_action( 'load-edit.php', array( $this, 'edit_reservations_load' ) );
+			add_action( 'admin_footer', array( $this, 'status_modal' ) );
+			add_action( 'wp_ajax_wprb-change-status', array( $this, 'wprb_change_status_callback' ) );
+		}
 
+	}
+
+
+	/**
+	 * Edit reservations scripts and style
+	 */
+	public function wprb_edit_scripts() {
+
+		$admin_page = get_current_screen();
+
+		$pages = array( 'edit-reservation', 'reservation' );
+
+		if ( in_array(  $admin_page->id, $pages ) ) {
+
+			/*css*/
+			wp_enqueue_style( 'wprb-admin-style', WPRB_URI . 'css/wprb-admin.css' );
+
+			/*js*/
+			wp_enqueue_script( 'wprb-edit-js', WPRB_URI . 'js/wprb-edit.js', array( 'jquery' ), '1.0', true );
+
+			/*Nonce*/
+			$change_status_nonce = wp_create_nonce( 'wprb-change-status' );
+
+			/*Pass data to the script file*/
+			wp_localize_script(
+				'wprb-edit-js',
+				'wprbSettings',
+				array(
+					'changeStatusNonce' => $change_status_nonce,
+				)
+			);
 
 		}
 
@@ -106,11 +141,9 @@ class WPRB_Reservations {
 	 * @param  int    $post_id    the post id.
 	 * @param  string $first_name the customer first name.
 	 * @param  string $last_name  the customer last name.
-	 * @param  int    $people     the number of people for the current reservation.
-	 * @param  string $date       the booking gate.
 	 * @return void
 	 */
-	public static function default_reservation_title( $post_id, $first_name, $last_name, $people, $date ) {
+	public static function default_reservation_title( $post_id, $first_name, $last_name ) {
 
 		$post_title  = $first_name . ' ' . $last_name;
 
@@ -144,20 +177,26 @@ class WPRB_Reservations {
 			$email      = isset( $_POST['wprb-email'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-email'] ) ) : '';
 			$phone      = isset( $_POST['wprb-phone'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-phone'] ) ) : '';
 			$people     = isset( $_POST['wprb-people'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-people'] ) ) : '';
+			$table      = isset( $_POST['wprb-table'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-table'] ) ) : '';
 			$date       = isset( $_POST['wprb-date'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-date'] ) ) : '';
 			$time       = isset( $_POST['wprb-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-time'] ) ) : '';
+			$notes      = isset( $_POST['wprb-notes'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-notes'] ) ) : '';
+			$status     = isset( $_POST['wprb-status'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-status'] ) ) : '';
 			
 			update_post_meta( $post_id, 'wprb-first-name', $first_name );
 			update_post_meta( $post_id, 'wprb-last-name', $last_name );
 			update_post_meta( $post_id, 'wprb-email', $email );
 			update_post_meta( $post_id, 'wprb-phone', $phone );
 			update_post_meta( $post_id, 'wprb-people', $people );
+			update_post_meta( $post_id, 'wprb-table', $table );
 			update_post_meta( $post_id, 'wprb-date', $date );
 			update_post_meta( $post_id, 'wprb-time', $time );
+			update_post_meta( $post_id, 'wprb-notes', $notes );
+			update_post_meta( $post_id, 'wprb-status', $status );
 
 			if ( ! $post_title ) {
 
-				self::default_reservation_title( $post_id, $first_name, $last_name, $people, $date );
+				self::default_reservation_title( $post_id, $first_name, $last_name );
 
 			}
 
@@ -181,11 +220,29 @@ class WPRB_Reservations {
 			'time'   => __( 'Time', 'wprb' ),
 			'people' => __( 'People', 'wprb' ),
 			'table'  => __( 'Table', 'wprb' ),
+			'status'  => __( 'Status', 'wprb' ),
 			// 'date'   => __( 'Date' )
 		);
 
 		return $columns;
 
+	}
+
+
+	/**
+	 * Get the status label of the reservation
+	 * 
+	 * @param  string $status the reservation status.
+	 * @param  int    $post_id the id reservation.
+	 * @return mixed
+	 */
+	public function get_status_label( $status, $post_id = null, $active = false ) {
+
+		$data_post_id = $post_id ? ' data-post-id="' . $post_id . '"' : '';
+		$class_active = $active ? 'active ' : '';
+				
+		return '<a href="#wprb-status-modal" rel="modal:open" class="' . $class_active . 'wprb-status-label ' . esc_html( wp_unslash( $status ) ) . '" ' . $data_post_id . ' data-status="' . esc_html( wp_unslash( $status ) ) . '">' . ucfirst( esc_html( wp_unslash( $status ) ) ) . '</a>'; 
+		
 	}
 
 
@@ -231,6 +288,14 @@ class WPRB_Reservations {
 				$table = get_post_meta( $post_id, 'wprb-table', true );
 			
 				echo $table ? $table : __( 'No table assigned', 'wprb' );
+
+				break;
+
+			case 'status':
+
+				$status = get_post_meta( $post_id, 'wprb-status', true );
+			
+				echo $this->get_status_label( $status, $post_id );
 
 				break;
 			
@@ -296,6 +361,58 @@ class WPRB_Reservations {
 		return $vars;
 
 	}
+
+
+	/**
+	 * The modal window to change the reservation status
+	 */
+	public function status_modal() {
+
+		$admin_page = get_current_screen();
+		
+		if ( 'edit-reservation' === $admin_page->id ) {
+
+			$statuses = array( 'received', 'managed', 'completed', 'expired' );
+
+			echo '<div id="wprb-status-modal" class="wprb_modal">';
+				echo '<h3>' . esc_html__( 'Select the new reservation status', 'wprb' ) . '</h3>';
+				echo '<ul>';
+
+					foreach ( $statuses as $status ) {
+						
+						echo '<li data-status="' . esc_html( wp_unslash( $status ) ) . '">' . $this->get_status_label( $status ) . '</li>';
+
+					}
+					
+				echo '</ul>';
+			echo '</div>';
+
+		}
+
+	}
+
+
+	/**
+	 * Change the reservations status in the db
+	 */
+	public function wprb_change_status_callback() {
+
+		if ( isset( $_POST['reservation-id'] ) && isset( $_POST['status'] ) && isset( $_POST['wprb-change-status-nonce'] ) && wp_verify_nonce( $_POST['wprb-change-status-nonce'], 'wprb-change-status' ) ) {
+
+			$post_id = sanitize_text_field( $_POST['reservation-id'] );
+			$status  = sanitize_text_field( $_POST['status'] );
+
+			update_post_meta( $post_id, 'wprb-status', $status );
+
+			/* The new status label */
+			echo $this->get_status_label( $status, $post_id, true );
+
+		}
+
+		exit;
+
+	}
+
 
 }
 new WPRB_Reservations( true );

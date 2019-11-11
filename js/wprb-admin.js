@@ -19,6 +19,7 @@ var wprbAdminController = function() {
 		self.remove_hours();
 		self.auto_complete_fields();
 		self.auto_complete_fields(true);
+
 	}
 
 	/**

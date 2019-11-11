@@ -354,7 +354,7 @@ class WPRB_Reservation_Widget {
 			$post_id = wp_insert_post( $args );
 
 			/*Add the default title*/
-			WPRB_Reservations::default_reservation_title( $post_id, $first_name, $last_name, $people, $date );
+			WPRB_Reservations::default_reservation_title( $post_id, $first_name, $last_name );
 
 			if ( is_int( $post_id ) ) {
 			

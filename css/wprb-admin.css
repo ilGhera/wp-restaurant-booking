@@ -220,8 +220,77 @@ label[for=wprb-bookable-hours-from] {
 	display: inline;
 }
 
-.wprb-reservation input {
+.wprb-reservation input,
+.wprb-reservation textarea,
+.wprb-reservation select {
 	width: 300px;
+}
+
+.wprb-status-label {
+	display: inline;
+	padding: .2em .6em .3em;
+	/*font-size: 75%;*/
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
+	cursor: pointer;
+}
+
+.wprb-status-label:hover,
+.wprb-status-label:visited,
+.wprb-status-label:active {
+	color: #fff;
+}
+.wprb-status-label.received {
+	background-color: #f0ad4e;
+}
+
+.wprb-status-label.managed {
+	background-color: #5bc0de;
+}
+
+.wprb-status-label.completed {
+	background-color: #5cb85c;
+}
+
+.wprb-status-label.expired {
+	background-color: #d9534f;
+}
+
+.widefat thead tr th {
+	width: 13%;
+}
+
+.widefat thead tr th#title {
+	width: 35%;
+}
+
+#wprb-status-modal h3 {
+	text-align: center;
+}
+
+#wprb-status-modal ul {
+	padding: 1rem 0 2rem;
+}
+
+#wprb-status-modal ul li {
+	float: left;
+	width: 25%;
+	text-align: center;
+}
+
+#wprb-status-modal ul li a {
+	text-decoration: none;
+	opacity: 0.5;
+}
+
+#wprb-status-modal ul li a:hover,
+#wprb-status-modal ul li a.active {
+	opacity: 1;
 }
 
 @media screen and (max-width: 1000px) {

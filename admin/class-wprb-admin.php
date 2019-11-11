@@ -38,19 +38,18 @@ class WPRB_Admin {
 
 		$admin_page = get_current_screen();
 		
-		$pages = array( 'wprb_page_wprb-settings', 'reservation' );
+		$pages = array( 'wprb_page_wprb-settings', 'edit-reservation', 'reservation' );
 
 		if ( in_array(  $admin_page->id, $pages ) ) {
 
 			/*css*/
-			wp_enqueue_style( 'wprb-admin-style', WPRB_URI . 'css/wprb-admin.css' );
 			wp_enqueue_style( 'chosen-style', WPRB_URI . '/vendor/harvesthq/chosen/chosen.min.css' );
-			wp_enqueue_style( 'tzcheckbox-style', WPRB_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.css' );
+			wp_enqueue_style( 'modal-style', WPRB_URI . 'css/jquery.modal.min.css' );
 
 			/*js*/
-			wp_enqueue_script( 'wprb-admin-js', WPRB_URI . 'js/wprb-admin.js', array( 'jquery' ), '1.0', true );
 			wp_enqueue_script( 'chosen', WPRB_URI . '/vendor/harvesthq/chosen/chosen.jquery.min.js' );
-			wp_enqueue_script( 'tzcheckbox', WPRB_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.js', array( 'jquery' ) );
+			wp_enqueue_script( 'modal-js', WPRB_URI . 'js/jquery.modal.min.js', array( 'jquery' ), '0.9.1', true );
+
 
 			/*Nonce*/
 			$add_hours_nonce = wp_create_nonce( 'wprb-add-hours' );
@@ -64,6 +63,17 @@ class WPRB_Admin {
 				)
 			);
 
+		}
+
+		if ( 'wprb_page_wprb-settings' === $admin_page->id ) {
+
+			/*css*/
+			wp_enqueue_style( 'wprb-admin-style', WPRB_URI . 'css/wprb-admin.css' );
+			wp_enqueue_style( 'tzcheckbox-style', WPRB_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.css' );
+
+			/*js*/
+			wp_enqueue_script( 'wprb-admin-js', WPRB_URI . 'js/wprb-admin.js', array( 'jquery' ), '1.0', true );
+			wp_enqueue_script( 'tzcheckbox', WPRB_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.js', array( 'jquery' ) );
 
 		}
 
@@ -79,14 +89,14 @@ class WPRB_Admin {
 		
 		global $wpdb;
 		
-		// $query = "
-		// 	SELECT * FROM " . $wpdb->prefix . "wprb_support_reservations WHERE status = 1
-		// ";
+		$query = "
+			SELECT * FROM " . $wpdb->prefix . "postmeta WHERE meta_key = 'wprb-status' AND meta_value = 'received'
+		";
 		
-		// $reservations = $wpdb->get_results($query);
+		$reservations = $wpdb->get_results( $query );
 
-		// return count($reservations);
-		return 3;
+		return count( $reservations );
+
 	}
 
 
@@ -96,7 +106,7 @@ class WPRB_Admin {
 	public function register_wprb_admin() {
 
 		$unread_reservations = $this->get_unread_reservations();
-		$bouble_count = '<span class="update-plugins count-' . $unread_reservations . '" title="' . $unread_reservations . '""><span class="update-count">' . $unread_reservations . '</span></span>';
+		$bouble_count = '<span class="wprb update-plugins count-' . $unread_reservations . '" title="' . $unread_reservations . '""><span class="update-count">' . $unread_reservations . '</span></span>';
 	    
 	    $menu_label = sprintf( 'WPRB %s', $bouble_count );
 

@@ -13,8 +13,11 @@ $last_name  = get_post_meta( $id, 'wprb-last-name', true );
 $email      = get_post_meta( $id, 'wprb-email', true );
 $phone      = get_post_meta( $id, 'wprb-phone', true );
 $people     = get_post_meta( $id, 'wprb-people', true );
+$table      = get_post_meta( $id, 'wprb-table', true );
 $date       = get_post_meta( $id, 'wprb-date', true );
 $time       = get_post_meta( $id, 'wprb-time', true );
+$notes      = get_post_meta( $id, 'wprb-notes', true );
+$status     = get_post_meta( $id, 'wprb-status', true );
 
 ?>
 
@@ -55,7 +58,13 @@ $time       = get_post_meta( $id, 'wprb-time', true );
 				<p class="description"><?php esc_html_e( 'The number of people', 'wprb' ); ?></p>
 			</td>
 		</tr>
-
+		<tr>
+			<th scope="row"><?php esc_html_e( 'Table', 'wprb' ); ?></th>
+			<td>
+				<input type="text" name="wprb-table" class="wprb-table" value="<?php echo $table; ?>" placeholder="5A">
+				<p class="description"><?php esc_html_e( 'The table assigned to this reservation', 'wprb' ); ?></p>
+			</td>
+		</tr>
 		<tr>
 			<th scope="row"><?php esc_html_e( 'Date', 'wprb' ); ?></th>
 			<td>
@@ -68,6 +77,25 @@ $time       = get_post_meta( $id, 'wprb-time', true );
 			<td>
 				<input type="time" name="wprb-time" class="wprb-time" value="<?php echo $time; ?>" placeholder="<?php esc_html_e( wp_unslash( 'xxxx', 'wprb' ) ) ?>" required>
 				<p class="description"><?php esc_html_e( 'The time of the reservation', 'wprb' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><?php esc_html_e( 'Notes', 'wprb' ); ?></th>
+			<td>
+				<textarea name="wprb-notes" class="wprb-notes" rows="6"><?php echo $notes; ?></textarea>
+				<p class="description"><?php esc_html_e( 'Notes of the customer for this reservation', 'wprb' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><?php esc_html_e( 'Status', 'wprb' ); ?></th>
+			<td>
+				<select name="wprb-status" class="wprb-status">
+					<option value="received"><?php esc_html_e( 'Received', 'wprb' ) ?></option>
+					<option value="managed"><?php esc_html_e( 'Managed', 'wprb' ) ?></option>
+					<option value="completed"><?php esc_html_e( 'Completed', 'wprb' ) ?></option>
+					<option value="expired"><?php esc_html_e( 'Expired', 'wprb' ) ?></option>
+				</select>
+				<p class="description"><?php esc_html_e( 'The status of the reservation', 'wprb' ); ?></p>
 			</td>
 		</tr>
 
