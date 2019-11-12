@@ -305,6 +305,11 @@ p.wprb-step-description {
 	opacity: 1;
 }
 
+#wprb-reservation textarea {
+	margin-bottom: 10px;
+	padding: 0.8rem;
+}
+
 .wprb-confirmation-email {
 	color: #888;
 	display: block;

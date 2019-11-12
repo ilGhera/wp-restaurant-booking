@@ -176,6 +176,8 @@ class WPRB_Reservation_Widget {
 				echo '<input type="email" name="email-field" required placeholder="' . esc_html( wp_unslash( __( 'Email*', 'wprb' ) ) ) . '" value="">';
 				echo '<input type="tel" name="phone-field" required placeholder="' . esc_html( wp_unslash( __( 'Phone number*', 'wprb' ) ) ) . '" value="">';
 
+				echo '<textarea name="notes-field" class="notes-field" placeholder="' . esc_html( wp_unslash( __( 'Add more details', 'wprb' ) ) ) . '"></textarea>';
+
 				echo '<input type="hidden" name="people-field" class="people-field" value="">';
 				echo '<input type="hidden" name="date-field" class="date-field" value="">';
 				echo '<input type="hidden" name="time-field" class="time-field" value="">';
@@ -330,6 +332,7 @@ class WPRB_Reservation_Widget {
 			$people     = isset( $values['people-field'] ) ? sanitize_text_field( wp_unslash( $values['people-field'] ) ) : '';
 			$date       = isset( $values['date-field'] ) ? sanitize_text_field( wp_unslash( $values['date-field'] ) ) : '';
 			$time       = isset( $values['time-field'] ) ? sanitize_text_field( wp_unslash( $values['time-field'] ) ) : '';
+			$notes      = isset( $values['notes-field'] ) ? sanitize_text_field( wp_unslash( $values['notes-field'] ) ) : '';
 
 			$the_date = date('Y-m-d', strtotime( $date ) );
 
@@ -347,6 +350,8 @@ class WPRB_Reservation_Widget {
 					'wprb-people'     => $people,
 					'wprb-date'       => $the_date,
 					'wprb-time'       => $time,
+					'wprb-notes'      => $notes,
+					'wprb-status'     => 'received',
 				),
 			);
 			
