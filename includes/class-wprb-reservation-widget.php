@@ -110,6 +110,45 @@ class WPRB_Reservation_Widget {
 
 
 	/**
+	 * Display the hours element based on the admin settings
+	 */
+	public static function hours_select_element() {
+
+		$hours = get_option( 'wprb-hours' );
+
+		if ( is_array( $hours ) ) {
+			
+			echo '<ul>';
+				foreach ($hours as $hour) {
+
+					if ( isset( $hour['from'] ) && isset( $hour['to'] ) && isset( $hour['every'] ) ) {
+
+						$begin    = new DateTime( $hour['from'] );
+						$end      = new DateTime( $hour['to'] );
+
+						/*Modify the end to include it*/
+						$end 	  = $end->modify( '+1 min' ); 
+						
+						$interval = DateInterval::createFromDateString( $hour['every'] . ' min' );
+						$times    = new DatePeriod($begin, $interval, $end);
+
+						foreach ($times as $time) {
+
+							echo '<li class="wprb-hour"><input type="button" value="' . $time->format( 'H:i' ) . '"></li>';
+
+						}
+
+					}
+					
+				}
+			echo '</ul>';
+
+		}
+
+	}
+
+
+	/**
 	 * Second step reservation
 	 *
 	 * Includes time
@@ -120,38 +159,7 @@ class WPRB_Reservation_Widget {
 
 			echo '<p class="wprb-step-description">' . esc_html( wp_unslash( __( 'Select the time' , 'wprb' ) ) ) . '</p>';
 
-			$hours = get_option( 'wprb-hours' );
-
-			// error_log( 'HOURS: ' . print_r( $hours, true ) );
-
-			if ( is_array( $hours ) ) {
-				
-				echo '<ul>';
-					foreach ($hours as $hour) {
-
-						if ( isset( $hour['from'] ) && isset( $hour['to'] ) && isset( $hour['every'] ) ) {
-
-							$begin    = new DateTime( $hour['from'] );
-							$end      = new DateTime( $hour['to'] );
-
-							/*Modify the end to include it*/
-							$end 	  = $end->modify( '+1 min' ); 
-							
-							$interval = DateInterval::createFromDateString( $hour['every'] . ' min' );
-							$times    = new DatePeriod($begin, $interval, $end);
-
-							foreach ($times as $time) {
-
-								echo '<li class="wprb-hour"><input type="button" value="' . $time->format( 'H:i' ) . '"></li>';
-
-							}
-
-						}
-						
-					}
-				echo '</ul>';
-
-			}
+			self::hours_select_element();
 
 		echo '</div>';
 		

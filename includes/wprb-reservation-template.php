@@ -7,18 +7,17 @@
  * @since 0.9.0
  */
 
-$id         = get_the_ID();
-$first_name = get_post_meta( $id, 'wprb-first-name', true );
-$last_name  = get_post_meta( $id, 'wprb-last-name', true );
-$email      = get_post_meta( $id, 'wprb-email', true );
-$phone      = get_post_meta( $id, 'wprb-phone', true );
-$people     = get_post_meta( $id, 'wprb-people', true );
-$table      = get_post_meta( $id, 'wprb-table', true );
-$date       = get_post_meta( $id, 'wprb-date', true );
-$time       = get_post_meta( $id, 'wprb-time', true );
-$notes      = get_post_meta( $id, 'wprb-notes', true );
-$status     = get_post_meta( $id, 'wprb-status', true );
-
+$id           = get_the_ID();
+$first_name   = get_post_meta( $id, 'wprb-first-name', true );
+$last_name    = get_post_meta( $id, 'wprb-last-name', true );
+$email        = get_post_meta( $id, 'wprb-email', true );
+$phone        = get_post_meta( $id, 'wprb-phone', true );
+$people       = get_post_meta( $id, 'wprb-people', true );
+$table        = get_post_meta( $id, 'wprb-table', true );
+$date         = get_post_meta( $id, 'wprb-date', true );
+$time         = get_post_meta( $id, 'wprb-time', true );
+$notes        = get_post_meta( $id, 'wprb-notes', true );
+$status       = get_post_meta( $id, 'wprb-status', true );
 ?>
 
 
@@ -75,7 +74,10 @@ $status     = get_post_meta( $id, 'wprb-status', true );
 		<tr>
 			<th scope="row"><?php esc_html_e( 'Time', 'wprb' ); ?></th>
 			<td>
-				<input type="time" name="wprb-time" class="wprb-time" value="<?php echo $time; ?>" placeholder="<?php esc_html_e( wp_unslash( 'xxxx', 'wprb' ) ) ?>" required>
+				<div class="booking-hours">
+					<?php WPRB_Reservation_Widget::hours_select_element(); ?>
+				</div>
+				<input type="hidden" name="wprb-time" class="wprb-time" value="<?php echo $time; ?>">
 				<p class="description"><?php esc_html_e( 'The time of the reservation', 'wprb' ); ?></p>
 			</td>
 		</tr>

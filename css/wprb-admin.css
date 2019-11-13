@@ -293,6 +293,46 @@ label[for=wprb-bookable-hours-from] {
 	opacity: 1;
 }
 
+.booking-hours {
+	width: 300px;
+	margin-bottom: 1rem;
+}
+
+.booking-hours ul {
+	height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.booking-hours ul li {
+	width: 25%;
+	float: left;
+	text-align: center;
+}
+
+.booking-hours ul li input {
+	border: 1px solid #cdcdcd; /*temp*/
+	box-shadow: none;
+	width: 90%;
+	height: 30px;
+	margin-bottom: 8px;
+	cursor: pointer;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-color: #fff;
+	border-radius: 20px;
+	font-size: 12px;
+	text-align: center;
+	color: #212121;
+}
+
+.booking-hours ul li input:hover,
+.booking-hours ul li input.active {
+	color: #fff;
+	background: #f5b016;
+}
+
 @media screen and (max-width: 1000px) {
 
 	.wrap-left {

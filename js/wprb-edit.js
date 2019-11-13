@@ -12,10 +12,47 @@ var wprbEditController = function() {
 
 	self.onLoad = function() {
 
+		self.hours_element();
 		self.auto_change_reservation_status();
 		self.reservation_id_to_modal();
 		self.modal_status_label_activate();
 		self.modal_change_status();
+
+	}
+
+
+	/**
+	 * Handles the hour setting in the single reservation
+	 */
+	self.hours_element = function() {
+
+		jQuery(function($){
+
+			var time_el     = $('li.wprb-hour input');
+			var input       = $('input.wprb-time');
+			var current_val = $(input).val();
+
+			$(time_el).each(function(){
+
+				if( current_val === $(this).val() ) {
+
+					$(this).addClass('active');
+
+				}
+
+			})
+
+			$(time_el).on('click', function(){
+
+				$(time_el).removeClass('active')
+				
+				$(this).addClass('active');
+
+				$(input).val( $(this).val() );
+
+			})
+
+		})
 
 	}
 
@@ -34,7 +71,6 @@ var wprbEditController = function() {
 				if( '' == $(this).val() ) {
 
 					$('.wprb-status').val('received');
-
 
 				} else {
 
