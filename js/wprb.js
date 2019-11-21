@@ -149,7 +149,7 @@ var wprbController = function() {
 		jQuery(function($){
 
 			var datepicker = $('.datepicker-here').datepicker().data('datepicker');
-			var people = $('.people-field').attr('value');
+			var people;
 			var date_selected;
 			var options;
 			var date;
@@ -157,6 +157,7 @@ var wprbController = function() {
 
 			$('.datepicker').on('click', function(){
 
+				people = $('.people-field').attr('value');
 				console.log( 'PEOPLE: ' + people );
 
 				/*The number of people must be set*/
