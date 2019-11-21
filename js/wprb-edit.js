@@ -86,7 +86,7 @@ var wprbEditController = function() {
 		jQuery(function($){
 
 			var hours_tr = $('.wprb-hours');
-			var people = $('.wprb-people').val();
+			var people;
 			var data;
 
 			if('' != $('.wprb-date').val()) {
@@ -94,20 +94,12 @@ var wprbEditController = function() {
 			}
 
 			$('.wprb-date').on('change', function(){
+				
+				people = $('.wprb-people').val();
 
 				console.log( $(this).val() );
 
 				self.hours_element_update( people, $(this).val() );
-
-				// if( '' != $(this).val() ) {
-
-				// 	hours_el.addClass('active');
-
-				// } else {
-
-				// 	hours_el.removeClass('active');
-
-				// }
 
 			})
 

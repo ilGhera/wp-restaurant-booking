@@ -347,17 +347,18 @@ class WPRB_Admin {
 
 				/*Premium Key Form*/
 				echo '<form id="wprb-premium-key" method="post" action="">';
-				echo '<label>' . esc_html( __( 'Premium Key', 'wprb' ) ) . '</label>';
-				echo '<input type="text" class="regular-text code" name="wprb-premium-key" id="wprb-premium-key" placeholder="' . esc_html( __( 'Add your Premium Key', 'wprb' ) ) . '" value="' . esc_attr( $key ) . '" />';
-				echo '<p class="description">' . esc_html( __( 'Add your Premium Key and keep update your copy of WP Restaurant Booking - Premium.', 'wprb' ) ) . '</p>';
-				wp_nonce_field( 'wprb-premium-key', 'wprb-premium-key-nonce' );
-				echo '<input type="submit" class="button button-primary" value="' . esc_html( __( 'Save settings', 'wprb' ) ) . '" />';
+					echo '<label>' . esc_html( __( 'Premium Key', 'wprb' ) ) . '</label>';
+					echo '<input type="text" class="regular-text code" name="wprb-premium-key" id="wprb-premium-key" placeholder="' . esc_html( __( 'Add your Premium Key', 'wprb' ) ) . '" value="' . esc_attr( $key ) . '" />';
+					echo '<p class="description">' . esc_html( __( 'Add your Premium Key and keep update your copy of WP Restaurant Booking - Premium.', 'wprb' ) ) . '</p>';
+					wp_nonce_field( 'wprb-premium-key', 'wprb-premium-key-nonce' );
+					echo '<input type="submit" class="button button-primary" value="' . esc_html( __( 'Save settings', 'wprb' ) ) . '" />';
 				echo '</form>';
 
 				/*Plugin options menu*/
-				echo '<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"><br /></div>';
+				echo '<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"><br></div>';
 				echo '<h2 id="wprb-admin-menu" class="nav-tab-wrapper woo-nav-tab-wrapper">';
 					echo '<a href="#" data-link="wprb-set-reservations" class="nav-tab nav-tab-active" onclick="return false;">' . esc_html( __( 'Reservations', 'wprb' ) ) . '</a>';
+					echo '<a href="#" data-link="wprb-set-last-minute" class="nav-tab" onclick="return false;">' . esc_html( __( 'Last minute', 'wprb' ) ) . '</a>';
 					echo '<a href="#" data-link="wprb-set-notifications" class="nav-tab" onclick="return false;">' . esc_html( __( 'Notifications', 'wprb' ) ) . '</a>';
 				echo '</h2>';
 
@@ -365,6 +366,13 @@ class WPRB_Admin {
 				echo '<div id="wprb-set-reservations" class="wprb-admin" style="display: block;">';
 
 					include( WPRB_ADMIN . 'wprb-set-reservations-template.php' );
+
+				echo '</div>';
+
+				/*Set last minute*/
+				echo '<div id="wprb-set-last-minute" class="wprb-admin">';
+
+					include( WPRB_ADMIN . 'wprb-set-last-minute-template.php' );
 
 				echo '</div>';
 
