@@ -128,29 +128,6 @@ var wprbEditController = function() {
 			var date        = $('.wprb-date').val();
 			var input       = $('input.wprb-time');
 			var current_val = $(input).val();
-			
-
-			// if('' != date) {
-
-			// 	hours_el.addClass('active');
-			
-			// } else {
-
-			// 	hours_el.removeClass('active');
-
-			// 	console.log( 'date: ' . date );
-
-			// 	$(hours_el).on('click', function(){
-					
-			// 		if( ! $(this).hasClass('active') ) {
-						
-			// 			alert( 'Please, select a date first' );
-
-			// 		}
-
-			// 	})
-
-			// }
 
 			$(time_el).each(function(){
 

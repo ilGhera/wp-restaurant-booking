@@ -510,7 +510,7 @@ class WPRB_Reservations {
 		$data_post_id = $post_id ? ' data-post-id="' . $post_id . '"' : '';
 		$class_active = $active ? 'active ' : '';
 
-		return '<a href="#wprb-status-modal" rel="modal:open" class="' . esc_attr( $class_active ) . 'wprb-status-label ' . esc_html( $status ) . '" ' . esc_attr( $data_post_id ) . ' data-status="' . esc_html( $status ) . '">' . ucfirst( esc_html( $status ) ) . '</a>';
+		return '<a href="#wprb-status-modal" rel="modal:open" class="' . esc_attr( $class_active ) . 'wprb-status-label ' . esc_html( $status ) . '" ' . esc_attr( $data_post_id ) . ' data-status="' . esc_html( $status ) . '">' . ucfirst( esc_html__( $status, 'wprb' ) ) . '</a>';
 
 	}
 
@@ -643,7 +643,7 @@ class WPRB_Reservations {
 
 					foreach ( $statuses as $status ) {
 
-						echo '<li data-status="' . esc_html( $status ) . '">' . $this->get_status_label( $status ) . '</li>';
+						echo '<li data-status="' . esc_attr( $status ) . '">' . $this->get_status_label( $status ) . '</li>';
 
 					}
 
