@@ -274,6 +274,14 @@ class WPRB_Admin {
 
 			update_option( 'wprb-bookable', $save_bookable );
 
+			/*Medium time*/
+			$medium_time = isset( $_POST['wprb-medium-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-medium-time'] ) ) : '';
+			update_option( 'wprb-medium-time', $medium_time );
+
+			/*Expiration time*/
+			$expiration_time = isset( $_POST['wprb-expiration-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-expiration-time'] ) ) : '';
+			update_option( 'wprb-expiration-time', $expiration_time );
+
 			/*Hours*/
 			$save_hours = array();
 

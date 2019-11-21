@@ -17,9 +17,8 @@ $table              = get_post_meta( $reservation_id, 'wprb-table', true );
 $date               = get_post_meta( $reservation_id, 'wprb-date', true );
 $time               = get_post_meta( $reservation_id, 'wprb-time', true );
 $notes              = get_post_meta( $reservation_id, 'wprb-notes', true );
-$reservation_status = get_post_meta( $reservation_id, 'wprb-status', true );
+$res_status         = get_post_meta( $reservation_id, 'wprb-status', true );
 ?>
-
 
 <table class="wprb-reservation form-table">
 	<tr>
@@ -98,10 +97,10 @@ $reservation_status = get_post_meta( $reservation_id, 'wprb-status', true );
 		<th scope="row"><?php esc_html_e( 'Status', 'wprb' ); ?></th>
 		<td>
 			<select name="wprb-status" class="wprb-status">
-				<option value="received"><?php esc_html_e( 'Received', 'wprb' ); ?></option>
-				<option value="managed"><?php esc_html_e( 'Managed', 'wprb' ); ?></option>
-				<option value="completed"><?php esc_html_e( 'Completed', 'wprb' ); ?></option>
-				<option value="expired"><?php esc_html_e( 'Expired', 'wprb' ); ?></option>
+				<option value="received"<?php echo 'received' === $res_status ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Received', 'wprb' ); ?></option>
+				<option value="managed"<?php echo 'managed' === $res_status ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Managed', 'wprb' ); ?></option>
+				<option value="completed"<?php echo 'completed' === $res_status ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Completed', 'wprb' ); ?></option>
+				<option value="expired"<?php echo 'expired' === $res_status ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Expired', 'wprb' ); ?></option>
 			</select>
 			<p class="description"><?php esc_html_e( 'The status of the reservation', 'wprb' ); ?></p>
 		</td>

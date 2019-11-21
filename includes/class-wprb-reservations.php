@@ -516,6 +516,36 @@ class WPRB_Reservations {
 
 
 	/**
+	 * Get the reservation status and change it if expired
+	 *
+	 * @param  int $post_id the reservation id.
+	 */
+	public function get_filtered_status( $post_id ) {
+
+		/*Reservations data*/
+		$get_date        = get_post_meta( $post_id, 'wprb-date', true );
+		$get_time        = get_post_meta( $post_id, 'wprb-time', true );
+		$expiration_time = get_option( 'wprb-expiration-time' ) ? get_option( 'wprb-expiration-time' ) : 60;
+		$status          = get_post_meta( $post_id, 'wprb-status', true );
+
+		$time_string      = $get_date . ' ' . $get_time;
+		$reservation_time = date( 'Y-m-d H:i', strtotime( $time_string ) );
+		$time_limit       = strtotime( $time_string ) + ( 60 * $expiration_time );
+		$now              = strtotime( 'now' );
+
+		if ( in_array( $status, array( 'received', 'managed' ) ) && $now >= $time_limit ) {
+
+			$status = 'expired';
+			update_post_meta( $post_id, 'wprb-status', $status );
+
+		}
+
+		echo $this->get_status_label( $status );
+
+	}
+
+
+	/**
 	 * Manage the content of the reservatiosn post table columns
 	 *
 	 * @param  string $column the column name.
@@ -557,9 +587,8 @@ class WPRB_Reservations {
 				break;
 
 			case 'status':
-				$status = get_post_meta( $post_id, 'wprb-status', true );
 
-				echo $this->get_status_label( $status, $post_id );
+				echo $this->get_filtered_status( $post_id );
 
 				break;
 

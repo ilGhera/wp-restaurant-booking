@@ -227,13 +227,14 @@ label[for=wprb-bookable-hours-from] {
 }
 
 .wprb-status-label {
-	display: inline;
-	padding: .2em .6em .3em;
-	/*font-size: 75%;*/
-	font-weight: 700;
+	display: inline-block;
+	width: 74px;
+	text-align: center;
+	padding: .4em 0 .45em;
+	font-size: 90%;
+	font-weight: 600;
 	line-height: 1;
 	color: #fff;
-	text-align: center;
 	white-space: nowrap;
 	vertical-align: baseline;
 	border-radius: .25em;
@@ -285,7 +286,7 @@ label[for=wprb-bookable-hours-from] {
 
 #wprb-status-modal ul li a {
 	text-decoration: none;
-	opacity: 0.5;
+	opacity: 0.2;
 }
 
 #wprb-status-modal ul li a:hover,
