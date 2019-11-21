@@ -28,7 +28,7 @@ var wprbEditController = function() {
 		jQuery(function($){
 
 			var hours_tr = $('.wprb-hours');
-			console.log( 'nonce: ' + wprbSettings.nonce );
+			console.log( 'nonce: ' + wprbSettings.changeDateNonce );
 			data = {
 				'action': 'wprb-hours-available',
 				'wprb-change-date-nonce': wprbSettings.changeDateNonce,
@@ -141,7 +141,7 @@ var wprbEditController = function() {
 
 			$(document).on('click', 'li.wprb-hour input', function(){
 
-				$(time_el).removeClass('active')
+				$('li.wprb-hour input').removeClass('active')
 				
 				$(this).addClass('active');
 
