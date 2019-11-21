@@ -12,11 +12,106 @@ var wprbEditController = function() {
 
 	self.onLoad = function() {
 
+		self.people_element();
+		self.date_element();
 		self.hours_element();
 		self.auto_change_reservation_status();
 		self.reservation_id_to_modal();
 		self.modal_status_label_activate();
 		self.modal_change_status();
+
+	}
+
+
+	self.hours_element_update = function(people = null, date = null) {
+
+		jQuery(function($){
+
+			var hours_tr = $('.wprb-hours');
+			console.log( 'nonce: ' + wprbSettings.nonce );
+			data = {
+				'action': 'wprb-hours-available',
+				'wprb-change-date-nonce': wprbSettings.changeDateNonce,
+				'people': people,
+				'date': date
+			}
+
+			$.post(ajaxurl, data, function(response) {
+
+				$('.booking-hours ul').html(response);
+
+				if ( ! $(hours_tr).hasClass('active') ) {
+
+					$(hours_tr).addClass('active').show('slow');
+
+				}
+
+			})
+
+		})
+
+	}
+
+	self.people_element = function() {
+
+		jQuery(function($){
+
+
+			$('.wprb-people').on('change', function(){
+
+				var date = $('.wprb-date').val();
+				console.log( 'PEOPLE DATE: ' + date);
+
+				if ( $('.wprb-hours').hasClass('active') ) {
+
+					console.log('cambio');
+					console.log('DATE: ' + date);
+
+					self.hours_element_update($(this).val(), date);
+
+				}
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Activate the hours element if a date is set
+	 */
+	self.date_element = function() {
+
+		jQuery(function($){
+
+			var hours_tr = $('.wprb-hours');
+			var people = $('.wprb-people').val();
+			var data;
+
+			if('' != $('.wprb-date').val()) {
+				$(hours_tr).show();
+			}
+
+			$('.wprb-date').on('change', function(){
+
+				console.log( $(this).val() );
+
+				self.hours_element_update( people, $(this).val() );
+
+				// if( '' != $(this).val() ) {
+
+				// 	hours_el.addClass('active');
+
+				// } else {
+
+				// 	hours_el.removeClass('active');
+
+				// }
+
+			})
+
+		})
 
 	}
 
@@ -28,9 +123,34 @@ var wprbEditController = function() {
 
 		jQuery(function($){
 
+			var hours_el    = $('.booking-hours');
 			var time_el     = $('li.wprb-hour input');
+			var date        = $('.wprb-date').val();
 			var input       = $('input.wprb-time');
 			var current_val = $(input).val();
+			
+
+			// if('' != date) {
+
+			// 	hours_el.addClass('active');
+			
+			// } else {
+
+			// 	hours_el.removeClass('active');
+
+			// 	console.log( 'date: ' . date );
+
+			// 	$(hours_el).on('click', function(){
+					
+			// 		if( ! $(this).hasClass('active') ) {
+						
+			// 			alert( 'Please, select a date first' );
+
+			// 		}
+
+			// 	})
+
+			// }
 
 			$(time_el).each(function(){
 
@@ -42,7 +162,7 @@ var wprbEditController = function() {
 
 			})
 
-			$(time_el).on('click', function(){
+			$(document).on('click', 'li.wprb-hour input', function(){
 
 				$(time_el).removeClass('active')
 				

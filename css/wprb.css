@@ -265,6 +265,16 @@ p.wprb-step-description {
 	color: #212121;
 }
 
+.booking-hours ul li.not-available input:hover,
+.booking-hours ul li.not-available input.active {
+	color: inherit;
+	background: inherit;
+}
+
+.booking-hours ul li.not-available {
+	opacity: 0.4;
+}
+
 .booking-hours ul li input:hover,
 .booking-hours ul li input.active {
 	color: #fff;

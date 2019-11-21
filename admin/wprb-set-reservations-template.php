@@ -7,10 +7,11 @@
  * @since 0.9.0
  */
 
-$admin = new WPRB_Admin();
+$admin          = new WPRB_Admin();
 $external_seats = get_option( 'wprb-activate-external-seats' );
 $bookable       = get_option( 'wprb-bookable' );
 $hours          = get_option( 'wprb-hours' );
+$medium_time    = get_option( 'wprb-medium-time' );
 ?>
 <!-- Form -->
 <form name="wprb-set-reservations" class="wprb-set-reservations wprb-form"  method="post" action="">
@@ -31,7 +32,7 @@ $hours          = get_option( 'wprb-hours' );
 					echo '<div class="wprb-set-reservations-day">';
 
 						/*The cols name*/
-						if( 'mon' === $key ) {
+						if ( 'mon' === $key ) {
 							echo '<div class="wprb-col"><h4>' . esc_html__( 'Bookable seats', 'wprb' ) . '</h4></div>';
 							echo '<div class="wprb-col external"><h4>' . esc_html__( 'External seats', 'wprb' ) . '</h4></div>';
 							echo '<div class="clear"></div>';
@@ -45,7 +46,7 @@ $hours          = get_option( 'wprb-hours' );
 							/*Single data from the db*/
 							$bookable_value = isset( $bookable[ $key ]['bookable'] ) ? $bookable[ $key ]['bookable'] : null;
 
-							echo '<input type="number" name="wprb-bookable-seats-' . esc_attr( $key ) . '" id="wprb-bookable-seats" class="' . esc_attr( $key ) . '" placeholder="0" value="' . $bookable_value . '">';
+							echo '<input type="number" name="wprb-bookable-seats-' . esc_attr( $key ) . '" id="wprb-bookable-seats" class="' . esc_attr( $key ) . '" placeholder="0" value="' . esc_attr( $bookable_value ) . '">';
 						echo '</div>';
 
 						echo '<div class="wprb-col external">';
@@ -53,9 +54,9 @@ $hours          = get_option( 'wprb-hours' );
 							/*Single data from the db*/
 							$externals_value = isset( $bookable[ $key ]['externals'] ) ? $bookable[ $key ]['externals'] : null;
 
-							echo '<input type="number" name="wprb-external-seats-' . esc_attr( $key ) . '" id="wprb-external-seats" class="' . esc_attr( $key ) . '" placeholder="0" value="' . $externals_value . '">';
+							echo '<input type="number" name="wprb-external-seats-' . esc_attr( $key ) . '" id="wprb-external-seats" class="' . esc_attr( $key ) . '" placeholder="0" value="' . esc_html( $externals_value ) . '">';
 						echo '</div>';
-	
+
 						echo '<div class="wprb-col">';
 						echo '</div>';
 
@@ -68,6 +69,13 @@ $hours          = get_option( 'wprb-hours' );
 				}
 				?>
 				<p class="description"><?php esc_html_e( 'Set seats that can be booked for each day of the week.', 'wprb' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><?php esc_html_e( 'Medium time', 'wprb' ); ?></th>
+			<td>
+				<input type="number" step="5" min="15" max="180" value="<?php esc_attr( $medium_time ); ?>" placeholder="Default 60">
+				<p class="description"><?php esc_html_e( 'An estimate about the minutes passed by the customer at the table.', 'wprb' ); ?></p>
 			</td>
 		</tr>
 		<tr>

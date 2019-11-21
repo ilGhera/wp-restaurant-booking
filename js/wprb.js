@@ -38,6 +38,35 @@ var wprbController = function() {
 
 	}
 
+	/**
+	 * Update bookable based on people and date selections
+	 *
+	 * @param  {int}    people the number of people of the reservation
+	 * @param  {string} date   the reservation date
+	 */
+	self.hours_available_update = function(people = null, date = null) {
+
+		jQuery(function($){
+
+			var data = {
+				'action': 'wprb-hours-available',
+				'wprb-change-date-nonce': wprbSettings.changeDateNonce,
+				'people': people,
+				'date': date
+			}
+
+			console.log( 'NONCE: ' + wprbSettings.changeDateNonce );
+
+			$.post(wprbSettings.ajaxURL, data, function(response){
+
+				$('.booking-step.booking-hours ul').html(response);
+
+			})
+
+		})
+
+	}
+
 
 	/**
 	 * Widget numer of people selection
@@ -50,6 +79,7 @@ var wprbController = function() {
 			var number   = $('.booking-people_numbers__number input');
 			var select   = $('.booking-people_numbers__number select');
 			var calendar = $('.datepicker-here');
+			var date     = $('.date-field').val();
 
 			$(number).on('click', function(){
 				
@@ -69,6 +99,15 @@ var wprbController = function() {
 				$('li.people .value').html($(this).val());
 				$('.people-field').val($(this).val());
 
+				console.log('DATE 1: ' + date);
+				if (date) {
+					console.log('PEOPLE 1: ' + $(this).val());
+					/*Get bookables*/
+					self.hours_available_update( $(this).val(), date );
+
+				}
+
+
 			})
 
 			$(select).on('change', function(){
@@ -87,7 +126,14 @@ var wprbController = function() {
 				$('li.people .value').html($(this).val());
 				$('.people-field').val($(this).val());
 
-				console.log($(this).val());
+				console.log('DATE 2: ' + date);
+				if (date) {					
+					console.log('PEOPLE 2: ' + $(this).val());
+					/*Get bookables*/
+					self.hours_available_update( $(this).val(), date );
+
+				}
+
 			})
 
 		})
@@ -103,11 +149,15 @@ var wprbController = function() {
 		jQuery(function($){
 
 			var datepicker = $('.datepicker-here').datepicker().data('datepicker');
+			var people = $('.people-field').attr('value');
 			var date_selected;
 			var options;
 			var date;
+			var hours;
 
 			$('.datepicker').on('click', function(){
+
+				console.log( 'PEOPLE: ' + people );
 
 				/*The number of people must be set*/
 				if( '' == $('.people-field').val() ) {
@@ -132,8 +182,6 @@ var wprbController = function() {
 
 					date = date_selected.toLocaleString('en-EN', options);
 
-
-
 					/*Add data*/
 					$('li.date .value').html(date); // temp.
 					$('.date-field').val(date);
@@ -141,6 +189,9 @@ var wprbController = function() {
 					/*Activate the hours step*/
 					$('.booking-step').removeClass('active');
 					$('.booking-hours').addClass('active');
+
+					/*Get bookables*/
+					self.hours_available_update( people, date );
 
 					console.log($('.datepicker-here').data('datepicker'));
 					console.log(date_selected);
@@ -161,7 +212,13 @@ var wprbController = function() {
 
 		jQuery(function($){
 
-			$('.booking-hours ul li input').on('click', function(){
+			$(document).on('click', '.booking-hours ul li input', function(){
+
+				var parent_li = $(this).closest('li');
+
+				if( $(parent_li).hasClass('not-available') ) {
+					return;
+				}
 
 				/*Change active element*/
 				$('.booking-hours ul li input').removeClass('active');
@@ -330,7 +387,7 @@ var wprbController = function() {
 
 				var data = {
 					'action': 'wprb-reservation',
-					'wprb-reservation-nonce': wprbSettings.nonce,
+					'wprb-save-reservation-nonce': wprbSettings.saveReservationNonce,
 					'values': values
 				}
 

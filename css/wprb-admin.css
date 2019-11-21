@@ -308,7 +308,9 @@ label[for=wprb-bookable-hours-from] {
 	width: 25%;
 	float: left;
 	text-align: center;
+	margin-bottom: 0;
 }
+
 
 .booking-hours ul li input {
 	border: 1px solid #cdcdcd; /*temp*/
@@ -316,7 +318,6 @@ label[for=wprb-bookable-hours-from] {
 	width: 90%;
 	height: 30px;
 	margin-bottom: 8px;
-	cursor: pointer;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
@@ -327,11 +328,34 @@ label[for=wprb-bookable-hours-from] {
 	color: #212121;
 }
 
+.booking-hours ul li input {
+	cursor: pointer;
+}
+
 .booking-hours ul li input:hover,
 .booking-hours ul li input.active {
 	color: #fff;
 	background: #f5b016;
 }
+
+.booking-hours ul li.not-available {
+	opacity: 0.4;
+}
+
+.booking-hours ul li.not-available input {
+	cursor: inherit;
+}
+
+.booking-hours ul li.not-available input:hover,
+.booking-hours ul li.not-available input.active {
+	color: inherit;
+	background: inherit;
+}
+
+.wprb-hours {
+	display: none;
+}
+
 
 @media screen and (max-width: 1000px) {
 
