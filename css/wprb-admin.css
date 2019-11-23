@@ -177,21 +177,33 @@ form#wprb-premium-key input.button {
 	display: block;
 }
 
-.hours-element label {
+.hours-element label,
+.last-minute-element label {
 	padding: 0 0.5rem;
 }
 
-label[for=wprb-bookable-hours-from] {
+label[for=wprb-bookable-hours-from],
+label[for=wprb-last-minute-date] {
 	padding-left: 0;
 }
 
+input#wprb-last-minute-date {
+	width: 130px;
+}
+
 .wprb-bookable-hours-from,
-.wprb-bookable-hours-to {
+.wprb-last-minute-from,
+.wprb-bookable-hours-to,
+.wprb-last-minute-to,
+.wprb-bookable-hours-every,
+.wprb-last-minute-people {
 	width: 75px;
 }
 
 .wprb-add-hours-container,
-.wprb-remove-hours-container {
+.wprb-remove-hours-container,
+.wprb-add-last-minute-container,
+.wprb-remove-last-minute-container {
 	display: inline;
 	position: relative;
 	top: 0.3rem;
@@ -199,24 +211,34 @@ label[for=wprb-bookable-hours-from] {
 }
 
 .add-hours-hover,
-.remove-hours-hover {
+.remove-hours-hover,
+.add-last-minute-hover,
+.remove-last-minute-hover {
 	display: none;
 }
 
 .add-hours, 
 .add-hours-hover,
 .remove-hours, 
-.remove-hours-hover {
+.remove-hours-hover,
+.add-last-minute, 
+.add-last-minute-hover,
+.remove-last-minute, 
+.remove-last-minute-hover {
 	margin-left: 2px;
 }
 
 .wprb-add-hours-container:hover .add-hours,
-.wprb-remove-hours-container:hover .remove-hours {
+.wprb-remove-hours-container:hover .remove-hours,
+.wprb-add-last-minute-container:hover .add-last-minute,
+.wprb-remove-last-minute-container:hover .remove-last-minute {
 	display: none;
 }
 
 .wprb-add-hours-container:hover .add-hours-hover,
-.wprb-remove-hours-container:hover .remove-hours-hover {
+.wprb-remove-hours-container:hover .remove-hours-hover,
+.wprb-add-last-minute-container:hover .add-last-minute-hover,
+.wprb-remove-last-minute-container:hover .remove-last-minute-hover {
 	display: inline;
 }
 

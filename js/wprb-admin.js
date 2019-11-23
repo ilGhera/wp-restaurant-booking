@@ -12,22 +12,27 @@ var wprbAdminController = function() {
 
 	self.onLoad = function() {
 
-		self.wprb_pagination();
+		self.wprbPagination();
 		self.tzCheckbox();
-		self.external_seats();
-		self.add_hours();
-		self.remove_hours();
-		self.auto_complete_fields();
-		self.auto_complete_fields(true);
+		self.externalSeats();
+		self.addHours();
+		self.removeHours();
+		self.addLastMinute();
+		self.removeLastMinute();
+		self.autoCompleteFields();
+		self.autoCompleteFields(true);
+		self.lastMinuteElement();
 
 	}
 
 	/**
 	 * Tab navigation
 	 */
-	self.wprb_pagination = function() {
+	self.wprbPagination = function() {
 
 		jQuery(function($){
+
+			console.log( wprbSettings );
 
 			var contents = $('.wprb-admin')
 			var url = window.location.href.split("#")[0];
@@ -113,15 +118,15 @@ var wprbAdminController = function() {
 	/**
 	 *External seats option
 	 */
-	self.external_seats = function() {
+	self.externalSeats = function() {
 
 		jQuery(function($){
 
 			var col             = $('.wprb-col.external');
-			var field_container = $('.wprb-activate-external-seats-field');
-			var field           = $('input', field_container);
+			var fieldContainer  = $('.wprb-activate-external-seats-field');
+			var field           = $('input', fieldContainer);
 
-			var field_check = function() {
+			var fieldCheck = function() {
 
 				if ( 'checked' == field.attr('checked') ) {
 
@@ -134,11 +139,11 @@ var wprbAdminController = function() {
 				}
 			
 			}
-			field_check();
+			fieldCheck();
 
-			$('span.tzCheckBox', field_container).on('click', function(){
+			$('span.tzCheckBox', fieldContainer).on('click', function(){
 
-				field_check();
+				fieldCheck();
 
 			})	
 
@@ -150,7 +155,7 @@ var wprbAdminController = function() {
 	/**
 	 * Add a new hours element
 	 */
-	self.add_hours = function() {
+	self.addHours = function() {
 
 		jQuery(function($){
 
@@ -183,7 +188,7 @@ var wprbAdminController = function() {
 	/**
 	 * Remove an hour element
 	 */
-	self.remove_hours = function() {
+	self.removeHours = function() {
 
 		jQuery(function($){
 
@@ -205,7 +210,7 @@ var wprbAdminController = function() {
 	 *
 	 * @param  {Boolean} external true for external field, default for bookable.
 	 */
-	self.auto_complete_fields = function( external = false ) {
+	self.autoCompleteFields = function( external = false ) {
 
 		jQuery(function($){
 
@@ -229,6 +234,91 @@ var wprbAdminController = function() {
 					}
 
 				})
+
+			})
+
+		})
+
+	}
+
+
+	self.lastMinuteElement = function() {
+
+		jQuery(function($){
+
+			var toggle      = $('.wprb-activate-last-minute-field .tzCheckBox');
+			var lastMinute  = $('.wprb-add-last-minute-field');
+
+			if ($(toggle).hasClass('checked')) {
+
+				lastMinute.show();
+
+			}
+
+			$(toggle).on('click', function(){
+				
+				if ($(this).hasClass('checked')) {
+
+					lastMinute.show('slow');
+
+				} else {
+
+					lastMinute.hide();
+
+				}
+			
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Add a new last minute
+	 */
+	self.addLastMinute = function() {
+
+		jQuery(function($){
+
+			$(document).on('click', '.add-last-minute-hover', function(){
+
+
+				var count = $('.last-minute-element').length;
+				var prev  = $('.wprb-last-minute-element-' + count);
+				var next  = count + 1;
+				var data  = {
+					'action': 'wprb-add-last-minute',
+					'wprb-add-last-minute-nonce': wprbSettings.addLastMinuteNonce,
+					'number': next
+				}
+
+				$.post(ajaxurl, data, function(response){
+
+					console.log(response);
+					$(prev).after(response);
+
+				})
+
+			})
+
+		})
+
+	}
+
+	
+	/**
+	 * Remove a last minute
+	 */
+	self.removeLastMinute = function() {
+
+		jQuery(function($){
+
+			$(document).on('click', '.remove-last-minute-hover', function(){
+
+				var element = $(this).closest('.last-minute-element');
+
+				$(element).remove();
 
 			})
 

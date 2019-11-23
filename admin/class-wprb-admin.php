@@ -19,9 +19,11 @@ class WPRB_Admin {
 		if ( $init ) {
 
 			add_action( 'admin_init', array( $this, 'save_reservations_settings' ) );
+			add_action( 'admin_init', array( $this, 'save_last_minute_settings' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'wprb_admin_scripts' ) );
 			add_action( 'admin_menu', array( $this, 'register_wprb_admin' ) );
 			add_action( 'wp_ajax_wprb-add-hours', array( $this, 'hours_element_callback' ) );
+			add_action( 'wp_ajax_wprb-add-last-minute', array( $this, 'last_minute_element_callback' ) );
 
 		}
 
@@ -51,16 +53,9 @@ class WPRB_Admin {
 			wp_enqueue_script( 'modal-js', WPRB_URI . 'js/jquery.modal.min.js', array( 'jquery' ), '0.9.0', true );
 
 			/*Nonce*/
-			$add_hours_nonce = wp_create_nonce( 'wprb-add-hours' );
+			$add_hours_nonce       = wp_create_nonce( 'wprb-add-hours' );
+			$add_last_minute_nonce = wp_create_nonce( 'wprb-add-last-minute' );
 
-			/*Pass data to the script file*/
-			wp_localize_script(
-				'wprb-admin-js',
-				'wprbSettings',
-				array(
-					'addHoursNonce' => $add_hours_nonce,
-				)
-			);
 
 		}
 
@@ -73,6 +68,16 @@ class WPRB_Admin {
 			/*js*/
 			wp_enqueue_script( 'wprb-admin-js', WPRB_URI . 'js/wprb-admin.js', array( 'jquery' ), '1.0', true );
 			wp_enqueue_script( 'tzcheckbox', WPRB_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.js', array( 'jquery' ) );
+
+			/*Pass data to the script file*/
+			wp_localize_script(
+				'wprb-admin-js',
+				'wprbSettings',
+				array(
+					'addHoursNonce'      => $add_hours_nonce,
+					'addLastMinuteNonce' => $add_last_minute_nonce,
+				)
+			);
 
 		}
 
@@ -190,7 +195,7 @@ class WPRB_Admin {
 			echo '<input type="time" name="wprb-bookable-hours-to-' . esc_attr( $number ) . '" id="wprb-bookable-hours-to" class="wprb-bookable-hours-to" min="12:00" max="23:00" value="' . esc_attr( $to ) . '" required>';
 
 			echo '<label for="wprb-bookable-hours-every">' . esc_html__( 'every (minutes)', 'wprb' ) . '</label>';
-			echo '<input type="number" name="wprb-bookable-hours-every-' . esc_attr( $number ) . '" id="wprb-bookable-hours-every" class="wprb-bookable-hours-every" min="5" max="60" step="5" value="15" value="' . esc_attr( $every ) . '" required>';
+			echo '<input type="number" name="wprb-bookable-hours-every-' . esc_attr( $number ) . '" id="wprb-bookable-hours-every" class="wprb-bookable-hours-every" min="5" max="60" step="5" value="' . esc_attr( $every ) . '" required>';
 
 			if ( 1 === $number ) {
 
@@ -240,7 +245,101 @@ class WPRB_Admin {
 
 
 	/**
-	 * Save the serervation oprion in the db
+	 * Return a single last minute element as ajax callback
+	 */
+	public function last_minute_element_callback() {
+
+		error_log( 'TEST: ' . $_POST['wprb-add-last-minute-nonce'] );
+
+		if ( isset( $_POST['number'], $_POST['wprb-add-last-minute-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-add-last-minute-nonce'] ), 'wprb-add-last-minute' ) ) {
+
+			$number = sanitize_text_field( wp_unslash( $_POST['number'] ) );
+
+			$this->last_minute( $number );
+
+		}
+
+		exit;
+
+	}
+
+
+	/**
+	 * Display a single last minute
+	 *
+	 * @param int   $number the number of hours element.
+	 * @param array $data single element data coming from the db.
+	 */
+	public function last_minute( $number = 1, $data = array() ) {
+
+		$date   = isset( $data['date'] ) ? $data['date'] : '';
+		$from   = isset( $data['from'] ) ? $data['from'] : '';
+		$to     = isset( $data['to'] ) ? $data['to'] : '';
+		$people = isset( $data['people'] ) ? $data['people'] : '';
+
+		echo '<div class="wprb-last-minute-element-' . esc_attr( $number ) . ' last-minute-element">';
+			
+			echo '<label for="wprb-last-minute-date">' . esc_html__( 'On', 'wprb' ) . '</label>';
+			echo '<input type="date" name="wprb-last-minute-date-' . esc_attr( $number ) . '" id="wprb-last-minute-date" class="wprb-last-minute-date" min="' . esc_html( date( 'Y-m-d' ) ) . '" value="' . esc_attr( $date ) . '">';
+
+			echo '<label for="wprb-last-minute-from">' . esc_html__( 'from', 'wprb' ) . '</label>';
+			echo '<input type="time" name="wprb-last-minute-from-' . esc_attr( $number ) . '" id="wprb-last-minute-from" class="wprb-last-minute-from" min="12:00" max="23:00" value="' . esc_attr( $from ) . '">';
+
+			echo '<label for="wprb-last-minute-to">' . esc_html__( 'to', 'wprb' ) . '</label>';
+			echo '<input type="time" name="wprb-last-minute-to-' . esc_attr( $number ) . '" id="wprb-last-minute-to" class="wprb-last-minute-to" min="12:00" max="23:00" value="' . esc_attr( $to ) . '">';
+
+			echo '<label for="wprb-last-minute-people">' . esc_html__( 'people', 'wprb' ) . '</label>';
+			echo '<input type="number" name="wprb-last-minute-people-' . esc_attr( $number ) . '" id="wprb-last-minute-people" class="wprb-last-minute-people" step="1" value="' . esc_attr( $people ) . '">';
+
+			if ( 1 === $number ) {
+
+				echo '<div class="wprb-add-last-minute-container">';
+					echo '<img class="add-last-minute" src="' . esc_url( WPRB_URI . 'images/add-icon.png' ) . '">';
+					echo '<img class="add-last-minute-hover" src="' . esc_url( WPRB_URI . 'images/add-icon-hover.png' ) . '">';
+				echo '</div>';
+
+			} else {
+
+				echo '<div class="wprb-remove-last-minute-container">';
+					echo '<img class="remove-last-minute" src="' . esc_url( WPRB_URI . 'images/remove-icon.png' ) . '">';
+					echo '<img class="remove-last-minute-hover" src="' . esc_url( WPRB_URI . 'images/remove-icon-hover.png' ) . '">';
+				echo '</div>';
+
+			}
+
+		echo '</div>';
+
+	}
+
+
+	/**
+	 * Display the last minute element in the plugin admin area
+	 */
+	public function display_last_minute_elements() {
+
+		$saved_last_minute = get_option( 'wprb-last-minute' );
+
+		if ( $saved_last_minute ) {
+
+			$count = count( $saved_last_minute );
+
+			for ( $i = 1; $i <= $count; $i++ ) {
+
+				$this->last_minute( $i, $saved_last_minute[ $i ] );
+
+			}
+
+		} else {
+
+			$this->last_minute();
+
+		}
+
+	}
+
+
+	/**
+	 * Save the serervation option in the db
 	 */
 	public function save_reservations_settings() {
 
@@ -311,6 +410,53 @@ class WPRB_Admin {
 			}
 
 			update_option( 'wprb-hours', $save_hours );
+
+		}
+
+	}
+
+
+	/**
+	 * Save last minute
+	 */
+	public function save_last_minute_settings() {
+
+		if ( isset( $_POST['wprb-set-last-minute-sent'], $_POST['wprb-set-last-minute-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-set-last-minute-nonce'] ), 'wprb-set-last-minute' ) ) {
+
+			/*Last minute activate*/
+			$activate = isset( $_POST['wprb-activate-last-minute'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-activate-last-minute'] ) ) : 0;
+			update_option( 'wprb-activate-last-minute', $activate );
+
+			/*Set last minute*/
+			$last_minute = array();
+
+			/*20 is the current limit*/
+			for ( $i = 1; $i <= 20; $i++ ) {
+
+				$date = isset( $_POST[ 'wprb-last-minute-date-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-last-minute-date-' . $i ] ) ) : null;
+				$from = isset( $_POST[ 'wprb-last-minute-from-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-last-minute-from-' . $i ] ) ) : null;
+				$to = isset( $_POST[ 'wprb-last-minute-to-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-last-minute-to-' . $i ] ) ) : null;
+				$people = isset( $_POST[ 'wprb-last-minute-people-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-last-minute-people-' . $i ] ) ) : null;
+				if ( $date && $from && $to && $people ) {
+
+					$last_minute[ $i ] = array(
+						'date'   => $date,
+						'from'   => $from,
+						'to'     => $to,
+						'people' => $people,
+					);
+
+				} else {
+
+					break;
+
+				}
+
+			}
+
+			update_option( 'wprb-last-minute', $last_minute );
+
+
 
 		}
 
