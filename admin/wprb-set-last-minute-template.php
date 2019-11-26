@@ -8,7 +8,6 @@
  */
 $last_minute_activate = get_option( 'wprb-activate-last-minute' );
 $last_minute          = get_option( 'wprb-last-minute' );
-error_log( 'LAST MINUTE: ' . print_r( $last_minute, true ) );
 ?>
 <!-- Form -->
 <form name="wprb-set-last-minute" class="wprb-set-last-minute wprb-form"  method="post" action="">

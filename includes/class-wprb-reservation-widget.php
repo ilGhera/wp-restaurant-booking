@@ -116,6 +116,21 @@ class WPRB_Reservation_Widget {
 
 
 	/**
+	 * Print the widget description for last minute
+	 */
+	public static function last_minute_text() {
+
+		echo '<p class="last-minute-text">';
+
+			esc_html_e( 'More information about Last Minute ', 'wprb' ); // temp.
+			printf( '<a href="%s">here</a>.', esc_url( '#' ) );
+
+		echo '</p>';
+
+	}
+
+
+	/**
 	 * Display the hours available in the specific day
 	 *
 	 * @param int    $people number of people of the reservation.
@@ -123,18 +138,47 @@ class WPRB_Reservation_Widget {
 	 */
 	public static function hours_select_element( $people = 0, $date = null ) {
 
-		$hours = WPRB_Reservations::get_available_hours( $date );
+		$hours       = WPRB_Reservations::get_available_hours( $date );
+		$last_minute = WPRB_Reservations::get_available_last_minute( $date, $people );
+
+		error_log( 'LAST MINUTE: ' . print_r( $last_minute, true ) );
 
 		if ( is_array( $hours ) ) {
 
-			foreach ( $hours as $key => $value ) {
+			echo '<p class="wprb-step-description">' . esc_html__( 'Select the time', 'wprb' ) . '</p>';
 
-				$not_available = ( $people > $value || 0 === $value ) ? ' not-available' : '';
-				$title         = $not_available ? __( 'Not available', 'mufwc' ) : $value;
+			echo '<ul>';
 
-				echo '<li class="wprb-hour' . esc_attr( $not_available ) . '" title="' . esc_attr( $title ) . '"><input type="button" value="' . esc_attr( $key ) . '"></li>';
+				foreach ( $hours as $key => $value ) {
 
-			}
+					$not_available = ( $people > $value || 0 === $value ) ? ' not-available' : '';
+					$title         = $not_available ? __( 'Not available', 'wprb' ) : $value;
+
+					echo '<li class="wprb-hour' . esc_attr( $not_available ) . '" title="' . esc_attr( $title ) . '"><input type="button" value="' . esc_attr( $key ) . '"></li>';
+
+				}
+
+			echo '</ul>';
+
+		}
+
+		if ( is_array( $last_minute ) && ! empty( $last_minute ) ) {
+
+			echo '<p class="wprb-step-description last-minute">' . esc_html__( 'Last minut available', 'wprb' ) . '</p>';
+
+			echo '<ul class="last-minute">';
+
+				foreach ( $last_minute as $last ) {
+
+					$title = sprintf( __( 'Available until %s', 'wprb' ), $last['to'] );
+
+					echo '<li class="wprb-hour' . esc_attr( $not_available ) . '" title="' . esc_attr( $title ) . '"><input type="button" class="last-minute" data-until="' . esc_attr( $last['to'] ) . '" value="' . esc_attr( $last['from'] ) . '"></li>';
+
+				}
+
+			echo '</ul>';
+
+			self::last_minute_text();
 
 		}
 
@@ -170,13 +214,7 @@ class WPRB_Reservation_Widget {
 	 */
 	public function step_2() {
 
-		echo '<div class="booking-step booking-hours">';
-
-			echo '<p class="wprb-step-description">' . esc_html__( 'Select the time', 'wprb' ) . '</p>';
-
-			echo '<ul></ul>';
-
-		echo '</div>';
+		echo '<div class="booking-step booking-hours"></div>';
 
 	}
 
@@ -204,6 +242,7 @@ class WPRB_Reservation_Widget {
 				echo '<input type="hidden" name="people-field" class="people-field" value="">';
 				echo '<input type="hidden" name="date-field" class="date-field" value="">';
 				echo '<input type="hidden" name="time-field" class="time-field" value="">';
+				echo '<input type="hidden" name="until-field" class="until-field" value="">';
 
 				echo '<input type="submit" class="wprb-complete-reservation" value="' . esc_attr__( 'Book now', 'wprb' ) . '">';
 
@@ -349,7 +388,7 @@ class WPRB_Reservation_Widget {
 		if ( isset( $_POST['values'], $_POST['wprb-save-reservation-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-save-reservation-nonce'] ), 'wprb-save-reservation' ) ) {
 
 			$values = $this->prepare_values( $_POST['values'] );
-			// error_log( 'VALUES: ' . print_r( $values, true ) );
+			error_log( 'VALUES: ' . print_r( $values, true ) );
 
 			$first_name = isset( $values['first-name-field'] ) ? sanitize_text_field( wp_unslash( $values['first-name-field'] ) ) : '';
 			$last_name  = isset( $values['last-name-field'] ) ? sanitize_text_field( wp_unslash( $values['last-name-field'] ) ) : '';
@@ -359,6 +398,7 @@ class WPRB_Reservation_Widget {
 			$date       = isset( $values['date-field'] ) ? sanitize_text_field( wp_unslash( $values['date-field'] ) ) : '';
 			$time       = isset( $values['time-field'] ) ? sanitize_text_field( wp_unslash( $values['time-field'] ) ) : '';
 			$notes      = isset( $values['notes-field'] ) ? sanitize_text_field( wp_unslash( $values['notes-field'] ) ) : '';
+			$until      = isset( $values['until-field'] ) ? sanitize_text_field( wp_unslash( $values['until-field'] ) ) : '';
 
 			$the_date = date( 'Y-m-d', strtotime( $date ) );
 
@@ -379,6 +419,13 @@ class WPRB_Reservation_Widget {
 					'wprb-status'     => 'received',
 				),
 			);
+
+			/*Last minute*/
+			if ( $until ) {
+
+				$args['meta_input']['wprb-until'] = $until;
+
+			}
 
 			$post_id = wp_insert_post( $args );
 

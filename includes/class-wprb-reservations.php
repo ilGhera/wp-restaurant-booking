@@ -53,7 +53,6 @@ class WPRB_Reservations {
 			$change_status_nonce = wp_create_nonce( 'wprb-change-status' );
 			$change_date_nonce   = wp_create_nonce( 'wprb-change-date' );
 
-
 			/*Pass data to the script file*/
 			wp_localize_script(
 				'wprb-edit-js',
@@ -172,15 +171,21 @@ class WPRB_Reservations {
 	 */
 	public static function get_day_reservations( $date ) {
 
-		$outtput = array();
+		$output = array();
 
 		$args = array(
-			'post_type' => 'reservation',
-			'meta_query' => array(
+			'post_type'      => 'reservation',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'meta_query'     => array(
 				array(
 					'key'     => 'wprb-date',
 					'value'   => $date,
 					'compare' => '=',
+				),
+				array(
+					'key'     => 'wprb-until',
+					'compare' => 'NOT EXISTS',
 				),
 			),
 		);
@@ -287,7 +292,7 @@ class WPRB_Reservations {
 		$bookable = $get_bookable[ $day ]['bookable'];
 
 		// error_log( 'BOOKABLE: ' . print_r( $bookable, true ) );
-		// error_log( 'DATE: ' . strtolower( $day ) );
+
 		if ( is_array( $hours ) ) {
 
 			$count = count( $hours );
@@ -346,7 +351,7 @@ class WPRB_Reservations {
 		// error_log( 'HOUR: ' . $hour );
 		// error_log( 'THE INTERVAL: ' . $get_interval );
 		/*Create the margin time*/
-		$margin = new DateInterval( 'PT' . $medium_time .'M' );
+		$margin = new DateInterval( 'PT' . $medium_time . 'M' );
 
 		// error_log( 'HOUR: ' . print_r( $booked, true ) );
 
@@ -388,9 +393,8 @@ class WPRB_Reservations {
 	 */
 	public static function get_available_hours( $date = null ) {
 
-		$bookables = self::get_initial_bookables( $date );
+		$bookables   = self::get_initial_bookables( $date );
 
-		// error_log( 'BOOKABLES: ' . print_r( $bookables, true ) );
 		if ( $date ) {
 
 			$day_reservations = self::get_day_reservations( $date );
@@ -421,8 +425,97 @@ class WPRB_Reservations {
 
 		}
 
-		// error_log( 'UPDATED BOOKABLES: ' . print_r( $bookables, true ) );
+		// error_log( 'AVAILABLE HOURS: ' . print_r( $bookables, true ) );
 		return $bookables;
+
+	}
+
+
+	/**
+	 * Get the last minute already used for a specific date
+	 *
+	 * @param  string $date the date.
+	 * @return int the number of last minute reservations of the day
+	 */
+	public static function get_day_last_minute( $date ) {
+
+		$output = 0;
+
+		$args = array(
+			'post_type'      => 'reservation',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'meta_query'     => array(
+				array(
+					'key'     => 'wprb-date',
+					'value'   => $date,
+					'compare' => '=',
+				),
+				array(
+					'key'     => 'wprb-until',
+					'compare' => 'EXISTS',
+				),
+			),
+		);
+
+		$reservations = get_posts( $args );
+
+		if ( $reservations ) {
+
+			foreach ( $reservations as $res ) {
+
+				$people = get_post_meta( $res->ID, 'wprb-people', true );
+
+				if ( $people ) {
+
+					$output += $people;
+
+				}
+
+			}
+
+		}
+
+		// error_log( 'RES. LAST MINUTE: ' . $output );
+
+		return $output;
+
+	}
+
+
+	/**
+	 * Get the last minute hours of the day
+	 *
+	 * @param  string $date   the date.
+	 * @param  int    $people the number of people.
+	 * @return array
+	 */
+	public static function get_available_last_minute( $date, $people ) {
+
+		if ( get_option( 'wprb-activate-last-minute' ) ) {
+
+			$output          = array();
+			$last_minute     = get_option( 'wprb-last-minute' );
+			$day_last_minute = self::get_day_last_minute( $date );
+
+			if ( $last_minute ) {
+
+				foreach ( $last_minute as $element ) {
+
+					$available = isset( $element['people'] ) ? ( $element['people'] - $day_last_minute ) : 0;
+
+					if ( isset( $element['date'] ) && $date === $element['date'] && $available >= $people ) {
+
+						$output[] = $element;
+
+					}
+
+				}
+
+			}
+
+			return $output;
+		}
 
 	}
 
@@ -566,9 +659,23 @@ class WPRB_Reservations {
 				break;
 
 			case 'time':
-				$time = get_post_meta( $post_id, 'wprb-time', true );
+				$time  = get_post_meta( $post_id, 'wprb-time', true );
+				$until = get_post_meta( $post_id, 'wprb-until', true );
 
-				echo esc_html( $time );
+				/*Last minute*/
+				if ( $until ) {
+
+					echo '<span class="last-minute">';
+
+						echo esc_html( $time ) . ' - ' . esc_html( $until );
+
+					echo '</span>';
+
+				} else {
+
+					echo esc_html( $time );
+
+				}
 
 				break;
 
@@ -587,7 +694,6 @@ class WPRB_Reservations {
 				break;
 
 			case 'status':
-
 				echo $this->get_filtered_status( $post_id );
 
 				break;

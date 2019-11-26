@@ -249,8 +249,6 @@ class WPRB_Admin {
 	 */
 	public function last_minute_element_callback() {
 
-		error_log( 'TEST: ' . $_POST['wprb-add-last-minute-nonce'] );
-
 		if ( isset( $_POST['number'], $_POST['wprb-add-last-minute-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-add-last-minute-nonce'] ), 'wprb-add-last-minute' ) ) {
 
 			$number = sanitize_text_field( wp_unslash( $_POST['number'] ) );
@@ -270,7 +268,7 @@ class WPRB_Admin {
 	 * @param int   $number the number of hours element.
 	 * @param array $data single element data coming from the db.
 	 */
-	public function last_minute( $number = 1, $data = array() ) {
+	public function last_minute( $number = 0, $data = array() ) {
 
 		$date   = isset( $data['date'] ) ? $data['date'] : '';
 		$from   = isset( $data['from'] ) ? $data['from'] : '';
@@ -283,15 +281,15 @@ class WPRB_Admin {
 			echo '<input type="date" name="wprb-last-minute-date-' . esc_attr( $number ) . '" id="wprb-last-minute-date" class="wprb-last-minute-date" min="' . esc_html( date( 'Y-m-d' ) ) . '" value="' . esc_attr( $date ) . '">';
 
 			echo '<label for="wprb-last-minute-from">' . esc_html__( 'from', 'wprb' ) . '</label>';
-			echo '<input type="time" name="wprb-last-minute-from-' . esc_attr( $number ) . '" id="wprb-last-minute-from" class="wprb-last-minute-from" min="12:00" max="23:00" value="' . esc_attr( $from ) . '">';
+			echo '<input type="time" name="wprb-last-minute-from-' . esc_attr( $number ) . '" id="wprb-last-minute-from" class="wprb-last-minute-from" min="12:00" max="23:00" value="' . esc_attr( $from ) . '" required>';
 
 			echo '<label for="wprb-last-minute-to">' . esc_html__( 'to', 'wprb' ) . '</label>';
-			echo '<input type="time" name="wprb-last-minute-to-' . esc_attr( $number ) . '" id="wprb-last-minute-to" class="wprb-last-minute-to" min="12:00" max="23:00" value="' . esc_attr( $to ) . '">';
+			echo '<input type="time" name="wprb-last-minute-to-' . esc_attr( $number ) . '" id="wprb-last-minute-to" class="wprb-last-minute-to" min="12:00" max="23:00" value="' . esc_attr( $to ) . '" required>';
 
 			echo '<label for="wprb-last-minute-people">' . esc_html__( 'people', 'wprb' ) . '</label>';
-			echo '<input type="number" name="wprb-last-minute-people-' . esc_attr( $number ) . '" id="wprb-last-minute-people" class="wprb-last-minute-people" step="1" value="' . esc_attr( $people ) . '">';
+			echo '<input type="number" name="wprb-last-minute-people-' . esc_attr( $number ) . '" id="wprb-last-minute-people" class="wprb-last-minute-people" step="1" value="' . esc_attr( $people ) . '" required>';
 
-			if ( 1 === $number ) {
+			if ( 0 === $number ) {
 
 				echo '<div class="wprb-add-last-minute-container">';
 					echo '<img class="add-last-minute" src="' . esc_url( WPRB_URI . 'images/add-icon.png' ) . '">';
@@ -312,23 +310,74 @@ class WPRB_Admin {
 	}
 
 
+	public function get_filtered_last_minute() {
+
+		$output = null;
+
+		$last_minute = get_option( 'wprb-last-minute' );
+		error_log( 'LAST MINUTE: ' . print_r( $last_minute, true ) );
+				
+		if ( $last_minute ) {
+
+			$count = count( $last_minute );
+
+			for ( $i = 0; $i < $count; $i++ ) {
+
+				$date = isset( $last_minute[ $i ]['date'] ) ? $last_minute[ $i ]['date'] : ''; 
+				$from = isset( $last_minute[ $i ]['from'] ) ? $last_minute[ $i ]['from'] : ''; 
+
+				error_log( 'DATE: ' . $date );
+				error_log( 'FROM: ' . $from );
+
+				/*Check for expired elements*/
+				if ( $date && $from ) {
+					
+					$time = strtotime( $date . ' ' . $from );
+					$now  = strtotime( 'now' );
+
+					error_log( 'LAST MINUTE: ' . $time );
+					error_log( 'NOW: ' . $now );
+
+					if ( $now > $time ) {
+				
+						unset( $last_minute[ $i ] );
+
+					}
+
+				}
+
+
+			}
+		
+			$output = array_values( $last_minute );
+			
+			update_option( 'wprb-last-minute', $output );
+
+			return $output;
+
+		}
+
+	}
+
+
 	/**
 	 * Display the last minute element in the plugin admin area
 	 */
 	public function display_last_minute_elements() {
 
-		$saved_last_minute = get_option( 'wprb-last-minute' );
+		$last_minute = $this->get_filtered_last_minute();
+		error_log( 'FILTERED LAST MINUTE: ' . print_r( $last_minute, true ) );
+				
+		if ( $last_minute ) {
 
-		if ( $saved_last_minute ) {
+			$count = count( $last_minute );
 
-			$count = count( $saved_last_minute );
+			for ( $i = 0; $i < $count; $i++ ) {
 
-			for ( $i = 1; $i <= $count; $i++ ) {
-
-				$this->last_minute( $i, $saved_last_minute[ $i ] );
+				$this->last_minute( $i, $last_minute[ $i ] );
 
 			}
-
+			
 		} else {
 
 			$this->last_minute();
@@ -431,7 +480,7 @@ class WPRB_Admin {
 			$last_minute = array();
 
 			/*20 is the current limit*/
-			for ( $i = 1; $i <= 20; $i++ ) {
+			for ( $i = 0; $i <= 20; $i++ ) {
 
 				$date = isset( $_POST[ 'wprb-last-minute-date-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-last-minute-date-' . $i ] ) ) : null;
 				$from = isset( $_POST[ 'wprb-last-minute-from-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-last-minute-from-' . $i ] ) ) : null;
@@ -455,8 +504,6 @@ class WPRB_Admin {
 			}
 
 			update_option( 'wprb-last-minute', $last_minute );
-
-
 
 		}
 

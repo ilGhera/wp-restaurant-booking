@@ -285,8 +285,8 @@ var wprbAdminController = function() {
 
 
 				var count = $('.last-minute-element').length;
-				var prev  = $('.wprb-last-minute-element-' + count);
-				var next  = count + 1;
+				var prev  = $('.wprb-last-minute-element-' + ( count - 1 ) );
+				var next  = count;
 				var data  = {
 					'action': 'wprb-add-last-minute',
 					'wprb-add-last-minute-nonce': wprbSettings.addLastMinuteNonce,

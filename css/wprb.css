@@ -136,6 +136,12 @@
 p.wprb-step-description {
 	text-align: center;
 	font-weight: bold;
+	color: #
+}
+
+p.wprb-step-description.last-minute {
+	margin-top: 2.5rem;
+	margin-bottom: 0;
 }
 
 .booking-people {
@@ -243,6 +249,19 @@ p.wprb-step-description {
 	overflow-x: hidden;
 }
 
+.booking-hours ul.last-minute {
+	height: 80px;
+}
+
+.last-minute-text {
+	text-align: center;
+	color: #cdcdcd;
+}
+
+.last-minute-text a {
+	text-decoration: underline;
+}
+
 .booking-hours ul li {
 	width: 25%;
 	text-align: center;
@@ -263,6 +282,23 @@ p.wprb-step-description {
 	font-size: 12px;
 	text-align: center;
 	color: #212121;
+}
+
+.booking-hours ul.last-minute li input {
+	border-color: #f5c6cb;
+	box-shadow: none;
+	width: 90%;
+	height: 30px;
+	margin-bottom: 8px;
+	cursor: pointer;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-color: #f8d7da;
+	border-radius: 20px;
+	font-size: 12px;
+	text-align: center;
+	color: #721c24;
 }
 
 .booking-hours ul li.not-available input:hover,

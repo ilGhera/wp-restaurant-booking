@@ -379,6 +379,10 @@ input#wprb-last-minute-date {
 	display: none;
 }
 
+td.column-time span.last-minute {
+	color: red;
+}
+
 
 @media screen and (max-width: 1000px) {
 

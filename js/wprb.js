@@ -59,7 +59,7 @@ var wprbController = function() {
 
 			$.post(wprbSettings.ajaxURL, data, function(response){
 
-				$('.booking-step.booking-hours ul').html(response);
+				$('.booking-step.booking-hours').html(response);
 
 			})
 
@@ -216,6 +216,7 @@ var wprbController = function() {
 			$(document).on('click', '.booking-hours ul li input', function(){
 
 				var parent_li = $(this).closest('li');
+				var until;
 
 				if( $(parent_li).hasClass('not-available') ) {
 					return;
@@ -225,9 +226,17 @@ var wprbController = function() {
 				$('.booking-hours ul li input').removeClass('active');
 				$(this).addClass('active');
 
+				/*Lat minute*/
+				if ($(this).hasClass('last-minute')) {
+
+					until = $(this).data('until');
+
+				}
+
 				/*Add data*/
 				$('li.time .value').html($(this).val());
 				$('.time-field').val($(this).val());
+				$('.until-field').val(until);
 
 				/*Activate complete element*/
 				$('.complete').addClass('active');
