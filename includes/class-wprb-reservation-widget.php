@@ -434,6 +434,8 @@ class WPRB_Reservation_Widget {
 
 			if ( is_int( $post_id ) ) {
 
+				$sent = new WPRB_Notifications( $values );
+
 				echo $this->step_4( $first_name, $email );
 
 			}

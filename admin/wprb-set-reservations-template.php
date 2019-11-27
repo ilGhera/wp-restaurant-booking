@@ -26,7 +26,7 @@ $expiration_time = get_option( 'wprb-expiration-time' );
 			</td>
 		</tr>
 		<tr>
-			<th scope="row"><?php esc_html_e( 'Reservations', 'wprb' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Bookable seats', 'wprb' ); ?></th>
 			<td>
 				<?php
 				foreach ( $admin->week() as $key => $value ) {
@@ -34,7 +34,7 @@ $expiration_time = get_option( 'wprb-expiration-time' );
 
 						/*The cols name*/
 						if ( 'mon' === $key ) {
-							echo '<div class="wprb-col"><h4>' . esc_html__( 'Bookable seats', 'wprb' ) . '</h4></div>';
+							echo '<div class="wprb-col"><h4>' . esc_html__( 'Internal seats', 'wprb' ) . '</h4></div>';
 							echo '<div class="wprb-col external"><h4>' . esc_html__( 'External seats', 'wprb' ) . '</h4></div>';
 							echo '<div class="clear"></div>';
 						}

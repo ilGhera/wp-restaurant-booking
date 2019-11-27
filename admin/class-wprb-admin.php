@@ -20,6 +20,7 @@ class WPRB_Admin {
 
 			add_action( 'admin_init', array( $this, 'save_reservations_settings' ) );
 			add_action( 'admin_init', array( $this, 'save_last_minute_settings' ) );
+			add_action( 'admin_init', array( $this, 'save_notifications_settings' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'wprb_admin_scripts' ) );
 			add_action( 'admin_menu', array( $this, 'register_wprb_admin' ) );
 			add_action( 'wp_ajax_wprb-add-hours', array( $this, 'hours_element_callback' ) );
@@ -315,7 +316,7 @@ class WPRB_Admin {
 		$output = null;
 
 		$last_minute = get_option( 'wprb-last-minute' );
-		error_log( 'LAST MINUTE: ' . print_r( $last_minute, true ) );
+		// error_log( 'LAST MINUTE: ' . print_r( $last_minute, true ) );
 				
 		if ( $last_minute ) {
 
@@ -326,8 +327,8 @@ class WPRB_Admin {
 				$date = isset( $last_minute[ $i ]['date'] ) ? $last_minute[ $i ]['date'] : ''; 
 				$from = isset( $last_minute[ $i ]['from'] ) ? $last_minute[ $i ]['from'] : ''; 
 
-				error_log( 'DATE: ' . $date );
-				error_log( 'FROM: ' . $from );
+				// error_log( 'DATE: ' . $date );
+				// error_log( 'FROM: ' . $from );
 
 				/*Check for expired elements*/
 				if ( $date && $from ) {
@@ -335,8 +336,8 @@ class WPRB_Admin {
 					$time = strtotime( $date . ' ' . $from );
 					$now  = strtotime( 'now' );
 
-					error_log( 'LAST MINUTE: ' . $time );
-					error_log( 'NOW: ' . $now );
+					// error_log( 'LAST MINUTE: ' . $time );
+					// error_log( 'NOW: ' . $now );
 
 					if ( $now > $time ) {
 				
@@ -366,7 +367,7 @@ class WPRB_Admin {
 	public function display_last_minute_elements() {
 
 		$last_minute = $this->get_filtered_last_minute();
-		error_log( 'FILTERED LAST MINUTE: ' . print_r( $last_minute, true ) );
+		// error_log( 'FILTERED LAST MINUTE: ' . print_r( $last_minute, true ) );
 				
 		if ( $last_minute ) {
 
@@ -504,6 +505,33 @@ class WPRB_Admin {
 			}
 
 			update_option( 'wprb-last-minute', $last_minute );
+
+		}
+
+	}
+
+
+	/**
+	 * Save notifications
+	 */
+	public function save_notifications_settings() {
+
+		if ( isset( $_POST['wprb-set-notifications-sent'], $_POST['wprb-set-notifications-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-set-notifications-nonce'] ), 'wprb-set-notifications' ) ) {
+
+			$admin_activate = isset( $_POST['wprb-activate-admin-notification'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-activate-admin-notification'] ) ) : '';
+			update_option( 'wprb-activate-admin-notification', $admin_activate );
+
+			$admin_recipients = isset( $_POST['wprb-admin-recipients'] ) && '' !== $_POST['wprb-admin-recipients'] ? explode( ' ', sanitize_text_field( wp_unslash( $_POST['wprb-admin-recipients'] ) ) ) : '';
+			update_option( 'wprb-admin-recipients', $admin_recipients );
+
+			$user_activate = isset( $_POST['wprb-activate-user-notification'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-activate-user-notification'] ) ) : '';
+			update_option( 'wprb-activate-user-notification', $user_activate );
+
+			$user_object   = isset( $_POST['wprb-user-notification-object'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-user-notification-object'] ) ) : '';
+			update_option( 'wprb-user-notification-object', $user_object );
+
+			$user_message  = isset( $_POST['wprb-user-notification-message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['wprb-user-notification-message'] ) ) : '';
+			update_option( 'wprb-user-notification-message', $user_message );
 
 		}
 

@@ -21,7 +21,7 @@ $last_minute          = get_option( 'wprb-last-minute' );
 			</td>
 		</tr>
 		<tr class="wprb-add-last-minute-field" style="display: none;">
-			<th scope="row"><?php esc_html_e( 'test', 'wprb' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Add', 'wprb' ); ?></th>
 			<td>
 				<?php
 				$admin->display_last_minute_elements();

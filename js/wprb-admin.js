@@ -22,7 +22,8 @@ var wprbAdminController = function() {
 		self.autoCompleteFields();
 		self.autoCompleteFields(true);
 		self.lastMinuteElement();
-
+		self.notificationsElement();
+		self.notificationsShortcodes();
 	}
 
 	/**
@@ -242,6 +243,9 @@ var wprbAdminController = function() {
 	}
 
 
+	/**
+	 * Handles the visibility of the last minute fields
+	 */
 	self.lastMinuteElement = function() {
 
 		jQuery(function($){
@@ -319,6 +323,100 @@ var wprbAdminController = function() {
 				var element = $(this).closest('.last-minute-element');
 
 				$(element).remove();
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Handles the visibility of the notification fields
+	 */
+	self.notificationsElement = function() {
+
+		jQuery(function($){
+
+			var adminToggle     = $('.wprb-activate-admin-notifications-field .tzCheckBox');
+			var userToggle      = $('.wprb-activate-user-notifications-field .tzCheckBox');
+			var adminRecipients = $('.wprb-admin-recipients');
+			var userFields      = $('.wprb-user-notification-field');
+
+			/*Admin*/
+			if ($(adminToggle).hasClass('checked')) {
+
+				adminRecipients.show();
+
+			}
+
+			$(adminToggle).on('click', function(){
+				
+				if ($(this).hasClass('checked')) {
+
+					adminRecipients.show('slow');
+
+				} else {
+
+					adminRecipients.hide();
+
+				}
+			
+			})
+
+			/*User*/
+			if ($(userToggle).hasClass('checked')) {
+
+				userFields.show();
+
+			}
+
+			$(userToggle).on('click', function(){
+				
+				if ($(this).hasClass('checked')) {
+
+					userFields.show('slow');
+
+				} else {
+
+					userFields.hide();
+
+				}
+			
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Copy shortcodes to use in user notification
+	 */
+	self.notificationsShortcodes = function() {
+
+		jQuery(function($){
+
+			var $temp;
+			var shortcode;
+
+			/*Add title*/
+			$('.shortcodes code').each( function(){
+
+				$(this).attr('title', 'Click to copy');
+
+			})
+
+			/*Copy shortcode*/
+			$('.shortcodes code').on( 'click', function(){
+
+				$temp     = $('<input>');
+				shortcode = $(this);
+				
+				$('body').append($temp);
+				$temp.val($(shortcode).text()).select();
+				document.execCommand('copy');
+				$temp.remove();
 
 			})
 
