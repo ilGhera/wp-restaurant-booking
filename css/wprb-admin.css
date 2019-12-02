@@ -334,7 +334,6 @@ input#wprb-last-minute-date {
 	margin-bottom: 0;
 }
 
-
 .booking-hours ul li input {
 	border: 1px solid #cdcdcd; /*temp*/
 	box-shadow: none;
@@ -349,10 +348,24 @@ input#wprb-last-minute-date {
 	font-size: 12px;
 	text-align: center;
 	color: #212121;
+	cursor: pointer;
 }
 
-.booking-hours ul li input {
+.booking-hours ul.last-minute li input {
+	border-color: #f5c6cb;
+	box-shadow: none;
+	width: 90%;
+	height: 30px;
+	margin-bottom: 8px;
 	cursor: pointer;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-color: #f8d7da;
+	border-radius: 20px;
+	font-size: 12px;
+	text-align: center;
+	color: #721c24;
 }
 
 .booking-hours ul li input:hover,
@@ -379,6 +392,20 @@ input#wprb-last-minute-date {
 	display: none;
 }
 
+p.wprb-step-description.last-minute {
+	margin-top: 2.5rem;
+	margin-bottom: 0;
+	font-style: italic;
+	font-weight: bold;
+}
+
+ul.last-minute {
+	list-style: none;
+	margin: 0;
+	padding: 2rem 0 0;
+	height: 80px;
+}
+
 td.column-time span.last-minute {
 	color: red;
 }
@@ -393,6 +420,12 @@ tr.wprb-user-notification-field .description .shortcodes code {
 	font-style: normal;
 	font-size: 80%;
 	cursor: pointer;
+}
+
+input.wprb-time {
+	opacity: 0;
+	width: 0;
+	height: 0;
 }
 
 @media screen and (max-width: 1000px) {

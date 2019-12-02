@@ -19,7 +19,7 @@ class WPRB_Reservations {
 
 			add_action( 'admin_enqueue_scripts', array( $this, 'wprb_edit_scripts' ) );
 			add_action( 'init', array( $this, 'register_post_type' ) );
-			add_action( 'add_meta_boxes', array( $this, 'wprb_add_meta_box' ) );
+		    add_action( 'add_meta_boxes', array( $this, 'wprb_add_meta_box' ) );
 			add_action( 'save_post', array( __CLASS__, 'save_single_reservation' ), 10, 1 );
 			add_filter( 'manage_edit-reservation_columns', array( $this, 'edit_reservation_columns' ) );
 			add_action( 'manage_reservation_posts_custom_column', array( $this, 'manage_reservation_columns' ), 10, 2 );
@@ -27,6 +27,9 @@ class WPRB_Reservations {
 			add_action( 'load-edit.php', array( $this, 'edit_reservations_load' ) );
 			add_action( 'admin_footer', array( $this, 'status_modal' ) );
 			add_action( 'wp_ajax_wprb-change-status', array( $this, 'wprb_change_status_callback' ) );
+    
+		    add_filter( 'enter_title_here', array( $this, 'title_place_holder' ), 20 , 2 );
+	
 		}
 
 	}
@@ -107,6 +110,26 @@ class WPRB_Reservations {
 		);
 
 			register_post_type( 'reservation', $args );
+
+	}
+
+
+	/**
+	 * Custom placeholder for reservation title
+	 *
+	 * @param  string $title the placeholder.
+	 * @param  object $post  the post.
+	 * @return string
+	 */
+	public function title_place_holder( $title, $post ) {
+
+		if ( 'reservation' === $post->post_type ) {
+
+			$title = __( 'Add the reservation title or leave blank to use the customer name', 'wprb' );
+
+		}
+
+		return $title;
 
 	}
 
@@ -213,8 +236,6 @@ class WPRB_Reservations {
 
 			ksort( $output );
 
-			// error_log( 'DAY RESERVATIONS: ' . print_r( $output, true ) );
-
 			return $output;
 
 		}
@@ -269,7 +290,6 @@ class WPRB_Reservations {
 
 		}
 
-		// error_log( 'HOURS SET: ' . print_r( $output, true ) );
 		return $output;
 
 	}
@@ -290,8 +310,6 @@ class WPRB_Reservations {
 		$day          = strtolower( date( 'D', strtotime( $date ) ) );
 
 		$bookable = $get_bookable[ $day ]['bookable'];
-
-		// error_log( 'BOOKABLE: ' . print_r( $bookable, true ) );
 
 		if ( is_array( $hours ) ) {
 
@@ -322,7 +340,6 @@ class WPRB_Reservations {
 
 		$hours = self::get_hours_set( true );
 
-		// error_log( 'TIME: ' . print_r( $hours, true ) );
 		if ( is_array( $hours ) && isset( $hours[ $time ] ) ) {
 
 			return $hours[ $time ];
@@ -453,7 +470,8 @@ class WPRB_Reservations {
 				),
 				array(
 					'key'     => 'wprb-until',
-					'compare' => 'EXISTS',
+					'value'   => '',
+					'compare' => '!=',
 				),
 			),
 		);
@@ -476,8 +494,6 @@ class WPRB_Reservations {
 
 		}
 
-		// error_log( 'RES. LAST MINUTE: ' . $output );
-
 		return $output;
 
 	}
@@ -486,21 +502,30 @@ class WPRB_Reservations {
 	/**
 	 * Get the last minute hours of the day
 	 *
-	 * @param  string $date   the date.
-	 * @param  int    $people the number of people.
+	 * @param string $date        the date.
+	 * @param int    $people      the number of people.
+	 * @param bool   $edit        true if called from edit reservation.
+	 * @param bool   $last_minute define is the current reservation (back-end) is a last minute.
 	 * @return array
 	 */
-	public static function get_available_last_minute( $date, $people ) {
+	public static function get_available_last_minute( $date, $people, $edit = false, $last_minute = false ) {
 
 		if ( get_option( 'wprb-activate-last-minute' ) ) {
 
 			$output          = array();
-			$last_minute     = get_option( 'wprb-last-minute' );
+			$last_minute_el  = get_option( 'wprb-last-minute' );
 			$day_last_minute = self::get_day_last_minute( $date );
 
-			if ( $last_minute ) {
+			if ( $last_minute_el ) {
 
-				foreach ( $last_minute as $element ) {
+				foreach ( $last_minute_el as $element ) {
+
+					/*If in edit reservation exclude current reservation people*/
+					if ( $edit && $last_minute ) {
+
+						$day_last_minute = $day_last_minute - $people;
+
+					}
 
 					$available = isset( $element['people'] ) ? ( $element['people'] - $day_last_minute ) : 0;
 
@@ -539,6 +564,7 @@ class WPRB_Reservations {
 			$table      = isset( $_POST['wprb-table'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-table'] ) ) : '';
 			$date       = isset( $_POST['wprb-date'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-date'] ) ) : '';
 			$time       = isset( $_POST['wprb-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-time'] ) ) : '';
+			$until      = isset( $_POST['wprb-until'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-until'] ) ) : '';
 			$notes      = isset( $_POST['wprb-notes'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-notes'] ) ) : '';
 			$status     = isset( $_POST['wprb-status'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-status'] ) ) : '';
 
@@ -550,14 +576,31 @@ class WPRB_Reservations {
 			update_post_meta( $post_id, 'wprb-table', $table );
 			update_post_meta( $post_id, 'wprb-date', $date );
 			update_post_meta( $post_id, 'wprb-time', $time );
+			update_post_meta( $post_id, 'wprb-until', $until );
 			update_post_meta( $post_id, 'wprb-notes', $notes );
 			update_post_meta( $post_id, 'wprb-status', $status );
 
-			/*temp*/
-			// self::get_available_hours( $date );
+			$values = array(
+				'first-name-field' => $first_name,
+				'last-name-field'  => $last_name,
+				'email-field'      => $email,
+				'phone-field'      => $phone,
+				'people-field'     => $people,
+				'date-field'       => $date,
+				'time-field'       => $time,
+				'notes-field'      => $notes,
+				'until-field'      => $until,
+			);
+
 			if ( ! $post_title ) {
 
 				self::default_reservation_title( $post_id, $first_name, $last_name );
+
+			}
+
+			if ( get_post( $post_id ) ) {
+
+				$sent = new WPRB_Notifications( $values );
 
 			}
 

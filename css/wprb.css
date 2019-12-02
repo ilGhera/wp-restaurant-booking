@@ -311,6 +311,10 @@ p.wprb-step-description.last-minute {
 	opacity: 0.4;
 }
 
+.booking-hours ul li.not-available input {
+	cursor: default;
+}
+
 .booking-hours ul li input:hover,
 .booking-hours ul li input.active {
 	color: #fff;

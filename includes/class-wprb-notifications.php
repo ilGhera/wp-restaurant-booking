@@ -154,8 +154,6 @@ class WPRB_Notifications {
 
 			$sent = wp_mail( $to, $subject, $message );
 
-			// error_log( 'MAIL ADMIN: ' . print_r( $sent, true ) );
-
 		}
 
 

@@ -16,6 +16,8 @@ class WPRB_Reservation_Widget {
 	 */
 	public function __construct( $init = false ) {
 
+		$this->power_on = get_option( 'wprb-power-on' );
+
 		add_action( 'wp_enqueue_scripts', array( $this, 'wprb_scripts' ) );
 		add_action( 'wp_head', array( $this, 'booking_button' ) );
 		add_action( 'wp_footer', array( $this, 'booking_modal' ) );
@@ -25,6 +27,8 @@ class WPRB_Reservation_Widget {
 
 		add_action( 'wp_ajax_wprb-reservation', array( $this, 'wprb_save_reservation' ) );
 		add_action( 'wp_ajax_nopriv_wprb-reservation', array( $this, 'wprb_save_reservation' ) );
+
+		add_shortcode( 'booking-button', array( $this, 'booking_button_shortcode' ) );
 
 	}
 
@@ -69,9 +73,29 @@ class WPRB_Reservation_Widget {
 	 */
 	public function booking_button() {
 
-		echo '<div class="wprb-booking-button">';
-			echo '<a href="#wprb-booking-modal" rel="modal:open">' . esc_html( wp_unslash( __( 'Book now', 'wprb' ) ) ) . '</a>';
-		echo '</div>';
+		if ( $this->power_on ) {
+
+			echo '<div class="wprb-booking-button">';
+				echo '<a href="#wprb-booking-modal" rel="modal:open">' . esc_html( wp_unslash( __( 'Book now', 'wprb' ) ) ) . '</a>';
+			echo '</div>';
+
+		}
+
+	}
+
+
+	/**
+	 * The booking button shortcode
+	 *
+	 * @return mixed the button
+	 */
+	public function booking_button_shortcode() {
+
+		ob_start();
+
+		$this->booking_button();
+
+		return ob_get_clean();
 
 	}
 
@@ -133,28 +157,58 @@ class WPRB_Reservation_Widget {
 	/**
 	 * Display the hours available in the specific day
 	 *
-	 * @param int    $people number of people of the reservation.
-	 * @param srting $date the reservation date.
+	 * @param int    $people      number of people of the reservation.
+	 * @param srting $date        the reservation date.
+	 * @param bool   $back_end    different if used in back-end.
+	 * @param bool   $last_minute define is the current reservation (back-end) is a last minute.
 	 */
-	public static function hours_select_element( $people = 0, $date = null ) {
+	public static function hours_select_element( $people = 0, $date = null, $back_end = false, $last_minute = false ) {
 
-		$hours       = WPRB_Reservations::get_available_hours( $date );
-		$last_minute = WPRB_Reservations::get_available_last_minute( $date, $people );
-
-		error_log( 'LAST MINUTE: ' . print_r( $last_minute, true ) );
+		/*Hours*/
+		$hours = WPRB_Reservations::get_available_hours( $date );
 
 		if ( is_array( $hours ) ) {
 
-			echo '<p class="wprb-step-description">' . esc_html__( 'Select the time', 'wprb' ) . '</p>';
+			if ( false === $back_end ) {
+
+				echo '<p class="wprb-step-description">' . esc_html__( 'Select the time', 'wprb' ) . '</p>';
+
+			}
 
 			echo '<ul>';
 
+				/*The current hour*/
+				$now = current_time( 'timestamp' );
+
+				/*The margin time set by the admin*/
+				$margin_time = get_option( 'wprb-margin-time' ) ? get_option( 'wprb-margin-time' ) : 60;
+
 				foreach ( $hours as $key => $value ) {
 
-					$not_available = ( $people > $value || 0 === $value ) ? ' not-available' : '';
+					$is_available = true;
+
+					/*Check if it's too late*/
+					if ( $date ) {
+
+						if ( ( strtotime( $date . ' ' . $key ) - ( 60 * $margin_time ) ) < $now ) {
+
+							$is_available = false;
+
+						}
+
+					}
+
+					/*Check if it's available for this number of people*/
+					if ( $people > $value || 0 === $value ) {
+
+						$is_available = false;
+
+					}
+
+					$not_available = false === $is_available ? ' not-available' : '';
 					$title         = $not_available ? __( 'Not available', 'wprb' ) : $value;
 
-					echo '<li class="wprb-hour' . esc_attr( $not_available ) . '" title="' . esc_attr( $title ) . '"><input type="button" value="' . esc_attr( $key ) . '"></li>';
+					echo '<li class="wprb-hour regular' . esc_attr( $not_available ) . '" title="' . esc_attr( $title ) . '"><input type="button" value="' . esc_attr( $key ) . '"></li>';
 
 				}
 
@@ -162,13 +216,18 @@ class WPRB_Reservation_Widget {
 
 		}
 
-		if ( is_array( $last_minute ) && ! empty( $last_minute ) ) {
+		/*Lat minute*/
+		$last_minute_av = WPRB_Reservations::get_available_last_minute( $date, $people, $back_end, $last_minute );
 
-			echo '<p class="wprb-step-description last-minute">' . esc_html__( 'Last minut available', 'wprb' ) . '</p>';
+		if ( is_array( $last_minute_av ) && ! empty( $last_minute_av ) ) {
+
+			$description = $back_end ? __( 'Last minute', 'wprb' ) : __( 'Last minute available', 'wprb' );
+
+			echo '<p class="wprb-step-description last-minute">' . esc_html( $description ) . '</p>';
 
 			echo '<ul class="last-minute">';
 
-				foreach ( $last_minute as $last ) {
+				foreach ( $last_minute_av as $last ) {
 
 					$title = sprintf( __( 'Available until %s', 'wprb' ), $last['to'] );
 
@@ -178,7 +237,11 @@ class WPRB_Reservation_Widget {
 
 			echo '</ul>';
 
-			self::last_minute_text();
+			if ( false === $back_end ) {
+
+				self::last_minute_text();
+
+			}
 
 		}
 
@@ -192,13 +255,13 @@ class WPRB_Reservation_Widget {
 
 		if ( isset( $_POST['people'], $_POST['date'], $_POST['wprb-change-date-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-change-date-nonce'] ), 'wprb-change-date' ) ) {
 
-			$people   = sanitize_text_field( wp_unslash( $_POST['people'] ) );
-			$date     = sanitize_text_field( wp_unslash( $_POST['date'] ) );
-			$the_date = date( 'Y-m-d', strtotime( $date ) );
+			$people      = sanitize_text_field( wp_unslash( $_POST['people'] ) );
+			$date        = sanitize_text_field( wp_unslash( $_POST['date'] ) );
+			$back_end    = isset( $_POST['back-end'] ) ? sanitize_text_field( wp_unslash( $_POST['back-end'] ) ) : false;
+			$the_date    = date( 'Y-m-d', strtotime( $date ) );
+			$last_minute = isset( $_POST['last-minute'] ) ? sanitize_text_field( wp_unslash( $_POST['last-minute'] ) ) : null;
 
-			// error_log( 'TEST PEOPLE: ' . $people );
-			// error_log( 'TEST DATA: ' . $the_date );
-			$this->hours_select_element( $people, $the_date );
+			$this->hours_select_element( $people, $the_date, $back_end, $last_minute );
 
 		}
 
@@ -340,7 +403,6 @@ class WPRB_Reservation_Widget {
 
 			echo '</div>';
 
-		// echo '<a href="#" rel="modal:close">Close</a>';
 		echo '</div>';
 
 	}
@@ -388,7 +450,6 @@ class WPRB_Reservation_Widget {
 		if ( isset( $_POST['values'], $_POST['wprb-save-reservation-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-save-reservation-nonce'] ), 'wprb-save-reservation' ) ) {
 
 			$values = $this->prepare_values( $_POST['values'] );
-			error_log( 'VALUES: ' . print_r( $values, true ) );
 
 			$first_name = isset( $values['first-name-field'] ) ? sanitize_text_field( wp_unslash( $values['first-name-field'] ) ) : '';
 			$last_name  = isset( $values['last-name-field'] ) ? sanitize_text_field( wp_unslash( $values['last-name-field'] ) ) : '';

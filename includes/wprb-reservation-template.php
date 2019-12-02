@@ -7,20 +7,22 @@
  * @since 0.9.0
  */
 
-$reservation_id     = get_the_ID();
-$first_name         = get_post_meta( $reservation_id, 'wprb-first-name', true );
-$last_name          = get_post_meta( $reservation_id, 'wprb-last-name', true );
-$email              = get_post_meta( $reservation_id, 'wprb-email', true );
-$phone              = get_post_meta( $reservation_id, 'wprb-phone', true );
-$people             = get_post_meta( $reservation_id, 'wprb-people', true );
-$table              = get_post_meta( $reservation_id, 'wprb-table', true );
-$date               = get_post_meta( $reservation_id, 'wprb-date', true );
-$time               = get_post_meta( $reservation_id, 'wprb-time', true );
-$notes              = get_post_meta( $reservation_id, 'wprb-notes', true );
-$res_status         = get_post_meta( $reservation_id, 'wprb-status', true );
+$reservation_id = get_the_ID();
+$first_name     = get_post_meta( $reservation_id, 'wprb-first-name', true );
+$last_name      = get_post_meta( $reservation_id, 'wprb-last-name', true );
+$email          = get_post_meta( $reservation_id, 'wprb-email', true );
+$phone          = get_post_meta( $reservation_id, 'wprb-phone', true );
+$people         = get_post_meta( $reservation_id, 'wprb-people', true );
+$table          = get_post_meta( $reservation_id, 'wprb-table', true );
+$date           = get_post_meta( $reservation_id, 'wprb-date', true );
+$time           = get_post_meta( $reservation_id, 'wprb-time', true );
+$until          = get_post_meta( $reservation_id, 'wprb-until', true );
+$notes          = get_post_meta( $reservation_id, 'wprb-notes', true );
+$res_status     = get_post_meta( $reservation_id, 'wprb-status', true );
+$last_minute    = $until ? true : false;
 ?>
 
-<table class="wprb-reservation form-table">
+<table class="wprb-reservation form-table<?php echo $last_minute ? ' last-minute' : ''; ?>">
 	<tr>
 		<th scope="row"><?php esc_html_e( 'First name', 'wprb' ); ?></th>
 		<td>
@@ -52,7 +54,7 @@ $res_status         = get_post_meta( $reservation_id, 'wprb-status', true );
 	<tr>
 		<th scope="row"><?php esc_html_e( 'People', 'wprb' ); ?></th>
 		<td>
-			<input type="number" name="wprb-people" class="wprb-people" value="<?php echo esc_attr( wp_unslash( $people ) ); ?>" placeholder="2" required>
+			<input type="number" name="wprb-people" class="wprb-people" value="<?php echo esc_attr( wp_unslash( $people ) ); ?>" min="1" placeholder="2" required>
 			<p class="description"><?php esc_html_e( 'The number of people', 'wprb' ); ?></p>
 		</td>
 	</tr>
@@ -73,16 +75,17 @@ $res_status         = get_post_meta( $reservation_id, 'wprb-status', true );
 	<tr class="wprb-hours">
 		<th scope="row"><?php esc_html_e( 'Time', 'wprb' ); ?></th>
 		<td>
+			<input type="text" name="wprb-time" class="wprb-time" value="<?php echo esc_attr( wp_unslash( $time ) ); ?>" required>
+			<input type="hidden" name="wprb-until" class="wprb-until" value="<?php echo esc_attr( wp_unslash( $until ) ); ?>">
 			<div class="booking-hours">
-				<ul>
-					<?php
-					if ( $time && $people ) {
-						WPRB_Reservation_Widget::hours_select_element( $people, $date );
-					}
-					?>
-				</ul>
+				<?php
+				if ( $time && $people ) {
+
+					WPRB_Reservation_Widget::hours_select_element( $people, $date, true, $last_minute );
+
+				}
+				?>
 			</div>
-			<input type="hidden" name="wprb-time" class="wprb-time" value="<?php echo esc_attr( wp_unslash( $time ) ); ?>">
 			<p class="description"><?php esc_html_e( 'The time of the reservation', 'wprb' ); ?></p>
 		</td>
 	</tr>

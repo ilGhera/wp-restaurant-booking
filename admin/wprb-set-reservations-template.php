@@ -8,9 +8,11 @@
  */
 
 $admin           = new WPRB_Admin();
+$power_on        = get_option( 'wprb-power-on' );
 $external_seats  = get_option( 'wprb-activate-external-seats' );
 $bookable        = get_option( 'wprb-bookable' );
 $hours           = get_option( 'wprb-hours' );
+$margin_time     = get_option( 'wprb-margin-time' );
 $medium_time     = get_option( 'wprb-medium-time' );
 $expiration_time = get_option( 'wprb-expiration-time' );
 ?>
@@ -18,6 +20,13 @@ $expiration_time = get_option( 'wprb-expiration-time' );
 <form name="wprb-set-reservations" class="wprb-set-reservations wprb-form"  method="post" action="">
 
 	<table class="form-table">
+		<tr>
+			<th scope="row"><?php esc_html_e( 'Activate', 'wprb' ); ?></th>
+			<td>
+				<input type="checkbox" name="wprb-power-on" id="wprb-activate-external-seats" value="1"<?php echo ( 1 == $power_on ? ' checked="checked"' : 1 ); ?>>
+				<p class="description"><?php esc_html_e( 'Display the booking button and receive reservations.', 'wprb' ); ?></p>
+			</td>
+		</tr>
 		<tr class="wprb-activate-external-seats-field">
 			<th scope="row"><?php esc_html_e( 'External seats', 'wprb' ); ?></th>
 			<td>
@@ -73,16 +82,23 @@ $expiration_time = get_option( 'wprb-expiration-time' );
 			</td>
 		</tr>
 		<tr>
+			<th scope="row"><?php esc_html_e( 'Margin time', 'wprb' ); ?></th>
+			<td>
+				<input type="number" name="wprb-margin-time" step="5" min="10" max="1440" value="<?php echo esc_attr( $margin_time ); ?>" placeholder="Default 60">
+				<p class="description"><?php esc_html_e( 'The time within which it is possible to book.', 'wprb' ); ?></p>
+			</td>
+		</tr>
+		<tr>
 			<th scope="row"><?php esc_html_e( 'Medium time', 'wprb' ); ?></th>
 			<td>
-				<input type="number" name="wprb-medium-time" step="5" min="15" max="180" value="<?php echo esc_attr( $medium_time ); ?>" placeholder="Default 60">
+				<input type="number" name="wprb-medium-time" step="5" min="10" max="180" value="<?php echo esc_attr( $medium_time ); ?>" placeholder="Default 60">
 				<p class="description"><?php esc_html_e( 'An estimate about the minutes passed by the customer at the table.', 'wprb' ); ?></p>
 			</td>
 		</tr>
 		<tr>
 			<th scope="row"><?php esc_html_e( 'Expiration time', 'wprb' ); ?></th>
 			<td>
-				<input type="number" name="wprb-expiration-time" step="10" min="10" max="1440" value="<?php echo esc_attr( $expiration_time ); ?>" placeholder="Default 60">
+				<input type="number" name="wprb-expiration-time" step="5" min="10" max="1440" value="<?php echo esc_attr( $expiration_time ); ?>" placeholder="Default 60">
 				<p class="description"><?php esc_html_e( 'The delay time in minutes to consider a reservation as expired.', 'wprb' ); ?></p>
 			</td>
 		</tr>

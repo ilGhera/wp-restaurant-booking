@@ -277,7 +277,7 @@ class WPRB_Admin {
 		$people = isset( $data['people'] ) ? $data['people'] : '';
 
 		echo '<div class="wprb-last-minute-element-' . esc_attr( $number ) . ' last-minute-element">';
-			
+
 			echo '<label for="wprb-last-minute-date">' . esc_html__( 'On', 'wprb' ) . '</label>';
 			echo '<input type="date" name="wprb-last-minute-date-' . esc_attr( $number ) . '" id="wprb-last-minute-date" class="wprb-last-minute-date" min="' . esc_html( date( 'Y-m-d' ) ) . '" value="' . esc_attr( $date ) . '">';
 
@@ -311,36 +311,32 @@ class WPRB_Admin {
 	}
 
 
+	/**
+	 * Auto-delete the last minute out of date
+	 */
 	public function get_filtered_last_minute() {
 
 		$output = null;
 
 		$last_minute = get_option( 'wprb-last-minute' );
-		// error_log( 'LAST MINUTE: ' . print_r( $last_minute, true ) );
-				
+
 		if ( $last_minute ) {
 
 			$count = count( $last_minute );
 
 			for ( $i = 0; $i < $count; $i++ ) {
 
-				$date = isset( $last_minute[ $i ]['date'] ) ? $last_minute[ $i ]['date'] : ''; 
-				$from = isset( $last_minute[ $i ]['from'] ) ? $last_minute[ $i ]['from'] : ''; 
-
-				// error_log( 'DATE: ' . $date );
-				// error_log( 'FROM: ' . $from );
+				$date = isset( $last_minute[ $i ]['date'] ) ? $last_minute[ $i ]['date'] : '';
+				$from = isset( $last_minute[ $i ]['from'] ) ? $last_minute[ $i ]['from'] : '';
 
 				/*Check for expired elements*/
 				if ( $date && $from ) {
-					
+
 					$time = strtotime( $date . ' ' . $from );
 					$now  = strtotime( 'now' );
 
-					// error_log( 'LAST MINUTE: ' . $time );
-					// error_log( 'NOW: ' . $now );
-
 					if ( $now > $time ) {
-				
+
 						unset( $last_minute[ $i ] );
 
 					}
@@ -349,9 +345,9 @@ class WPRB_Admin {
 
 
 			}
-		
+
 			$output = array_values( $last_minute );
-			
+
 			update_option( 'wprb-last-minute', $output );
 
 			return $output;
@@ -367,8 +363,7 @@ class WPRB_Admin {
 	public function display_last_minute_elements() {
 
 		$last_minute = $this->get_filtered_last_minute();
-		// error_log( 'FILTERED LAST MINUTE: ' . print_r( $last_minute, true ) );
-				
+
 		if ( $last_minute ) {
 
 			$count = count( $last_minute );
@@ -378,7 +373,7 @@ class WPRB_Admin {
 				$this->last_minute( $i, $last_minute[ $i ] );
 
 			}
-			
+
 		} else {
 
 			$this->last_minute();
@@ -394,6 +389,10 @@ class WPRB_Admin {
 	public function save_reservations_settings() {
 
 		if ( isset( $_POST['wprb-set-reservations-sent'], $_POST['wprb-set-reservations-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-set-reservations-nonce'] ), 'wprb-set-reservations' ) ) {
+
+			/*Power on*/
+			$power_on = isset( $_POST['wprb-power-on'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-power-on'] ) ) : '';
+			update_option( 'wprb-power-on', $power_on );
 
 			/*External seats option*/
 			$external_seats = isset( $_POST['wprb-activate-external-seats'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-activate-external-seats'] ) ) : 0;
@@ -422,6 +421,10 @@ class WPRB_Admin {
 			}
 
 			update_option( 'wprb-bookable', $save_bookable );
+
+			/*Margin time*/
+			$margin_time = isset( $_POST['wprb-margin-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-margin-time'] ) ) : '';
+			update_option( 'wprb-margin-time', $margin_time );
 
 			/*Medium time*/
 			$medium_time = isset( $_POST['wprb-medium-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-medium-time'] ) ) : '';

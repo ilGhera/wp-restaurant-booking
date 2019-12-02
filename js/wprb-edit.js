@@ -23,22 +23,31 @@ var wprbEditController = function() {
 	}
 
 
-	self.hours_element_update = function(people = null, date = null) {
+	self.hours_element_update = function(people = null, date = null, back_end = false) {
 
 		jQuery(function($){
 
-			var hours_tr = $('.wprb-hours');
-			console.log( 'nonce: ' + wprbSettings.changeDateNonce );
-			data = {
+			var hours_tr    = $('.wprb-hours');
+			var last_minute = 0;
+
+			if( $('table.wprb-reservation').hasClass('last-minute') ) {
+				
+				last_minute = 1;
+			
+			}
+
+			var data = {
 				'action': 'wprb-hours-available',
 				'wprb-change-date-nonce': wprbSettings.changeDateNonce,
 				'people': people,
-				'date': date
+				'date': date,
+				'back-end': back_end,
+				'last-minute': last_minute
 			}
 
 			$.post(ajaxurl, data, function(response) {
 
-				$('.booking-hours ul').html(response);
+				$('.booking-hours').html(response);
 
 				if ( ! $(hours_tr).hasClass('active') ) {
 
@@ -67,7 +76,7 @@ var wprbEditController = function() {
 					console.log('cambio');
 					console.log('DATE: ' + date);
 
-					self.hours_element_update($(this).val(), date);
+					self.hours_element_update($(this).val(), date, true);
 
 				}
 
@@ -99,7 +108,7 @@ var wprbEditController = function() {
 
 				console.log( $(this).val() );
 
-				self.hours_element_update( people, $(this).val() );
+				self.hours_element_update(people, $(this).val(), true);
 
 			})
 
@@ -116,15 +125,23 @@ var wprbEditController = function() {
 		jQuery(function($){
 
 			var hours_el    = $('.booking-hours');
-			var time_el     = $('li.wprb-hour input');
+			var time_el     = $('li.wprb-hour.regular input');
 			var date        = $('.wprb-date').val();
 			var input       = $('input.wprb-time');
+			var until       = $('input.wprb-until');
 			var current_val = $(input).val();
+
+			if ( '' != $(until).val() ) {
+
+				console.log('test');
+				time_el = $('li.wprb-hour input.last-minute');
+
+			}
 
 			$(time_el).each(function(){
 
 				if( current_val === $(this).val() ) {
-
+						
 					$(this).addClass('active');
 
 				}
@@ -138,6 +155,19 @@ var wprbEditController = function() {
 				$(this).addClass('active');
 
 				$(input).val( $(this).val() );
+
+				console.log( 'VALORE:' + $(this).val() );
+				
+				/*Last minute*/
+				if ($(this).hasClass('last-minute')) {
+
+					$(until).val( $(this).data('until') );
+
+				} else {
+
+					$(until).val('');
+
+				}
 
 			})
 
