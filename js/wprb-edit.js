@@ -15,6 +15,7 @@ var wprbEditController = function() {
 		self.people_element();
 		self.date_element();
 		self.hours_element();
+		self.external_element();
 		self.auto_change_reservation_status();
 		self.reservation_id_to_modal();
 		self.modal_status_label_activate();
@@ -23,6 +24,13 @@ var wprbEditController = function() {
 	}
 
 
+	/**
+	 * Get the hours element updated based on the admin selections
+	 * 
+	 * @param  {int}     people   the reservation people.
+	 * @param  {string}  date     the reservation date.
+	 * @param  {Boolean} back_end true if called from edit reservation.
+	 */
 	self.hours_element_update = function(people = null, date = null, back_end = false) {
 
 		jQuery(function($){
@@ -126,14 +134,13 @@ var wprbEditController = function() {
 
 			var hours_el    = $('.booking-hours');
 			var time_el     = $('li.wprb-hour.regular input');
-			var date        = $('.wprb-date').val();
 			var input       = $('input.wprb-time');
 			var until       = $('input.wprb-until');
 			var current_val = $(input).val();
-
+			var date        = $('.wprb-date').val();;
+				
 			if ( '' != $(until).val() ) {
 
-				console.log('test');
 				time_el = $('li.wprb-hour input.last-minute');
 
 			}
@@ -163,9 +170,117 @@ var wprbEditController = function() {
 
 					$(until).val( $(this).data('until') );
 
+					/*No external*/
+					$('.wprb-external-container').slideUp();
+
 				} else {
 
 					$(until).val('');
+					
+					date = $('.wprb-date').val();
+
+					self.external_element_update( date, $(this).val() );
+
+				}
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Display the external element on edit page load
+	 */
+	self.external_element = function() {
+
+		jQuery(function($){
+
+			var is_external = false;
+			var date        = $('.wprb-date').val();
+			var time        = $('.wprb-time').val();
+
+			if ( $('table.wprb-reservation').hasClass('external') ) {
+
+				is_external = true;
+
+				$('.wprb-external-container').slideDown();
+				$('.wprb-external-container .yes').addClass('active');
+
+			} else {
+
+				self.external_element_update( date, time );
+
+			}
+		
+		})
+
+	}
+
+
+	/**
+	 * Check if an external reservation is available based on the admin selections
+	 * 
+	 * @param  {string}  date     the reservation date.
+	 * @param  {string}  time     the reservation time.
+	 * @param  {Boolean} back_end true if called from edit reservation.
+	 */
+	self.external_element_update = function( date, time ) {
+
+		jQuery(function($){
+
+			var is_external = 0;
+			var people      = $('.wprb-people').val();
+			var input       = $('input.wprb-external');
+			var interested;
+
+			console.log( 'PEOPLE: ' + people );
+
+			/*Deactivate buttons*/
+			$('.wprb-external-container a').removeClass('active');
+
+
+			if ( $('table.wprb-reservation').hasClass('external') ) {
+
+				is_external = 1;
+
+			}
+
+			var data = {
+				'action': 'wprb-check-for-external-seats',
+				'wprb-external-nonce': wprbSettings.externalNonce,
+				'date': date,
+				'time': time,
+				'people': people,
+				'back-end': 1,
+				'is_external': is_external
+			}
+
+			$.post(ajaxurl, data, function(response){
+				
+				if ( 1 == response ) {
+
+					$('.wprb-external-container').slideDown();
+
+					$('.wprb-external-container a').on('click', function(){
+
+						$('.wprb-external-container a').removeClass('active');
+						
+						$(this).addClass('active');
+						
+						interested = $(this).hasClass('yes') ? 1 : 0;
+
+						/*Add data*/
+						$(input).val(interested);
+
+					})					
+
+
+				} else {
+
+					$('.wprb-external-container').slideUp();
+					$('.wprb-external-container a').removeClass('active');
 
 				}
 

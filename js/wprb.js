@@ -206,6 +206,79 @@ var wprbController = function() {
 	}
 
 
+	/*Move to last booking step*/
+	self.go_to_last_step = function() {
+
+		jQuery(function($){
+
+			/*Activate complete element*/
+			$('.complete').addClass('active');
+
+			/*Activate the complete step*/
+			$('.booking-step').removeClass('active');
+			$('.booking-complete').addClass('active');	
+
+		})
+
+	}
+
+
+	/**
+	 * Display external seats option if available
+	 *
+	 * @param  {string} time the reservation time
+	 */
+	self.external_seats = function( time ) {
+
+		jQuery(function($){
+
+			var date   = $('.date-field').val();
+			var people = $('.people-field').val();
+			var interested;
+
+			var data = {
+				'action': 'wprb-check-for-external-seats',
+				'wprb-external-nonce': wprbSettings.externalNonce,
+				'date': date,
+				'time': time,
+				'people': people
+			}
+
+			$.post(wprbSettings.ajaxURL, data, function(response){
+				
+				if ( 1 == response ) {
+
+					$('.wprb-external-container').slideDown();
+
+					$('.wprb-external-container a').on('click', function(){
+
+						$('.wprb-external-container a').removeClass('active');
+						
+						$(this).addClass('active');
+						
+						interested = $(this).hasClass('yes') ? 1 : 0;
+
+						/*Add data*/
+						$('.external-field').val(interested);
+
+						self.go_to_last_step();
+
+					})					
+
+
+				} else {
+
+					self.go_to_last_step();
+
+				}
+
+			})
+
+		})
+
+	}
+
+
 	/**
 	 * Widget time selection
 	 */
@@ -226,25 +299,29 @@ var wprbController = function() {
 				$('.booking-hours ul li input').removeClass('active');
 				$(this).addClass('active');
 
+				/*Add data*/
+				$('li.time .value').html($(this).val());
+				$('.time-field').val($(this).val());
+				
 				/*Lat minute*/
 				if ($(this).hasClass('last-minute')) {
 
 					until = $(this).data('until');
+			
+					/*Add data*/
+					$('.until-field').val(until);
+
+					/*External not available*/
+					$('.wprb-external-container').slideUp();
+
+					self.go_to_last_step();
+				
+				} else {
+
+					/*temp*/
+					self.external_seats($(this).val());
 
 				}
-
-				/*Add data*/
-				$('li.time .value').html($(this).val());
-				$('.time-field').val($(this).val());
-				$('.until-field').val(until);
-
-				/*Activate complete element*/
-				$('.complete').addClass('active');
-
-				/*Activate the complete step*/
-				$('.booking-step').removeClass('active');
-				$('.booking-complete').addClass('active');
-
 
 			})
 

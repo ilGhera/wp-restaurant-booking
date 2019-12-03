@@ -321,6 +321,41 @@ p.wprb-step-description.last-minute {
 	background: #f5b016;
 }
 
+.wprb-external-container {
+	display: none;
+	margin: 2rem 0; 
+	text-align: center;
+}
+
+.wprb-external-container a {
+	display: inline-block;
+	width: 58px;
+	border: 1px solid #cdcdcd;
+	color: inherit;
+	padding: 0.5rem 0;
+	margin: 0 3px; 
+}
+
+.wprb-external-container a:hover,
+.wprb-external-container a.active {
+	color: #fff;
+	background: #cdcdcd; 
+	text-decoration: none;
+	cursor: pointer;
+}
+
+/*.wprb-external-container a.yes:hover,
+.wprb-external-container a.yes.active {
+	background: green;
+	border: 1px solid green; 
+}
+
+.wprb-external-container a.no:hover,
+.wprb-external-container a.no.active {
+	background: red;
+	border: 1px solid red; 
+}*/
+
 #wprb-reservation input {
 	border: 1px solid #cdcdcd;
 	outline: none;
