@@ -428,6 +428,38 @@ input.wprb-time {
 	height: 0;
 }
 
+span.external {
+	font-size: 70%;
+	padding: 2px 8px;
+	background-color: #cdcdcd;
+	border-radius: 3px;
+	color: #fff;
+	margin-left: 0.5rem;
+}
+
+.wprb-external-container {
+	display: none;
+	margin: 2rem 0; 
+}
+
+.wprb-external-container a {
+	display: inline-block;
+	width: 58px;
+	border: 1px solid #cdcdcd;
+	color: inherit;
+	padding: 0.5rem 0;
+	margin: 0 3px; 
+	text-align: center;
+}
+
+.wprb-external-container a:hover,
+.wprb-external-container a.active {
+	color: #fff;
+	background: #cdcdcd; 
+	text-decoration: none;
+	cursor: pointer;
+}
+
 @media screen and (max-width: 1000px) {
 
 	.wrap-left {

@@ -25,6 +25,9 @@ class WPRB_Reservation_Widget {
 		add_action( 'wp_ajax_wprb-hours-available', array( $this, 'hours_select_element_callback' ) );
 		add_action( 'wp_ajax_nopriv_wprb-hours-available', array( $this, 'hours_select_element_callback' ) );
 
+		add_action( 'wp_ajax_wprb-check-for-external-seats', array( $this, 'external_seats_element_callback' ) );
+		add_action( 'wp_ajax_nopriv_wprb-check-for-external-seats', array( $this, 'external_seats_element_callback' ) );
+
 		add_action( 'wp_ajax_wprb-reservation', array( $this, 'wprb_save_reservation' ) );
 		add_action( 'wp_ajax_nopriv_wprb-reservation', array( $this, 'wprb_save_reservation' ) );
 
@@ -52,6 +55,7 @@ class WPRB_Reservation_Widget {
 		wp_enqueue_script( 'datepicker-it', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.it.js', array( 'jquery' ), '2.2.3', true );
 
 		$change_date_nonce      = wp_create_nonce( 'wprb-change-date' );
+		$external_nonce         = wp_create_nonce( 'wprb-external' );		
 		$save_reservation_nonce = wp_create_nonce( 'wprb-save-reservation' );
 
 		/*Pass data to the script file*/
@@ -61,6 +65,7 @@ class WPRB_Reservation_Widget {
 			array(
 				'ajaxURL'              => admin_url( 'admin-ajax.php' ),
 				'changeDateNonce'      => $change_date_nonce,
+				'externalNonce'        => $external_nonce,
 				'saveReservationNonce' => $save_reservation_nonce,
 			)
 		);
@@ -161,8 +166,9 @@ class WPRB_Reservation_Widget {
 	 * @param srting $date        the reservation date.
 	 * @param bool   $back_end    different if used in back-end.
 	 * @param bool   $last_minute define is the current reservation (back-end) is a last minute.
+	 * @param bool   $external    define is the current reservation (back-end) is external.
 	 */
-	public static function hours_select_element( $people = 0, $date = null, $back_end = false, $last_minute = false ) {
+	public static function hours_select_element( $people = 0, $date = null, $back_end = false, $last_minute = false, $external = false ) {
 
 		/*Hours*/
 		$hours = WPRB_Reservations::get_available_hours( $date );
@@ -216,8 +222,13 @@ class WPRB_Reservation_Widget {
 
 		}
 
+		/*External seats*/
+		self::external_seats_element();
+
 		/*Lat minute*/
 		$last_minute_av = WPRB_Reservations::get_available_last_minute( $date, $people, $back_end, $last_minute );
+
+		error_log( 'LAST MINUTE: ' . print_r( $last_minute_av, true ) );
 
 		if ( is_array( $last_minute_av ) && ! empty( $last_minute_av ) ) {
 
@@ -249,7 +260,7 @@ class WPRB_Reservation_Widget {
 
 
 	/**
-	 * Get the hours element after date selection by the admin
+	 * Get the hours element after date selection by the user
 	 */
 	public function hours_select_element_callback() {
 
@@ -266,6 +277,47 @@ class WPRB_Reservation_Widget {
 		}
 
 		exit;
+
+	}
+
+
+	/**
+	 * Display the external seats option	 *
+	 */
+	public static function external_seats_element() {
+
+		echo '<div class="wprb-external-container">';
+			echo '<p>' . esc_html__( 'Outdoor table available', 'wprb' ) . '</p>';
+			echo '<a class="buton yes">' . esc_html__( 'Yes', 'wprb' ) . '</a>';
+			echo '<a class="buton no">' . esc_html__( 'No', 'wprb' ) . '</a>';
+		echo '</div>';
+
+	}
+
+	
+	/**
+	 * Get the external seats element after time selection by the user
+	 */
+	public function external_seats_element_callback() {
+
+		if ( isset( $_POST['date'], $_POST['time'], $_POST['people'], $_POST['wprb-external-nonce'] ) && wp_verify_nonce( $_POST['wprb-external-nonce'], 'wprb-external' ) ) {
+
+			$date        = sanitize_text_field( wp_unslash( $_POST['date'] ) );
+			$the_date    = date( 'Y-m-d', strtotime( $date ) );
+			$time        = sanitize_text_field( wp_unslash( $_POST['time'] ) );
+			$people      = sanitize_text_field( wp_unslash( $_POST['people'] ) );
+			$back_end    = isset( $_POST['back-end'] ) ? sanitize_text_field( wp_unslash( $_POST['back-end'] ) ) : '';
+			$is_external = isset( $_POST['is_external'] ) ? sanitize_text_field( wp_unslash( $_POST['is_external'] ) ) : '';
+
+
+			$bookable = WPRB_Reservations::get_available_externals_seats( $the_date, $time, $people, $back_end, $is_external );
+			error_log( 'EXT AVAILABLE: ' . $bookable );
+
+			echo $bookable ? 1 : 0;
+
+			exit;
+		
+		}
 
 	}
 
@@ -305,6 +357,7 @@ class WPRB_Reservation_Widget {
 				echo '<input type="hidden" name="people-field" class="people-field" value="">';
 				echo '<input type="hidden" name="date-field" class="date-field" value="">';
 				echo '<input type="hidden" name="time-field" class="time-field" value="">';
+				echo '<input type="hidden" name="external-field" class="external-field" value="">';
 				echo '<input type="hidden" name="until-field" class="until-field" value="">';
 
 				echo '<input type="submit" class="wprb-complete-reservation" value="' . esc_attr__( 'Book now', 'wprb' ) . '">';
@@ -459,6 +512,7 @@ class WPRB_Reservation_Widget {
 			$date       = isset( $values['date-field'] ) ? sanitize_text_field( wp_unslash( $values['date-field'] ) ) : '';
 			$time       = isset( $values['time-field'] ) ? sanitize_text_field( wp_unslash( $values['time-field'] ) ) : '';
 			$notes      = isset( $values['notes-field'] ) ? sanitize_text_field( wp_unslash( $values['notes-field'] ) ) : '';
+			$external   = isset( $values['external-field'] ) ? sanitize_text_field( wp_unslash( $values['external-field'] ) ) : '';
 			$until      = isset( $values['until-field'] ) ? sanitize_text_field( wp_unslash( $values['until-field'] ) ) : '';
 
 			$the_date = date( 'Y-m-d', strtotime( $date ) );
@@ -480,6 +534,13 @@ class WPRB_Reservation_Widget {
 					'wprb-status'     => 'received',
 				),
 			);
+
+			/*Externals*/
+			if ( $external ) {
+				
+				$args['meta_input']['wprb-external'] = $external;
+
+			}
 
 			/*Last minute*/
 			if ( $until ) {
