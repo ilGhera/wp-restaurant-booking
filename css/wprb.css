@@ -10,17 +10,27 @@
 }
 
 .wprb-booking-button {
-	position: fixed;
 	/*box-shadow: 2px 0px 10px 1px #fff;*/
 	display: inline-block;
 	padding: 0.5rem 2rem; 
-	top: 1rem;
-	left: 1rem;
 	background: #f5b016;
 	border-radius: 5px;
 	cursor: pointer;
     pointer-events: auto;
     z-index: 999999;
+}
+
+.wprb-booking-button.top {
+	position: fixed;
+	top: 1rem;
+}
+
+.wprb-booking-button.left {
+	left: 1rem;
+}
+
+.wprb-booking-button.right {
+	right: 1rem;
 }
 
 .wprb-booking-button:hover {
@@ -125,6 +135,11 @@
 	padding-top: 8px;
 }
 
+#wprb-booking-modal ul li {
+	font-size: 13px;
+	text-transform: capitalize;
+}
+
 .booking-step {
 	display: none;
 }
@@ -144,10 +159,12 @@ p.wprb-step-description.last-minute {
 	margin-bottom: 0;
 }
 
-.booking-people {
-	padding-bottom: 2rem;
-	margin-bottom: 4rem;
-	border-bottom: 1px solid #d7d7d7;
+.people-container {
+	opacity: 0.3;
+}
+
+.people-container.active {
+	opacity: 1;
 }
 
 #wprb-booking-modal ul.booking-people_numbers {
@@ -207,7 +224,7 @@ p.wprb-step-description.last-minute {
 	outline: none;
 	box-shadow: none;
 	position: relative;
-	width: 100%;
+	width: 56px;
 	height: 100%;
 	cursor: pointer;
 	-webkit-appearance: none;
@@ -229,14 +246,9 @@ p.wprb-step-description.last-minute {
 
 .booking-date {
 	text-align: center;
-}
-
-.datepicker-here {
-	opacity: 0.3;
-}
-
-.datepicker-here.active {
-	opacity: 1;
+	padding-bottom: 4rem;
+	margin-bottom: 4rem;
+	border-bottom: 1px solid #d7d7d7;
 }
 
 .booking-date .datepicker {
@@ -336,6 +348,12 @@ p.wprb-step-description.last-minute {
 	margin: 0 3px; 
 }
 
+.wprb-external-container a.only {
+	width: auto;
+	padding: 0.5rem 1rem;
+	margin: 0; 
+}
+
 .wprb-external-container a:hover,
 .wprb-external-container a.active {
 	color: #fff;
@@ -343,18 +361,6 @@ p.wprb-step-description.last-minute {
 	text-decoration: none;
 	cursor: pointer;
 }
-
-/*.wprb-external-container a.yes:hover,
-.wprb-external-container a.yes.active {
-	background: green;
-	border: 1px solid green; 
-}
-
-.wprb-external-container a.no:hover,
-.wprb-external-container a.no.active {
-	background: red;
-	border: 1px solid red; 
-}*/
 
 #wprb-reservation input {
 	border: 1px solid #cdcdcd;

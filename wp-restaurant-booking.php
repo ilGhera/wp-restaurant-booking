@@ -12,7 +12,6 @@
  * Text Domain: wprb
  */
 
-
 /**
  * Handles the plugin activation
  * @return void

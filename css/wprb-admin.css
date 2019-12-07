@@ -285,7 +285,7 @@ input#wprb-last-minute-date {
 }
 
 .widefat thead tr th {
-	width: 13%;
+	width: 12%;
 }
 
 .widefat thead tr th#title {
@@ -452,12 +452,32 @@ span.external {
 	text-align: center;
 }
 
+.wprb-external-container a.only {
+	width: auto;
+	padding: 0.5rem 1rem;
+	margin: 0; 
+}
+
 .wprb-external-container a:hover,
 .wprb-external-container a.active {
 	color: #fff;
 	background: #cdcdcd; 
 	text-decoration: none;
 	cursor: pointer;
+}
+
+.wprb-notes-icon {
+	opacity: 0.6;
+	width: 24px;
+}
+
+.tablenav .wprb-date {
+	height: 28px;
+	margin-right: 6px;
+}
+
+#wprb-button-position {
+	width: 160px;
 }
 
 @media screen and (max-width: 1000px) {

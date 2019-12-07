@@ -30,7 +30,6 @@ var wprbController = function() {
 		jQuery(function($){
 
 			$('.datepicker-here').datepicker({
-				// language: it,
 				minDate: new Date()
 			})
 
@@ -55,14 +54,78 @@ var wprbController = function() {
 				'date': date
 			}
 
-			console.log( 'NONCE: ' + wprbSettings.changeDateNonce );
-
 			$.post(wprbSettings.ajaxURL, data, function(response){
 
 				$('.booking-step.booking-hours').html(response);
 
 			})
 
+		})
+
+	}
+
+
+	/**
+	 * Widget date selection
+	 */
+	self.date_select = function() {
+
+		jQuery(function($){
+
+			var datepicker    = $('.datepicker-here').datepicker().data('datepicker');
+			var people        = $('.booking-people .people-container');
+			var people_select = $('.booking-people_numbers__number select');
+			var date_selected;
+			var options;
+			var date;
+			var data;
+
+			$('.datepicker').on('click', function(){
+
+				date_selected = $('.datepicker-here').data('datepicker').selectedDates[0];
+
+				options = {
+					day: '2-digit',
+					month: 'short', 
+					year: 'numeric'
+				}
+
+				date         = date_selected.toLocaleString('en-EN', options);
+				display_date = date_selected.toLocaleString(wprbSettings.locale, options);
+
+				/*Get the max bookable number*/
+				data = {
+					'action': 'wprb-get-max-bookable',
+					'wprb-max-bookable-nonce': wprbSettings.maxBookableNonce,
+					'date': date,
+				}
+
+				$.post(wprbSettings.ajaxURL, data, function(response){
+
+					$(people_select).html(response);
+
+				})
+
+				people_val = $('.date-field').val();
+
+				if ( people_val ) {
+
+					/*Update available hours*/
+					self.hours_available_update( $(this).val(), date );
+
+				}
+
+				/*Add data*/
+				$('li.date .value').html(display_date); // temp.
+				$('.date-field').val(date);
+
+				/*Activate people element*/
+				$('.people').addClass('active');
+				$(people).addClass('active');
+				$(people_select).removeAttr('disabled');
+					
+			})
+			
 		})
 
 	}
@@ -79,36 +142,51 @@ var wprbController = function() {
 			var number   = $('.booking-people_numbers__number input');
 			var select   = $('.booking-people_numbers__number select');
 			var calendar = $('.datepicker-here');
-			var date     = $('.date-field').val();
+			var date;
 
 			$(number).on('click', function(){
+
+				people = $('.people-field').attr('value');
 				
-				/*Activate only the number selected*/
-				$(number).removeClass('active');
-				$(select).closest('li').removeClass('active');
-				$(select).val('');
-				$(this).addClass('active');
+				/*The date must be set before*/
+				if( '' == $('.date-field').val() ) {
+					
+					alert('Please select a date first'); // temp.
 
-				/*Activate date element*/
-				$('.date').addClass('active');
-
-				/*Activate the calendar*/
-				$(calendar).addClass('active');
+				} else {
 				
-				/*Add data*/
-				$('li.people .value').html($(this).val());
-				$('.people-field').val($(this).val());
+					/*Activate only the number selected*/
+					$(number).removeClass('active');
+					$(select).closest('li').removeClass('active');
+					$(select).val('');
+					$(this).addClass('active');
 
-				console.log('DATE 1: ' + date);
-				if (date) {
-					console.log('PEOPLE 1: ' + $(this).val());
-					/*Get bookables*/
-					self.hours_available_update( $(this).val(), date );
+					/*Activate time element*/
+					$('.time').addClass('active');
+					
+					/*Add data*/
+					$('li.people .value').html($(this).val());
+					$('.people-field').val($(this).val());
+
+					date = $('.date-field').val();
+
+					if (date) {
+
+						/*Get bookables*/
+						self.hours_available_update( $(this).val(), date );
+
+					}
+
+					/*Activate the hours step*/
+					$('.booking-step').removeClass('active');
+					$('.booking-hours').addClass('active');
+
 
 				}
 
 
 			})
+			
 
 			$(select).on('change', function(){
 
@@ -126,81 +204,20 @@ var wprbController = function() {
 				$('li.people .value').html($(this).val());
 				$('.people-field').val($(this).val());
 
-				console.log('DATE 2: ' + date);
+				date = $('.date-field').val();
+
 				if (date) {					
-					console.log('PEOPLE 2: ' + $(this).val());
 					/*Get bookables*/
 					self.hours_available_update( $(this).val(), date );
 
 				}
 
-			})
-
-		})
-
-	}
-
-
-	/**
-	 * Widget date selection
-	 */
-	self.date_select = function() {
-
-		jQuery(function($){
-
-			var datepicker = $('.datepicker-here').datepicker().data('datepicker');
-			var people;
-			var date_selected;
-			var options;
-			var date;
-			var hours;
-
-			$('.datepicker').on('click', function(){
-
-				people = $('.people-field').attr('value');
-				console.log( 'PEOPLE: ' + people );
-
-				/*The number of people must be set*/
-				if( '' == $('.people-field').val() ) {
-					
-					datepicker.clear();
-
-					alert('Please select people first'); // temp.
-
-				} else {
-
-					/*Activate time element*/
-					$('.time').addClass('active');
-
-					// date_selected = $('.datepicker-here').data('datepicker').selectedDates[0].getDate();
-					date_selected = $('.datepicker-here').data('datepicker').selectedDates[0];
-
-					options = {
-						day: '2-digit',
-						month: 'short', 
-						year: 'numeric'
-					}
-
-					date = date_selected.toLocaleString('en-EN', options);
-
-					/*Add data*/
-					$('li.date .value').html(date); // temp.
-					$('.date-field').val(date);
-
-					/*Activate the hours step*/
-					$('.booking-step').removeClass('active');
-					$('.booking-hours').addClass('active');
-
-					/*Get bookables*/
-					self.hours_available_update( people, date );
-
-					console.log($('.datepicker-here').data('datepicker'));
-					console.log(date_selected);
-					
-				}
+				/*Activate the hours step*/
+				$('.booking-step').removeClass('active');
+				$('.booking-hours').addClass('active');
 
 			})
-			
+
 		})
 
 	}
@@ -226,9 +243,10 @@ var wprbController = function() {
 	/**
 	 * Display external seats option if available
 	 *
-	 * @param  {string} time the reservation time
+	 * @param  {string} time             the reservation time
+	 * @param  {int}    available_people the available seats
 	 */
-	self.external_seats = function( time ) {
+	self.external_seats = function( time, available_people ) {
 
 		jQuery(function($){
 
@@ -245,10 +263,20 @@ var wprbController = function() {
 			}
 
 			$.post(wprbSettings.ajaxURL, data, function(response){
-				
-				if ( 1 == response ) {
 
-					$('.wprb-external-container').slideDown();
+				if ( response ) {
+
+					if ( parseInt(response)  >= parseInt(available_people) ) {
+
+						$('.wprb-external-container.choise').slideUp();
+						$('.wprb-external-container.only').slideDown();
+
+					} else {
+
+						$('.wprb-external-container.only').slideUp();
+						$('.wprb-external-container.choise').slideDown();
+
+					}
 
 					$('.wprb-external-container a').on('click', function(){
 
@@ -288,7 +316,8 @@ var wprbController = function() {
 
 			$(document).on('click', '.booking-hours ul li input', function(){
 
-				var parent_li = $(this).closest('li');
+				var parent_li        = $(this).closest('li');
+				var available_people = $(parent_li).attr('title');
 				var until;
 
 				if( $(parent_li).hasClass('not-available') ) {
@@ -319,7 +348,7 @@ var wprbController = function() {
 				} else {
 
 					/*temp*/
-					self.external_seats($(this).val());
+					self.external_seats($(this).val(), available_people);
 
 				}
 
@@ -470,7 +499,6 @@ var wprbController = function() {
 				e.preventDefault();
 
 				var values = $(this).serializeArray();
-				console.log(values);
 
 				var data = {
 					'action': 'wprb-reservation',
@@ -479,8 +507,6 @@ var wprbController = function() {
 				}
 
 				$.post(wprbSettings.ajaxURL, data, function(response){
-
-					console.log(response);
 
 					$(title).text('Reservation completed'); //temp
 

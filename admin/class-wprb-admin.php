@@ -57,7 +57,6 @@ class WPRB_Admin {
 			$add_hours_nonce       = wp_create_nonce( 'wprb-add-hours' );
 			$add_last_minute_nonce = wp_create_nonce( 'wprb-add-last-minute' );
 
-
 		}
 
 		if ( 'wprb_page_wprb-settings' === $admin_page->id ) {
@@ -343,7 +342,6 @@ class WPRB_Admin {
 
 				}
 
-
 			}
 
 			$output = array_values( $last_minute );
@@ -394,6 +392,10 @@ class WPRB_Admin {
 			$power_on = isset( $_POST['wprb-power-on'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-power-on'] ) ) : '';
 			update_option( 'wprb-power-on', $power_on );
 
+			/*Button position*/
+			$button_position = isset( $_POST['wprb-button-position'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-button-position'] ) ) : '';
+			update_option( 'wprb-button-position', $button_position );
+
 			/*External seats option*/
 			$external_seats = isset( $_POST['wprb-activate-external-seats'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-activate-external-seats'] ) ) : 0;
 
@@ -410,6 +412,7 @@ class WPRB_Admin {
 
 				$save_bookable[ $day ]['bookable'] = $bookable;
 
+				/*External seats*/
 				if ( $external_seats ) {
 
 					$externals = isset( $_POST[ 'wprb-external-seats-' . $day ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-external-seats-' . $day ] ) ) : 0;
@@ -417,6 +420,11 @@ class WPRB_Admin {
 					$save_bookable[ $day ]['externals'] = $externals;
 
 				}
+
+				/*Max number bookable*/
+				$max_bookable = isset( $_POST[ 'wprb-max-bookable-' . $day ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-max-bookable-' . $day ] ) ) : 0;
+
+				$save_bookable[ $day ]['max'] = $max_bookable;
 
 			}
 

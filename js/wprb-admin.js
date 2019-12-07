@@ -19,8 +19,9 @@ var wprbAdminController = function() {
 		self.removeHours();
 		self.addLastMinute();
 		self.removeLastMinute();
-		self.autoCompleteFields();
-		self.autoCompleteFields(true);
+		self.autoCompleteFields('internal');
+		self.autoCompleteFields('external');
+		self.autoCompleteFields('max');
 		self.lastMinuteElement();
 		self.notificationsElement();
 		self.notificationsShortcodes();
@@ -32,8 +33,6 @@ var wprbAdminController = function() {
 	self.wprbPagination = function() {
 
 		jQuery(function($){
-
-			console.log( wprbSettings );
 
 			var contents = $('.wprb-admin')
 			var url = window.location.href.split("#")[0];
@@ -172,7 +171,6 @@ var wprbAdminController = function() {
 					'number': next
 				}
 
-				console.log(prev);
 				$.post(ajaxurl, data, function(response){
 
 					$(prev).after(response);
@@ -211,22 +209,37 @@ var wprbAdminController = function() {
 	 *
 	 * @param  {Boolean} external true for external field, default for bookable.
 	 */
-	self.autoCompleteFields = function( external = false ) {
+	self.autoCompleteFields = function( type = 'internal' ) {
 
 		jQuery(function($){
 
-			var element = true == external ? '#wprb-external-seats' : '#wprb-bookable-seats';
+			var element;
 			var value;
+
+			switch (type) {
+
+				case 'internal':
+				element = '#wprb-bookable-seats';
+
+				break;
+
+				case 'external':
+				element = '#wprb-external-seats';
+
+				break;
+
+				case 'max':
+				element = '#wprb-max-bookable';
+
+				break;
+
+			}
 
 			$(element + '.mon').on('change', function(){
 
 				value = $(this).val();
 
-
 				$('.wprb-set-reservations-day').each(function(){
-
-					// console.log( element );
-					console.log( 'TEST: ' + $(element, this).val() );
 
 					if( ! $(element, this).val()) {
 
@@ -299,7 +312,6 @@ var wprbAdminController = function() {
 
 				$.post(ajaxurl, data, function(response){
 
-					console.log(response);
 					$(prev).after(response);
 
 				})
