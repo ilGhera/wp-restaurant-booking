@@ -58,8 +58,6 @@ var wprbEditController = function() {
 
 				var current_status = $(this).data('status');
 
-				console.log(current_status);
-
 			})
 
 		})

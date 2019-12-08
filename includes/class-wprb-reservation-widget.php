@@ -28,6 +28,9 @@ class WPRB_Reservation_Widget {
 		add_action( 'wp_ajax_wprb-check-for-external-seats', array( $this, 'external_seats_element_callback' ) );
 		add_action( 'wp_ajax_nopriv_wprb-check-for-external-seats', array( $this, 'external_seats_element_callback' ) );
 
+		add_action( 'wp_ajax_wprb-get-max-bookable', array( $this, 'get_max_bookable' ) );
+		add_action( 'wp_ajax_nopriv_wprb-get-max-bookable', array( $this, 'get_max_bookable' ) );
+
 		add_action( 'wp_ajax_wprb-reservation', array( $this, 'wprb_save_reservation' ) );
 		add_action( 'wp_ajax_nopriv_wprb-reservation', array( $this, 'wprb_save_reservation' ) );
 
@@ -55,8 +58,10 @@ class WPRB_Reservation_Widget {
 		wp_enqueue_script( 'datepicker-it', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.it.js', array( 'jquery' ), '2.2.3', true );
 
 		$change_date_nonce      = wp_create_nonce( 'wprb-change-date' );
-		$external_nonce         = wp_create_nonce( 'wprb-external' );		
+		$external_nonce         = wp_create_nonce( 'wprb-external' );
+		$max_bookable_nonce     = wp_create_nonce( 'wprb-max-bookable' );
 		$save_reservation_nonce = wp_create_nonce( 'wprb-save-reservation' );
+		$locale                 = str_replace( '_', '-', get_locale() );
 
 		/*Pass data to the script file*/
 		wp_localize_script(
@@ -66,7 +71,9 @@ class WPRB_Reservation_Widget {
 				'ajaxURL'              => admin_url( 'admin-ajax.php' ),
 				'changeDateNonce'      => $change_date_nonce,
 				'externalNonce'        => $external_nonce,
+				'maxBookableNonce'     => $max_bookable_nonce,
 				'saveReservationNonce' => $save_reservation_nonce,
+				'locale'               => $locale,
 			)
 		);
 
@@ -75,14 +82,25 @@ class WPRB_Reservation_Widget {
 
 	/**
 	 * The boking button
+	 *
+	 * @param bool $shortcode true when called by the shordcode response function.
 	 */
-	public function booking_button() {
+	public function booking_button( $shortcode = false ) {
 
 		if ( $this->power_on ) {
 
-			echo '<div class="wprb-booking-button">';
-				echo '<a href="#wprb-booking-modal" rel="modal:open">' . esc_html( wp_unslash( __( 'Book now', 'wprb' ) ) ) . '</a>';
-			echo '</div>';
+			$position = get_option( 'wprb-button-position' );
+			$class    = 'custom' !== $position ? ' top ' . $position : '';
+
+			if ( $class || $shortcode ) {
+
+				echo '<div class="wprb-booking-button' . esc_attr( $class ) . '">';
+
+					echo '<a href="#wprb-booking-modal" rel="modal:open">' . esc_html( wp_unslash( __( 'Book now', 'wprb' ) ) ) . '</a>';
+
+				echo '</div>';
+
+			}
 
 		}
 
@@ -98,9 +116,47 @@ class WPRB_Reservation_Widget {
 
 		ob_start();
 
-		$this->booking_button();
+		$this->booking_button( true );
 
-		return ob_get_clean();
+		$output = ob_get_clean();
+
+		return $output;
+
+	}
+
+	/**
+	 * Get the max number of people bookable in the specified day of the week
+	 *
+	 * @return mixed the people select options of the widget
+	 */
+	public function get_max_bookable() {
+
+		if ( isset( $_POST['date'], $_POST['wprb-max-bookable-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-max-bookable-nonce'] ), 'wprb-max-bookable' ) ) {
+
+			$date = $_POST['date'] ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '';
+
+			if ( $date ) {
+
+				$the_date = strtolower( date( 'D', strtotime( $date ) ) );
+				$bookable = get_option( 'wprb-bookable' );
+
+				$max = isset( $bookable[ $the_date ]['max'] ) ? $bookable[ $the_date ]['max'] : 12;
+
+				if ( $max ) {
+
+					echo '<option value="" style="display: none;">+</option>';
+
+					for ( $i = 4; $i <= $max; $i++ ) {
+						echo '<option value="' . esc_attr( $i ) . '">' . esc_html( $i ) . '</option>';
+					}
+
+				}
+
+			}
+
+		}
+
+		exit;
 
 	}
 
@@ -112,32 +168,35 @@ class WPRB_Reservation_Widget {
 	 */
 	public function step_1() {
 
-		/*People*/
-		echo '<div class="booking-step booking-people active">';
-
-			echo '<div class="booking-label left-20">' . esc_html( wp_unslash( __( 'People', 'wprb' ) ) ) . '</div>';
-
-			echo '<ul class="booking-people_numbers">';
-				echo '<li class="booking-people_numbers__number"><input type="button" value="1"></li>';
-				echo '<li class="booking-people_numbers__number"><input type="button" value="2"></li>';
-				echo '<li class="booking-people_numbers__number"><input type="button" value="3"></li>';
-				echo '<li class="booking-people_numbers__number">';
-					echo '<select>';
-						echo '<option value="" style="display: none;">+</option>';
-						for ( $i = 4; $i < 13; $i++ ) {
-							echo '<option value="' . esc_attr( $i ) . '">' . esc_html( $i ) . '</option>';
-						}
-					echo '</select>';
-				echo '</li>';
-			echo '</ul>';
-			echo '<div class="clear"></div>';
-
-		echo '</div>';
-
 		/*Date*/
 		echo '<div class="booking-step booking-date active">';
 
+			echo '<p class="wprb-step-description">' . esc_html__( 'Select the date', 'wprb' ) . '</p>';
+
 			echo '<div class="datepicker-here" data-language="it" data-inline="true"></div>';
+
+		echo '</div>';
+
+		/*People*/
+		echo '<div class="booking-step booking-people active">';
+
+			echo '<div class="people-container">';
+
+				echo '<div class="booking-label left-20">' . esc_html( wp_unslash( __( 'People', 'wprb' ) ) ) . '</div>';
+
+				echo '<ul class="booking-people_numbers">';
+					echo '<li class="booking-people_numbers__number"><input type="button" value="1"></li>';
+					echo '<li class="booking-people_numbers__number"><input type="button" value="2"></li>';
+					echo '<li class="booking-people_numbers__number"><input type="button" value="3"></li>';
+					echo '<li class="booking-people_numbers__number">';
+						echo '<select disabled="disabled">';
+							echo '<option value="" style="display: none;">+</option>';
+						echo '</select>';
+					echo '</li>';
+				echo '</ul>';
+				echo '<div class="clear"></div>';
+
+			echo '</div>';
 
 		echo '</div>';
 
@@ -225,10 +284,8 @@ class WPRB_Reservation_Widget {
 		/*External seats*/
 		self::external_seats_element();
 
-		/*Lat minute*/
+		/*Last minute available*/
 		$last_minute_av = WPRB_Reservations::get_available_last_minute( $date, $people, $back_end, $last_minute );
-
-		error_log( 'LAST MINUTE: ' . print_r( $last_minute_av, true ) );
 
 		if ( is_array( $last_minute_av ) && ! empty( $last_minute_av ) ) {
 
@@ -240,6 +297,7 @@ class WPRB_Reservation_Widget {
 
 				foreach ( $last_minute_av as $last ) {
 
+					/* Translators: %s: the time until the table booked will be available */
 					$title = sprintf( __( 'Available until %s', 'wprb' ), $last['to'] );
 
 					echo '<li class="wprb-hour' . esc_attr( $not_available ) . '" title="' . esc_attr( $title ) . '"><input type="button" class="last-minute" data-until="' . esc_attr( $last['to'] ) . '" value="' . esc_attr( $last['from'] ) . '"></li>';
@@ -282,19 +340,24 @@ class WPRB_Reservation_Widget {
 
 
 	/**
-	 * Display the external seats option	 *
+	 * Display the external seats option
 	 */
 	public static function external_seats_element() {
 
-		echo '<div class="wprb-external-container">';
+		echo '<div class="wprb-external-container choise">';
 			echo '<p>' . esc_html__( 'Outdoor table available', 'wprb' ) . '</p>';
-			echo '<a class="buton yes">' . esc_html__( 'Yes', 'wprb' ) . '</a>';
-			echo '<a class="buton no">' . esc_html__( 'No', 'wprb' ) . '</a>';
+			echo '<a class="yes">' . esc_html__( 'Yes', 'wprb' ) . '</a>';
+			echo '<a class="no">' . esc_html__( 'No', 'wprb' ) . '</a>';
+		echo '</div>';
+
+		echo '<div class="wprb-external-container only">';
+			echo '<p>' . esc_html__( 'Only available outdoor', 'wprb' ) . '</p>';
+			echo '<a class="yes only">' . esc_html__( 'Yes, no problem', 'wprb' ) . '</a>';
 		echo '</div>';
 
 	}
 
-	
+
 	/**
 	 * Get the external seats element after time selection by the user
 	 */
@@ -311,12 +374,11 @@ class WPRB_Reservation_Widget {
 
 
 			$bookable = WPRB_Reservations::get_available_externals_seats( $the_date, $time, $people, $back_end, $is_external );
-			error_log( 'EXT AVAILABLE: ' . $bookable );
 
-			echo $bookable ? 1 : 0;
+			echo $bookable;
 
 			exit;
-		
+
 		}
 
 	}
@@ -378,12 +440,12 @@ class WPRB_Reservation_Widget {
 	 */
 	public function step_4( $first_name, $email ) {
 
-		echo '<div class="booking-end">';
+		echo '<div class="booking-end" data-title="' . esc_html__( 'Reservation completed', 'wprb' ) . '">';
 
 			echo '<p class="wprb-step-description">';
 				echo '<i class="far fa-check-circle"></i><br>';
 
-				/* translators: %s: customer first name */
+				/* Translators: %s: customer first name */
 				printf( esc_html__( 'Thanks %s!', 'wprb' ), esc_html( $first_name ) ) . '<br>';
 
 				echo esc_html__( 'We sent an e-mail with the confirmation data to', 'wprb' ) . '<br>';
@@ -409,21 +471,21 @@ class WPRB_Reservation_Widget {
 
 				echo '<ul class="header-bar_steps">';
 
+					/*Date*/
+					echo '<li class="date active" data-step="booking-date">';
+						echo '<span>';
+							echo '<i class="far fa-calendar-alt"></i>';
+						echo '</span><br>';
+						echo '<div class="value">' . esc_html( wp_unslash( __( 'Date', 'wprb' ) ) ) . '</div>';
+					echo '</li>';
+
 					/*People*/
-					echo '<li class="people active" data-step="booking-people">';
+					echo '<li class="people" data-step="booking-people">';
 						echo '<span>';
 							echo '<i class="fas fa-user-friends"></i>';
 						echo '</span><br>';
 						echo '<div class="value"></div>';
 						echo esc_html( wp_unslash( __( 'People', 'wprb' ) ) );
-					echo '</li>';
-
-					/*Date*/
-					echo '<li class="date" data-step="booking-date">';
-						echo '<span>';
-							echo '<i class="far fa-calendar-alt"></i>';
-						echo '</span><br>';
-						echo '<div class="value">' . esc_html( wp_unslash( __( 'Date', 'wprb' ) ) ) . '</div>';
 					echo '</li>';
 
 					/*Time*/
@@ -537,7 +599,7 @@ class WPRB_Reservation_Widget {
 
 			/*Externals*/
 			if ( $external ) {
-				
+
 				$args['meta_input']['wprb-external'] = $external;
 
 			}

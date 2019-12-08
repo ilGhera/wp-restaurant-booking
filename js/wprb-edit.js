@@ -77,12 +77,8 @@ var wprbEditController = function() {
 			$('.wprb-people').on('change', function(){
 
 				var date = $('.wprb-date').val();
-				console.log( 'PEOPLE DATE: ' + date);
 
 				if ( $('.wprb-hours').hasClass('active') ) {
-
-					console.log('cambio');
-					console.log('DATE: ' + date);
 
 					self.hours_element_update($(this).val(), date, true);
 
@@ -111,10 +107,15 @@ var wprbEditController = function() {
 			}
 
 			$('.wprb-date').on('change', function(){
+
+				/*Not in the reservations page */
+				if ( $(this).hasClass('list') ) {
+
+					return;
+
+				}
 				
 				people = $('.wprb-people').val();
-
-				console.log( $(this).val() );
 
 				self.hours_element_update(people, $(this).val(), true);
 
@@ -162,8 +163,6 @@ var wprbEditController = function() {
 				$(this).addClass('active');
 
 				$(input).val( $(this).val() );
-
-				console.log( 'VALORE:' + $(this).val() );
 				
 				/*Last minute*/
 				if ($(this).hasClass('last-minute')) {
@@ -201,18 +200,7 @@ var wprbEditController = function() {
 			var date        = $('.wprb-date').val();
 			var time        = $('.wprb-time').val();
 
-			if ( $('table.wprb-reservation').hasClass('external') ) {
-
-				is_external = true;
-
-				$('.wprb-external-container').slideDown();
-				$('.wprb-external-container .yes').addClass('active');
-
-			} else {
-
-				self.external_element_update( date, time );
-
-			}
+			self.external_element_update( date, time, true );
 		
 		})
 
@@ -224,26 +212,31 @@ var wprbEditController = function() {
 	 * 
 	 * @param  {string}  date     the reservation date.
 	 * @param  {string}  time     the reservation time.
-	 * @param  {Boolean} back_end true if called from edit reservation.
+	 * @param  {Boolean} on_load  true if called loading an edit reservation.
 	 */
-	self.external_element_update = function( date, time ) {
+	self.external_element_update = function( date, time, on_load ) {
 
 		jQuery(function($){
 
-			var is_external = 0;
-			var people      = $('.wprb-people').val();
-			var input       = $('input.wprb-external');
+			var is_external      = 0;
+			var people           = $('.wprb-people').val();
+			var input            = $('input.wprb-external');
+			var hour_selected    = $('.wprb-hour input.active');
+			var available_people = $(hour_selected).closest('li').attr('title');
 			var interested;
 
-			console.log( 'PEOPLE: ' + people );
-
-			/*Deactivate buttons*/
-			$('.wprb-external-container a').removeClass('active');
-
-
-			if ( $('table.wprb-reservation').hasClass('external') ) {
+			if ( on_load && $('table.wprb-reservation').hasClass('external') ) {
 
 				is_external = 1;
+
+			} else {
+
+				/*Deactivate buttons*/
+				$('.wprb-external-container a.yes').removeClass('active');
+				$('.wprb-external-container a.no').addClass('active');
+
+				/*Delete the hidden field value*/
+				$(input).val('');
 
 			}
 
@@ -259,9 +252,30 @@ var wprbEditController = function() {
 
 			$.post(ajaxurl, data, function(response){
 				
-				if ( 1 == response ) {
+				if ( response ) {
 
-					$('.wprb-external-container').slideDown();
+					if ( parseInt(response) >= parseInt(available_people) ) {
+
+						$('.wprb-external-container.choise').slideUp();
+						$('.wprb-external-container.only').slideDown();
+
+						$('.yes').addClass('active');
+						$(input).val(1);
+
+
+					} else {
+
+						$('.wprb-external-container.only').slideUp();
+						$('.wprb-external-container.choise').slideDown();
+
+					}
+
+					/*Activate if current reservation is external */
+					if ( is_external ) {
+
+						$('.yes').addClass('active');
+
+					}
 
 					$('.wprb-external-container a').on('click', function(){
 

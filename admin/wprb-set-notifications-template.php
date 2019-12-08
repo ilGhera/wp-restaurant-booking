@@ -57,21 +57,21 @@ $user_message         = get_option( 'wprb-user-notification-message' ) ? get_opt
 			</td>
 		</tr>
 		<tr class="wprb-user-notification-field" style="display: none;">
-			<th scope="row"><?php esc_html_e( 'Object', 'wprb' ) ?></th>
+			<th scope="row"><?php esc_html_e( 'Object', 'wprb' ); ?></th>
 			<td>
 				<input type="text" name="wprb-user-notification-object" class="wprb-user-notification-object regular-text" placeholder="<?php esc_html_e( 'Thanks for your reservation John!', 'wprb' ); ?>" value="<?php echo esc_html( $user_object ); ?>">
-				<p class="description"><?php esc_html_e( 'Specify a different email object.', 'wprb' ) ?></p>
+				<p class="description"><?php esc_html_e( 'Specify a different email object.', 'wprb' ); ?></p>
 			</td>
 		</tr>
 		<tr class="wprb-user-notification-field" style="display: none;">
-			<th scope="row"><?php esc_html_e( 'Message', 'wprb' ) ?></th>
+			<th scope="row"><?php esc_html_e( 'Message', 'wprb' ); ?></th>
 			<td>
 				<textarea type="text" name="wprb-user-notification-message" class="wprb-user-notification-message regular-text" rows="6" placeholder="<?php esc_html_e( 'Thanks for your reservation John!', 'wprb' ); ?>"><?php echo esc_html( $user_message ); ?></textarea>
 				<p class="description">
 					<?php
 					echo '<span class="shortcodes">';
-						echo "<code>[first-name]</code> <code>[last-name]</code> <code>[email]</code> <code>[phone]</code>";
-						echo "<code>[people]</code> <code>[date]</code> <code>[time]</code> <code>[until]</code> <code>[notes]</code>";
+						echo '<code>[first-name]</code> <code>[last-name]</code> <code>[email]</code> <code>[phone]</code>';
+						echo '<code>[people]</code> <code>[date]</code> <code>[time]</code> <code>[until]</code> <code>[notes]</code>';
 					echo '</span>';
 					esc_html_e( 'Specify a different email message.', 'wprb' );
 					?>

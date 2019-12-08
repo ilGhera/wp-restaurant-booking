@@ -9,6 +9,7 @@
 
 $admin           = new WPRB_Admin();
 $power_on        = get_option( 'wprb-power-on' );
+$button_position = get_option( 'wprb-button-position' );
 $external_seats  = get_option( 'wprb-activate-external-seats' );
 $bookable        = get_option( 'wprb-bookable' );
 $hours           = get_option( 'wprb-hours' );
@@ -23,8 +24,19 @@ $expiration_time = get_option( 'wprb-expiration-time' );
 		<tr>
 			<th scope="row"><?php esc_html_e( 'Activate', 'wprb' ); ?></th>
 			<td>
-				<input type="checkbox" name="wprb-power-on" id="wprb-activate-external-seats" value="1"<?php echo ( 1 == $power_on ? ' checked="checked"' : 1 ); ?>>
+				<input type="checkbox" name="wprb-power-on" id="wprb-power-on" value="1"<?php echo ( 1 == $power_on ? ' checked="checked"' : 1 ); ?>>
 				<p class="description"><?php esc_html_e( 'Display the booking button and receive reservations.', 'wprb' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><?php esc_html_e( 'Button position', 'wprb' ); ?></th>
+			<td>
+				<select name="wprb-button-position" id="wprb-button-position">
+					<option value="left"<?php echo 'left' === $button_position ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Top left', 'wprb' ); ?></option>
+					<option value="right"<?php echo 'right' === $button_position ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Top right', 'wprb' ); ?></option>
+					<option value="custom"<?php echo 'custom' === $button_position ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Custom', 'wprb' ); ?></option>
+				</select>
+				<p class="description"><?php esc_html_e( 'Booking button position. Custom position requires use of shortcode [booking-button].', 'wprb' ); ?></p>
 			</td>
 		</tr>
 		<tr class="wprb-activate-external-seats-field">
@@ -45,6 +57,7 @@ $expiration_time = get_option( 'wprb-expiration-time' );
 						if ( 'mon' === $key ) {
 							echo '<div class="wprb-col"><h4>' . esc_html__( 'Internal seats', 'wprb' ) . '</h4></div>';
 							echo '<div class="wprb-col external"><h4>' . esc_html__( 'External seats', 'wprb' ) . '</h4></div>';
+							echo '<div class="wprb-col max-bookable"><h4>' . esc_html__( 'Maximum bookable number', 'wprb' ) . '</h4></div>';
 							echo '<div class="clear"></div>';
 						}
 
@@ -65,6 +78,14 @@ $expiration_time = get_option( 'wprb-expiration-time' );
 							$externals_value = isset( $bookable[ $key ]['externals'] ) ? $bookable[ $key ]['externals'] : null;
 
 							echo '<input type="number" name="wprb-external-seats-' . esc_attr( $key ) . '" id="wprb-external-seats" class="' . esc_attr( $key ) . '" placeholder="0" value="' . esc_html( $externals_value ) . '">';
+						echo '</div>';
+
+						echo '<div class="wprb-col max-bookable">';
+
+							/*Single data from the db*/
+							$max_bookable = isset( $bookable[ $key ]['max'] ) ? $bookable[ $key ]['max'] : null;
+
+							echo '<input type="number" name="wprb-max-bookable-' . esc_attr( $key ) . '" id="wprb-max-bookable" class="' . esc_attr( $key ) . '" placeholder="0" value="' . esc_html( $max_bookable ) . '">';
 						echo '</div>';
 
 						echo '<div class="wprb-col">';

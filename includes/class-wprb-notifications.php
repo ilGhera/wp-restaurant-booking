@@ -58,7 +58,7 @@ class WPRB_Notifications {
 	 */
 	public static function default_user_object() {
 
-		return 'Thanks for your reservation [first-name]';
+		return __( 'Thanks for your reservation [first-name]', 'wprb' );
 
 	}
 
@@ -156,7 +156,6 @@ class WPRB_Notifications {
 
 		}
 
-
 	}
 
 
@@ -174,17 +173,17 @@ class WPRB_Notifications {
 			$get_content = get_option( 'wprb-user-notification-message' ) ? get_option( 'wprb-user-notification-message' ) : self::default_user_message();
 
 			ob_start();
-			// include( WPRB_INCLUDES . 'email/wprb-email-header-template.php' );
-			echo do_shortcode( str_replace('\n', '<br>', $get_content) );
-			// include( WPRB_INCLUDES . 'email/wprb-email-content-template.php' );
-			// include( WPRB_INCLUDES . 'email/wprb-email-footer-template.php' );
+			// include( WPRB_INCLUDES . 'email/wprb-email-header-template.php' );.
+			echo do_shortcode( str_replace( '\n', '<br>', $get_content ) );
+			// include( WPRB_INCLUDES . 'email/wprb-email-content-template.php' );.
+			// include( WPRB_INCLUDES . 'email/wprb-email-footer-template.php' );.
 			$message  = ob_get_clean();
 			// $headers = array('Content-Type: text/html; charset=UTF-8');
 			$headers = null;
 
 			$sent = wp_mail( $to, $subject, $message, $headers );
 
-			// error_log( 'MAIL USER: ' . print_r( $sent, true ) );
+			// error_log( 'MAIL USER: ' . print_r( $sent, true ) );.
 
 		}
 
