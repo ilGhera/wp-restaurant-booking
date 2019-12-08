@@ -488,6 +488,10 @@ class WPRB_Admin {
 			$activate = isset( $_POST['wprb-activate-last-minute'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-activate-last-minute'] ) ) : 0;
 			update_option( 'wprb-activate-last-minute', $activate );
 
+			/*Last minute description*/
+			$description = isset( $_POST['wprb-last-minute-description'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-last-minute-description'] ) ) : '';
+			update_option( 'wprb-last-minute-description', $description );
+
 			/*Set last minute*/
 			$last_minute = array();
 

@@ -8,7 +8,7 @@
  */
 
 $admin_activate       = get_option( 'wprb-activate-admin-notification' );
-$admin_recipients                   = get_option( 'wprb-admin-recipients' ) ? get_option( 'wprb-admin-recipients' ) : array( get_option( 'admin_email' ) );
+$admin_recipients     = get_option( 'wprb-admin-recipients' ) ? get_option( 'wprb-admin-recipients' ) : array( get_option( 'admin_email' ) );
 $user_activate        = get_option( 'wprb-activate-user-notification' );
 
 /*Define the user object*/

@@ -61,6 +61,7 @@ class WPRB_Reservation_Widget {
 		$external_nonce         = wp_create_nonce( 'wprb-external' );
 		$max_bookable_nonce     = wp_create_nonce( 'wprb-max-bookable' );
 		$save_reservation_nonce = wp_create_nonce( 'wprb-save-reservation' );
+		$date_first_message     = esc_html__( 'Please select a date first' , 'wprb');
 		$locale                 = str_replace( '_', '-', get_locale() );
 
 		/*Pass data to the script file*/
@@ -73,6 +74,7 @@ class WPRB_Reservation_Widget {
 				'externalNonce'        => $external_nonce,
 				'maxBookableNonce'     => $max_bookable_nonce,
 				'saveReservationNonce' => $save_reservation_nonce,
+				'dateFirstMessage'     => $date_first_message,
 				'locale'               => $locale,
 			)
 		);
@@ -208,12 +210,19 @@ class WPRB_Reservation_Widget {
 	 */
 	public static function last_minute_text() {
 
-		echo '<p class="last-minute-text">';
+		$default     = __( 'More information about Last Minute ', 'wprb' );
+		$description = get_option('wprb-last-minute-description') ? get_option('wprb-last-minute-description') : $default;
 
-			esc_html_e( 'More information about Last Minute ', 'wprb' ); // temp.
-			printf( '<a href="%s">here</a>.', esc_url( '#' ) );
+		if ( $description ) {
+			
+			echo '<p class="last-minute-text">';
 
-		echo '</p>';
+				echo esc_html( $description );
+				// printf( '<a href="%s">' . esc_html__( 'here', 'wprb' ) . '</a>', esc_url( '#' ) );
+
+			echo '</p>';
+			# code...
+		}
 
 	}
 
@@ -446,7 +455,7 @@ class WPRB_Reservation_Widget {
 				echo '<i class="far fa-check-circle"></i><br>';
 
 				/* Translators: %s: customer first name */
-				printf( esc_html__( 'Thanks %s!', 'wprb' ), esc_html( $first_name ) ) . '<br>';
+				printf( esc_html__( 'Thanks %s! ', 'wprb' ), esc_html( $first_name ) ) . '<br>';
 
 				echo esc_html__( 'We sent an e-mail with the confirmation data to', 'wprb' ) . '<br>';
 				echo '<span class="wprb-confirmation-email">' . esc_html( $email ) . '</span>';

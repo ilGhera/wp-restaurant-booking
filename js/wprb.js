@@ -106,12 +106,12 @@ var wprbController = function() {
 
 				})
 
-				people_val = $('.date-field').val();
+				people_val = $('.people-field').val();
 
 				if ( people_val ) {
 
 					/*Update available hours*/
-					self.hours_available_update( $(this).val(), date );
+					self.hours_available_update( people_val, date );
 
 				}
 
@@ -151,7 +151,7 @@ var wprbController = function() {
 				/*The date must be set before*/
 				if( '' == $('.date-field').val() ) {
 					
-					alert('Please select a date first'); // temp.
+					alert(wprbSettings.dateFirstMessage);
 
 				} else {
 				
