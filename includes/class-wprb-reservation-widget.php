@@ -440,7 +440,7 @@ class WPRB_Reservation_Widget {
 	 */
 	public function step_4( $first_name, $email ) {
 
-		echo '<div class="booking-end">';
+		echo '<div class="booking-end" data-title="' . esc_html__( 'Reservation completed', 'wprb' ) . '">';
 
 			echo '<p class="wprb-step-description">';
 				echo '<i class="far fa-check-circle"></i><br>';

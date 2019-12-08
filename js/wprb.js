@@ -480,6 +480,7 @@ var wprbController = function() {
 
 			var title     = $('.wprb-widget-title');
 			var container = ('#wprb-booking-modal .padding-2');
+			var get_title;
 
 			/*General fields check*/
 			self.fields_check();
@@ -508,9 +509,11 @@ var wprbController = function() {
 
 				$.post(wprbSettings.ajaxURL, data, function(response){
 
-					$(title).text('Reservation completed'); //temp
-
 					$(container).html(response);
+
+					get_title = $('.booking-end').data('title');
+					
+					$(title).text(get_title);
 
 					$('.header-bar_steps li span').css('cursor', 'default');
 

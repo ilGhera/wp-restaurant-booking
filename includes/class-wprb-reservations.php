@@ -865,7 +865,7 @@ class WPRB_Reservations {
 
 				} elseif ( $external ) {
 
-					echo esc_html( $time ) . '<span class="external">' . esc_html__( 'EXT', 'wprb' ) . '</span>';
+					echo esc_html( $time ) . '<span class="external" title="' . __( 'Outdor table', 'wprb' ) .'">' . esc_html__( 'EXT', 'wprb' ) . '</span>';
 
 				} else {
 

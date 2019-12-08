@@ -58,7 +58,7 @@ class WPRB_Notifications {
 	 */
 	public static function default_user_object() {
 
-		return 'Thanks for your reservation [first-name]';
+		return __( 'Thanks for your reservation [first-name]', 'wprb' );
 
 	}
 
