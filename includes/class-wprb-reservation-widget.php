@@ -210,18 +210,17 @@ class WPRB_Reservation_Widget {
 	 */
 	public static function last_minute_text() {
 
-		$default     = __( 'More information about Last Minute ', 'wprb' );
-		$description = get_option('wprb-last-minute-description') ? get_option('wprb-last-minute-description') : $default;
+		$default     = __( 'Last minutes are tables available only for a limited time', 'wprb' );
+		$description = get_option( 'wprb-last-minute-description' ) ? get_option( 'wprb-last-minute-description' ) : $default;
 
 		if ( $description ) {
-			
+
 			echo '<p class="last-minute-text">';
 
 				echo esc_html( $description );
-				// printf( '<a href="%s">' . esc_html__( 'here', 'wprb' ) . '</a>', esc_url( '#' ) );
 
 			echo '</p>';
-			# code...
+
 		}
 
 	}

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP Restaurant Booking 0.9.0\n"
-"POT-Creation-Date: 2019-12-08 08:42+0100\n"
-"PO-Revision-Date: 2019-12-08 08:42+0100\n"
+"POT-Creation-Date: 2019-12-08 09:25+0100\n"
+"PO-Revision-Date: 2019-12-08 09:34+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
 "Language: it_IT\n"
@@ -134,18 +134,16 @@ msgstr "Attiva le prenotazioni last minute."
 
 #: admin/wprb-set-last-minute-template.php:26
 #, fuzzy
-#| msgid "Description."
 msgid "Description"
-msgstr "Descrizione."
+msgstr "Descrizione"
 
 #: admin/wprb-set-last-minute-template.php:28
-#: includes/class-wprb-reservation-widget.php:213
-msgid "More information about Last Minute "
-msgstr "Cosa sono i Last Minute? "
+msgid "Last minutes are tables available only for a limited time"
+msgstr "I last minute sono tavoli disponibili per un tempo limitato"
 
 #: admin/wprb-set-last-minute-template.php:29
 msgid "A short description for the user about last minute."
-msgstr ""
+msgstr "Una descrizione breve dei last minute da mostrare all'utente."
 
 #: admin/wprb-set-last-minute-template.php:33
 msgid "Add"
@@ -361,6 +359,10 @@ msgstr "Seleziona l'orario"
 #: includes/wprb-reservation-template.php:58
 msgid "People"
 msgstr "Persone"
+
+#: includes/class-wprb-reservation-widget.php:213
+msgid "More information about Last Minute "
+msgstr "Cosa sono i Last Minute? "
 
 #: includes/class-wprb-reservation-widget.php:248
 msgid "Select the time"
