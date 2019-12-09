@@ -39,5 +39,8 @@ function load_wp_restaurant_booking() {
 	require( WPRB_INCLUDES . 'class-wprb-reservation-widget.php' );
 	require( WPRB_INCLUDES . 'class-wprb-notifications.php' );
 
+	/*Create "Reservations manager" role if doesn't exist*/
+	WPRB_Admin::add_user_role();
+
 }
-add_action( 'plugins_loaded', 'load_wp_restaurant_booking', 10 );
+add_action( 'after_setup_theme', 'load_wp_restaurant_booking', 10 );

@@ -61,7 +61,7 @@ class WPRB_Reservation_Widget {
 		$external_nonce         = wp_create_nonce( 'wprb-external' );
 		$max_bookable_nonce     = wp_create_nonce( 'wprb-max-bookable' );
 		$save_reservation_nonce = wp_create_nonce( 'wprb-save-reservation' );
-		$date_first_message     = esc_html__( 'Please select a date first' , 'wprb');
+		$date_first_message     = esc_html__( 'Please select a date first', 'wprb' );
 		$locale                 = str_replace( '_', '-', get_locale() );
 
 		/*Pass data to the script file*/

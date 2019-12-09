@@ -85,6 +85,65 @@ class WPRB_Admin {
 
 
 	/**
+	 * Add Reservations Manager user role
+	 */
+	public static function add_user_role() {
+
+		$wp_roles = wp_roles();
+
+		if ( $wp_roles && ! isset( $wp_roles->roles['wprb_manager'] ) ) {
+			
+			add_role(
+				'wprb_manager',
+				__( 'Reservations Manager', 'wprb' ),
+				array(
+					'moderate_comments'      => 1,
+                    'manage_categories'      => 1,
+                    'manage_links'           => 1,
+                    'upload_files'           => 1,
+                    'unfiltered_html'        => 1,
+                    'edit_posts'             => 1,
+                    'edit_others_posts'      => 1,
+                    'edit_published_posts'   => 1,
+                    'publish_posts'          => 1,
+                    'edit_pages'             => 1,
+                    'read'                   => 1,
+                    'level_7'                => 1,
+                    'level_6'                => 1,
+                    'level_5'                => 1,
+                    'level_4'                => 1,
+                    'level_3'                => 1,
+                    'level_2'                => 1,
+                    'level_1'                => 1,
+                    'level_0'                => 1,
+                    'edit_others_pages'      => 1,
+                    'edit_published_pages'   => 1,
+                    'publish_pages'          => 1,
+                    'delete_pages'           => 1,
+                    'delete_others_pages'    => 1,
+                    'delete_published_pages' => 1,
+                    'delete_posts'           => 1,
+                    'delete_others_posts'    => 1,
+                    'delete_published_posts' => 1,
+                    'delete_private_posts'   => 1,
+                    'edit_private_posts'     => 1,
+                    'read_private_posts'     => 1,
+                    'delete_private_pages'   => 1,
+                    'edit_private_pages'     => 1,
+                    'read_private_pages'     => 1,
+                    'wprb_edit_reservations' => 1,
+				)
+			);
+
+			/*Add cap to admin*/
+			$wp_roles->add_cap( 'administrator', 'wprb_edit_reservations' );
+
+		}
+
+	}
+
+
+	/**
 	 * Get the unread reservations
 	 *
 	 * @return int
@@ -122,16 +181,16 @@ class WPRB_Admin {
 		$menu_label = sprintf( 'WPRB %s', $bouble_count );
 
 		/*Main menu item*/
-		$hook = add_menu_page( 'WP Restaurant Booking', $menu_label, 'manage_options', 'edit.php?post_type=reservation', null, 'dashicons-food', 59 );
+		$hook = add_menu_page( 'WP Restaurant Booking', $menu_label, 'wprb_edit_reservations', 'edit.php?post_type=reservation', null, 'dashicons-food', 59 );
 
 		/*Reservations*/
-		add_submenu_page( 'edit.php?post_type=reservation', __( 'All reservations', 'wprb' ), __( 'All reservations', 'wprb' ), 'manage_options', 'edit.php?post_type=reservation' );
+		add_submenu_page( 'edit.php?post_type=reservation', __( 'All reservations', 'wprb' ), __( 'All reservations', 'wprb' ), 'wprb_edit_reservations', 'edit.php?post_type=reservation' );
 
 		/*New Reservation*/
-		add_submenu_page( 'edit.php?post_type=reservation', __( 'Add New', 'wprb' ), __( 'Add New', 'wprb' ), 'manage_options', 'post-new.php?post_type=reservation' );
+		add_submenu_page( 'edit.php?post_type=reservation', __( 'Add New', 'wprb' ), __( 'Add New', 'wprb' ), 'wprb_edit_reservations', 'post-new.php?post_type=reservation' );
 
 		/*Options*/
-		add_submenu_page( 'edit.php?post_type=reservation', __( 'Settings', 'wprb' ), __( 'Settings', 'wprb' ), 'manage_options', 'wprb-settings', array( $this, 'wprb_settings' ) );
+		add_submenu_page( 'edit.php?post_type=reservation', __( 'Settings', 'wprb' ), __( 'Settings', 'wprb' ), 'wprb_edit_reservations', 'wprb-settings', array( $this, 'wprb_settings' ) );
 
 	}
 
@@ -559,7 +618,7 @@ class WPRB_Admin {
 	public function wprb_settings() {
 
 		/*Right of access*/
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( 'wprb_edit_reservations' ) ) {
 			wp_die( esc_html( __( 'It seems like you don\'t have permission to see this page', 'wprb' ) ) );
 		}
 

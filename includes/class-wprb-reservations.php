@@ -1,6 +1,6 @@
 <?php
 /**
- * The single reservation handle
+ * Back-end reservations handle
  *
  * @author ilGhera
  * @package wp-restaurant-booking/includes
