@@ -671,7 +671,7 @@ class WPRB_Reservations {
 
 			}
 
-			if ( $externals ) {
+			if ( $externals && $time ) {
 
 				$available = $externals - $externals_booked;
 
