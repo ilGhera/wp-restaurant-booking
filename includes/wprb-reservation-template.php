@@ -25,7 +25,7 @@ $last_minute_class = $last_minute ? ' last-minute' : '';
 $external_class    = $external ? ' external' : '';
 ?>
 
-<table class="wprb-reservation form-table<?php echo esc_html( $last_minute_class . $external_class ); ?>">
+<table class="wprb-reservation form-table<?php echo esc_html( $last_minute_class . $external_class ); ?>" data-date="<?php echo esc_attr( $date ); ?>" data-time="<?php echo esc_attr( $time ); ?>">
 	<tr>
 		<th scope="row"><?php esc_html_e( 'First name', 'wprb' ); ?></th>
 		<td>
@@ -85,7 +85,7 @@ $external_class    = $external ? ' external' : '';
 				<?php
 				if ( $time && $people ) {
 
-					WPRB_Reservation_Widget::hours_select_element( $people, $date, true, $last_minute, $external );
+					WPRB_Reservation_Widget::hours_select_element( $people, $date, true, $last_minute, $external, $time );
 
 				}
 				?>

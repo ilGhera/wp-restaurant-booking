@@ -234,11 +234,12 @@ class WPRB_Reservation_Widget {
 	 * @param bool   $back_end    different if used in back-end.
 	 * @param bool   $last_minute define is the current reservation (back-end) is a last minute.
 	 * @param bool   $external    define is the current reservation (back-end) is external.
+	 * @param string $external    the current booking time if editing an existing reservation.
 	 */
-	public static function hours_select_element( $people = 0, $date = null, $back_end = false, $last_minute = false, $external = false ) {
+	public static function hours_select_element( $people = 0, $date = null, $back_end = false, $last_minute = false, $external = false, $time = null ) {
 
 		/*Hours*/
-		$hours = WPRB_Reservations::get_available_hours( $date );
+		$hours = WPRB_Reservations::get_available_hours( $date, $time, $people );
 
 		if ( is_array( $hours ) ) {
 
@@ -293,7 +294,7 @@ class WPRB_Reservation_Widget {
 		self::external_seats_element();
 
 		/*Last minute available*/
-		$last_minute_av = WPRB_Reservations::get_available_last_minute( $date, $people, $back_end, $last_minute );
+		$last_minute_av = WPRB_Reservations::get_available_last_minute( $date, $people, $back_end, $last_minute, $time );
 
 		if ( is_array( $last_minute_av ) && ! empty( $last_minute_av ) ) {
 
@@ -337,8 +338,9 @@ class WPRB_Reservation_Widget {
 			$back_end    = isset( $_POST['back-end'] ) ? sanitize_text_field( wp_unslash( $_POST['back-end'] ) ) : false;
 			$the_date    = date( 'Y-m-d', strtotime( $date ) );
 			$last_minute = isset( $_POST['last-minute'] ) ? sanitize_text_field( wp_unslash( $_POST['last-minute'] ) ) : null;
+			$time        = isset( $_POST['time'] ) ? sanitize_text_field( wp_unslash( $_POST['time'] ) ) : null;
 
-			$this->hours_select_element( $people, $the_date, $back_end, $last_minute );
+			$this->hours_select_element( $people, $the_date, $back_end, $last_minute, $time );
 
 		}
 

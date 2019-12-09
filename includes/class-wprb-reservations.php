@@ -430,10 +430,12 @@ class WPRB_Reservations {
 	/**
 	 * Get the bookable hours available based on the date provided
 	 *
-	 * @param  string $date the reservation date.
+	 * @param  string $date   the reservation date.
+	 * @param  string $time   the reservation time.
+	 * @param  int    $people the reservation people.
 	 * @return array time as key and bookables as value
 	 */
-	public static function get_available_hours( $date = null ) {
+	public static function get_available_hours( $date = null, $time = null, $people = null ) {
 
 		$bookables = self::get_initial_bookables( $date );
 
@@ -444,6 +446,17 @@ class WPRB_Reservations {
 			if ( $day_reservations ) {
 
 				foreach ( $day_reservations as $key => $value ) {
+
+					/*Exclude current reservation if editing an existing one*/
+					if ( $time && $people ) {
+						
+						if ( $key === $time && isset( $day_reservations[ $time ] ) ) {
+							
+							$value = $value - $people;
+
+						}
+
+					}
 
 					$temporal_space = self::get_temporal_space( $key );
 
@@ -540,30 +553,46 @@ class WPRB_Reservations {
 	 * @param int    $people      the number of people.
 	 * @param bool   $edit        true if called from edit reservation.
 	 * @param bool   $last_minute define is the current reservation (back-end) is a last minute.
+	 * @param string $time        the booking time on editing a reservation.
 	 * @return array
 	 */
-	public static function get_available_last_minute( $date, $people, $edit = false, $last_minute = false ) {
+	public static function get_available_last_minute( $date, $people, $edit = false, $last_minute = false, $time = null ) {
 
 		if ( get_option( 'wprb-activate-last-minute' ) ) {
 
 			$output          = array();
 			$last_minute_el  = get_option( 'wprb-last-minute' );
 			$day_last_minute = self::get_day_last_minute( $date );
-			$day_bookables   = self::get_available_hours( $date );
+			$day_bookables   = self::get_available_hours( $date, $time, $people );
 
 			if ( $last_minute_el ) {
 
 				foreach ( $last_minute_el as $element ) {
 
+
+					/*Difference between set and already booked*/
+					$available = 0;
+
+					if( isset( $element['people'], $element['from'], $day_last_minute[ $element['from'] ] ) ) {
+					
+						$available = $element['people'] - $day_last_minute[ $element['from'] ];
+					
+					} else {
+					
+						$available = $element['people'];
+					
+					}
+
 					/*If in edit reservation exclude current reservation people*/
 					if ( $edit && $last_minute ) {
 
-						$day_last_minute = $day_last_minute - $people;
+						if ( $element['from'] === $time ) {
+							
+							$available += $people; 
 
-					} // temp.
+						}
 
-					/*Difference between set and already booked*/
-					$available = isset( $element['people'], $day_last_minute[ $element['from'] ] ) ? ( $element['people'] - $day_last_minute[ $element['from'] ] ) : $element['people'];
+					}
 
 					/*If available >= people*/
 					if ( isset( $element['date'] ) && $date === $element['date'] && $available >= $people ) {

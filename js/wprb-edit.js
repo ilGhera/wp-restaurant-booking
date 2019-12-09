@@ -37,11 +37,20 @@ var wprbEditController = function() {
 
 			var hours_tr    = $('.wprb-hours');
 			var last_minute = 0;
+			var reservation_time;
 
+			/*Editing a last minute reservation*/
 			if( $('table.wprb-reservation').hasClass('last-minute') ) {
 				
 				last_minute = 1;
 			
+			}
+
+			/*Get current booking time if editing a reservation*/
+			if (back_end) {
+
+				reservation_time = $('table.wprb-reservation').data('time');
+
 			}
 
 			var data = {
@@ -50,6 +59,7 @@ var wprbEditController = function() {
 				'people': people,
 				'date': date,
 				'back-end': back_end,
+				'time': reservation_time,
 				'last-minute': last_minute
 			}
 
@@ -69,16 +79,18 @@ var wprbEditController = function() {
 
 	}
 
+	/**
+	 * Handles the people setting in the single reservation
+	 */
 	self.people_element = function() {
 
 		jQuery(function($){
-
 
 			$('.wprb-people').on('change', function(){
 
 				var date = $('.wprb-date').val();
 
-				if ( $('.wprb-hours').hasClass('active') ) {
+				if ( date ) {
 
 					self.hours_element_update($(this).val(), date, true);
 
