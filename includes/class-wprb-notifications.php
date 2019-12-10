@@ -139,6 +139,30 @@ class WPRB_Notifications {
 
 
 	/**
+	 * Change from email address and name
+	 */
+	public function mail_from_filters() {
+
+		/*Email addres to noreplay*/
+		add_filter(
+			'wp_mail_from',
+			function( $email ) {
+				$output = str_replace( 'wordpress', 'noreplay', $email );
+				return $output;
+			}
+		);
+
+		/*Email from to site name*/
+		add_filter(
+			'wp_mail_from_name',
+			function( $name ) {
+				return get_bloginfo( 'name' );
+			}
+		);
+	}
+
+
+	/**
 	 * Send admin notification if activated
 	 */
 	public function send_admin_notification() {
@@ -151,6 +175,8 @@ class WPRB_Notifications {
 			$subject = sprintf( __( 'New reservation from %1$s for %2$s', 'wprb' ), $this->first_name, $this->date );
 
 			$message = do_shortcode( self::default_admin_message() );
+
+			$this->mail_from_filters();
 
 			$sent = wp_mail( $to, $subject, $message );
 
@@ -180,6 +206,8 @@ class WPRB_Notifications {
 			$message  = ob_get_clean();
 			// $headers = array('Content-Type: text/html; charset=UTF-8');
 			$headers = null;
+
+			$this->mail_from_filters();
 
 			$sent = wp_mail( $to, $subject, $message, $headers );
 
