@@ -262,6 +262,8 @@ var wprbEditController = function() {
 				'is_external': is_external
 			}
 
+			console.log( 'DATA:' + JSON.stringify(data) );
+
 			$.post(ajaxurl, data, function(response){
 				
 				if ( response ) {

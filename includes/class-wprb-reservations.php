@@ -193,10 +193,11 @@ class WPRB_Reservations {
 	/**
 	 * Get all the reservations of the date specified
 	 *
-	 * @param  string $date the date.
+	 * @param  string $date     the date.
+	 * @param  bool   $external get only external reservations.
 	 * @return array hours as key and people as value
 	 */
-	public static function get_day_reservations( $date ) {
+	public static function get_day_reservations( $date, $external = false ) {
 
 		$output = array();
 
@@ -230,6 +231,17 @@ class WPRB_Reservations {
 				),
 			),
 		);
+
+		/*Get only external reservations*/
+		if ( $external ) {
+
+			$args['meta_query'][] = array(
+				'key'     => 'wprb-external',
+				'value'   => 1,
+				'compare' => '=',
+			);
+
+		}
 
 		$reservations = get_posts( $args );
 
@@ -329,8 +341,7 @@ class WPRB_Reservations {
 		$get_bookable       = get_option( 'wprb-bookable' );
 		$day                = strtolower( date( 'D', strtotime( $date ) ) );
 		$external_activated = get_option( 'wprb-activate-external-seats' );
-
-		$bookable = $externals ? $get_bookable[ $day ]['externals'] : $get_bookable[ $day ]['bookable'];
+		$bookable = ( $externals && $external_activated ) ? $get_bookable[ $day ]['externals'] : $get_bookable[ $day ]['bookable'];
 
 		/*The total bookable must include externals if activated*/
 		if ( $external_activated && ! $externals ) {
@@ -430,18 +441,19 @@ class WPRB_Reservations {
 	/**
 	 * Get the bookable hours available based on the date provided
 	 *
-	 * @param  string $date   the reservation date.
-	 * @param  string $time   the reservation time.
-	 * @param  int    $people the reservation people.
+	 * @param  string $date     the reservation date.
+	 * @param  string $time     the reservation time.
+	 * @param  int    $people   the reservation people.
+	 * @param  boool  $external get only external available hours.
 	 * @return array time as key and bookables as value
 	 */
-	public static function get_available_hours( $date = null, $time = null, $people = null ) {
+	public static function get_available_hours( $date = null, $time = null, $people = null, $external = false ) {
 
-		$bookables = self::get_initial_bookables( $date );
+		$bookables = self::get_initial_bookables( $date, $external );
 
 		if ( $date ) {
 
-			$day_reservations = self::get_day_reservations( $date );
+			$day_reservations = self::get_day_reservations( $date, $external );
 
 			if ( $day_reservations ) {
 
@@ -449,9 +461,9 @@ class WPRB_Reservations {
 
 					/*Exclude current reservation if editing an existing one*/
 					if ( $time && $people ) {
-						
+
 						if ( $key === $time && isset( $day_reservations[ $time ] ) ) {
-							
+
 							$value = $value - $people;
 
 						}
@@ -466,7 +478,7 @@ class WPRB_Reservations {
 
 							if ( isset( $bookables[ $time ] ) ) {
 
-								$bookables[ $time ] = $bookables[ $time ] - $value;
+								$bookables[ $time ] = max( $bookables[ $time ] - $value, 0 );
 
 							}
 
@@ -574,20 +586,20 @@ class WPRB_Reservations {
 					$available = 0;
 
 					if( isset( $element['people'], $element['from'], $day_last_minute[ $element['from'] ] ) ) {
-					
+
 						$available = $element['people'] - $day_last_minute[ $element['from'] ];
-					
+
 					} else {
-					
+
 						$available = $element['people'];
-					
+
 					}
 
 					/*If in edit reservation exclude current reservation people*/
 					if ( $edit && $last_minute ) {
 
 						if ( $element['from'] === $time ) {
-							
+
 							$available += $people; 
 
 						}
@@ -617,7 +629,7 @@ class WPRB_Reservations {
 
 
 
-	/**
+	/**temp
 	 * Get external seats already used for a date specific
 	 *
 	 * @param  string $date the reservation date.
@@ -689,28 +701,18 @@ class WPRB_Reservations {
 
 		if ( get_option( 'wprb-activate-external-seats' ) ) {
 
-			$externals = self::get_initial_bookables( $date, true, $time );
-
-			$externals_booked = self::get_day_externals( $date, $time );
+			$externals     = self::get_initial_bookables( $date, true, $time );
+			$day_bookables = self::get_available_hours( $date, $time, $people, true );
+			$available     = isset( $day_bookables[ $time ] ) ? $day_bookables[ $time ] : '';
 
 			/*If in edit reservation exclude current reservation people*/
-			if ( $externals_booked && $edit && $is_external ) {
+			if ( $available && $edit && $is_external ) {
 
-				$externals_booked = $externals_booked - $people;
-
-			}
-
-			if ( $externals && $time ) {
-
-				$available = $externals - $externals_booked;
-
-				if ( 0 !== $available && $available >= $people ) {
-
-					return $available;
-
-				}
+				$available = $available - $people;
 
 			}
+			
+			return $available;
 
 		}
 

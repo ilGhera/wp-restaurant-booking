@@ -16,7 +16,7 @@ class WPRB_Reservation_Widget {
 	 */
 	public function __construct( $init = false ) {
 
-		$this->power_on = get_option( 'wprb-power-on' );
+		$this->power_on           = get_option( 'wprb-power-on' );
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'wprb_scripts' ) );
 		add_action( 'wp_head', array( $this, 'booking_button' ) );
@@ -78,6 +78,18 @@ class WPRB_Reservation_Widget {
 				'locale'               => $locale,
 			)
 		);
+
+	}
+
+
+	/**
+	 * Check if external seats option is activated
+	 */
+	public static function are_externals_active() {
+
+		$output = get_option( 'wprb-activate-external-seats' );
+
+		return $output;
 
 	}
 
@@ -234,14 +246,15 @@ class WPRB_Reservation_Widget {
 	 * @param bool   $back_end    different if used in back-end.
 	 * @param bool   $last_minute define is the current reservation (back-end) is a last minute.
 	 * @param bool   $external    define is the current reservation (back-end) is external.
-	 * @param string $external    the current booking time if editing an existing reservation.
+	 * @param string $time        the current booking time if editing an existing reservation.
 	 */
 	public static function hours_select_element( $people = 0, $date = null, $back_end = false, $last_minute = false, $external = false, $time = null ) {
 
 		/*Hours*/
-		$hours = WPRB_Reservations::get_available_hours( $date, $time, $people );
+		$hours_available     = WPRB_Reservations::get_available_hours( $date, $time, $people );
+		$externals_available = WPRB_Reservations::get_available_hours( $date, $time, $people, true );
 
-		if ( is_array( $hours ) ) {
+		if ( is_array( $hours_available ) ) {
 
 			if ( false === $back_end ) {
 
@@ -257,7 +270,7 @@ class WPRB_Reservation_Widget {
 				/*The margin time set by the admin*/
 				$margin_time = get_option( 'wprb-margin-time' ) ? get_option( 'wprb-margin-time' ) : 60;
 
-				foreach ( $hours as $key => $value ) {
+				foreach ( $hours_available as $key => $value ) {
 
 					$is_available = true;
 
@@ -272,17 +285,30 @@ class WPRB_Reservation_Widget {
 
 					}
 
+					/*Define internal and external available seats*/
+					$ext = self::are_externals_active() && isset( $externals_available[ $key ] ) ? $externals_available[ $key ] : 0;
+					$int = max( $value - $ext, 0 );
+
 					/*Check if it's available for this number of people*/
-					if ( $people > $value || 0 === $value ) {
+					if ( $people > $ext && $people > $int ) {
 
 						$is_available = false;
 
 					}
 
 					$not_available = false === $is_available ? ' not-available' : '';
-					$title         = $not_available ? __( 'Not available', 'wprb' ) : $value;
+					$title         = $not_available ? __( 'Not available', 'wprb' ) : '';
 
-					echo '<li class="wprb-hour regular' . esc_attr( $not_available ) . '" title="' . esc_attr( $title ) . '"><input type="button" value="' . esc_attr( $key ) . '"></li>';
+					/*Define data for li element*/
+					$data = 'data-internal=' . $int;
+
+					if ( self::are_externals_active() ) {
+						
+						$data .= ' data-external=' . $ext;
+
+					}
+
+					echo '<li class="wprb-hour regular' . esc_attr( $not_available ) . '" title="' . esc_attr( $title ) . '" ' . esc_attr( $data ) . '><input type="button" value="' . esc_attr( $key ) . '"></li>';
 
 				}
 

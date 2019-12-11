@@ -194,8 +194,8 @@ var wprbController = function() {
 				$(number).removeClass('active');
 				$(this).closest('li').addClass('active');
 
-				/*Activate date element*/
-				$('.date').addClass('active');
+				/*Activate time element*/
+				$('.time').addClass('active');
 
 				/*Activate the calendar*/
 				$(calendar).addClass('active');
@@ -243,64 +243,50 @@ var wprbController = function() {
 	/**
 	 * Display external seats option if available
 	 *
-	 * @param  {string} time             the reservation time
-	 * @param  {int}    available_people the available seats
+	 * @param  {int} internals the internal seats available
+	 * @param  {int} externals the external seats available
 	 */
-	self.external_seats = function( time, available_people ) {
+	self.external_seats = function( internals, externals ) {
 
 		jQuery(function($){
 
-			var date   = $('.date-field').val();
-			var people = $('.people-field').val();
+			var date                = $('.date-field').val();
+			var people              = $('.people-field').val();
 			var interested;
 
-			var data = {
-				'action': 'wprb-check-for-external-seats',
-				'wprb-external-nonce': wprbSettings.externalNonce,
-				'date': date,
-				'time': time,
-				'people': people
+			if ( people <= parseInt(externals) && people > parseInt(internals) ) {
+
+				$('.wprb-external-container.choise').slideUp();
+				$('.wprb-external-container.only').slideDown();
+
+			} else if (  people <= parseInt(externals) && people <= parseInt(internals) ) {
+
+				$('.wprb-external-container.only').slideUp();
+				$('.wprb-external-container.choise').slideDown();
+
+			} else {
+
+				$('.wprb-external-container.only').slideUp();
+				$('.wprb-external-container.choise').slideUp();
+
+				self.go_to_last_step();
+
 			}
 
-			$.post(wprbSettings.ajaxURL, data, function(response){
+			$('.wprb-external-container a').on('click', function(){
 
-				if ( response ) {
+				$('.wprb-external-container a').removeClass('active');
+				
+				$(this).addClass('active');
+				
+				interested = $(this).hasClass('yes') ? 1 : 0;
 
-					if ( parseInt(response)  >= parseInt(available_people) ) {
+				/*Add data*/
+				$('.external-field').val(interested);
 
-						$('.wprb-external-container.choise').slideUp();
-						$('.wprb-external-container.only').slideDown();
+				self.go_to_last_step();
 
-					} else {
-
-						$('.wprb-external-container.only').slideUp();
-						$('.wprb-external-container.choise').slideDown();
-
-					}
-
-					$('.wprb-external-container a').on('click', function(){
-
-						$('.wprb-external-container a').removeClass('active');
-						
-						$(this).addClass('active');
-						
-						interested = $(this).hasClass('yes') ? 1 : 0;
-
-						/*Add data*/
-						$('.external-field').val(interested);
-
-						self.go_to_last_step();
-
-					})					
-
-
-				} else {
-
-					self.go_to_last_step();
-
-				}
-
-			})
+			})					
 
 		})
 
@@ -316,8 +302,9 @@ var wprbController = function() {
 
 			$(document).on('click', '.booking-hours ul li input', function(){
 
-				var parent_li        = $(this).closest('li');
-				var available_people = $(parent_li).attr('title');
+				var parent_li = $(this).closest('li');
+				var internals = $(parent_li).data('internal');
+				var externals = $(parent_li).data('external');
 				var until;
 
 				if( $(parent_li).hasClass('not-available') ) {
@@ -345,10 +332,14 @@ var wprbController = function() {
 
 					self.go_to_last_step();
 				
-				} else {
+				} else if ( externals ) {
 
 					/*temp*/
-					self.external_seats($(this).val(), available_people);
+					self.external_seats( internals, externals );
+
+				} else {
+
+					self.go_to_last_step();
 
 				}
 
