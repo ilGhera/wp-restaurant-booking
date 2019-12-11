@@ -7,15 +7,16 @@
  * @since 0.9.0
  */
 
-$admin           = new WPRB_Admin();
-$power_on        = get_option( 'wprb-power-on' );
-$button_position = get_option( 'wprb-button-position' );
-$external_seats  = get_option( 'wprb-activate-external-seats' );
-$bookable        = get_option( 'wprb-bookable' );
-$hours           = get_option( 'wprb-hours' );
-$margin_time     = get_option( 'wprb-margin-time' );
-$medium_time     = get_option( 'wprb-medium-time' );
-$expiration_time = get_option( 'wprb-expiration-time' );
+$admin                     = new WPRB_Admin();
+$power_on                  = get_option( 'wprb-power-on' );
+$button_position           = get_option( 'wprb-button-position' );
+$display_number_availables = get_option( 'wprb-display-number-availables' );
+$external_seats            = get_option( 'wprb-activate-external-seats' );
+$bookable                  = get_option( 'wprb-bookable' );
+$hours                     = get_option( 'wprb-hours' );
+$margin_time               = get_option( 'wprb-margin-time' );
+$medium_time               = get_option( 'wprb-medium-time' );
+$expiration_time           = get_option( 'wprb-expiration-time' );
 ?>
 <!-- Form -->
 <form name="wprb-set-reservations" class="wprb-set-reservations wprb-form"  method="post" action="">
@@ -37,6 +38,13 @@ $expiration_time = get_option( 'wprb-expiration-time' );
 					<option value="custom"<?php echo 'custom' === $button_position ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Custom', 'wprb' ); ?></option>
 				</select>
 				<p class="description"><?php esc_html_e( 'Booking button position. Custom position requires use of shortcode [booking-button].', 'wprb' ); ?></p>
+			</td>
+		</tr>
+		<tr class="wprb-display-number-availables-field">
+			<th scope="row"><?php esc_html_e( 'Display number', 'wprb' ); ?></th>
+			<td>
+				<input type="checkbox" name="wprb-display-number-availables" id="wprb-display-number-availables" value="1"<?php echo ( 1 == $display_number_availables ? ' checked="checked"' : '' ); ?>>
+				<p class="description"><?php esc_html_e( 'Display the number of available seats to the user.', 'wprb' ); ?></p>
 			</td>
 		</tr>
 		<tr class="wprb-activate-external-seats-field">

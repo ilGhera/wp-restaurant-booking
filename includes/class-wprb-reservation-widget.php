@@ -25,9 +25,6 @@ class WPRB_Reservation_Widget {
 		add_action( 'wp_ajax_wprb-hours-available', array( $this, 'hours_select_element_callback' ) );
 		add_action( 'wp_ajax_nopriv_wprb-hours-available', array( $this, 'hours_select_element_callback' ) );
 
-		add_action( 'wp_ajax_wprb-check-for-external-seats', array( $this, 'external_seats_element_callback' ) );
-		add_action( 'wp_ajax_nopriv_wprb-check-for-external-seats', array( $this, 'external_seats_element_callback' ) );
-
 		add_action( 'wp_ajax_wprb-get-max-bookable', array( $this, 'get_max_bookable' ) );
 		add_action( 'wp_ajax_nopriv_wprb-get-max-bookable', array( $this, 'get_max_bookable' ) );
 
@@ -239,6 +236,53 @@ class WPRB_Reservation_Widget {
 
 
 	/**
+	 * Display the attribute title of the single hour element
+	 *
+	 * @param  int  $internals     the internal seats available.
+	 * @param  int  $externals     the external seats availbrle.
+	 * @param  bool $not_available hour not available.
+	 * @return string
+	 */
+	public static function get_hour_title( $internals, $externals, $not_available ) {
+
+		$title              = null;
+		$display_availables = get_option( 'wprb-display-number-availables' );
+
+		if ( $not_available ) {
+
+			$title = __( 'Not available', 'wprb' );
+
+		} else {
+
+			if ( $display_availables ) {
+
+				if ( ! $externals ) {
+
+					/* Translators: number of available seats */
+					$title = sprintf( __( 'Available seats: %d', 'wprb' ), $internals + $externals );
+
+				} else {
+
+					$title  = __( "AVAILABLE SEATS\n", 'wprb' );
+
+					/* Translators: number of internals available */
+					$title .= sprintf( __( "Indor: %d\n", 'wprb' ), $internals );
+
+					/* Translators: number of externals available */
+					$title .= sprintf( __( 'Outdor: %d', 'wprb' ), $externals );
+
+				}
+
+			}
+
+		}
+
+		return $title;
+
+	}
+
+
+	/**
 	 * Display the hours available in the specific day
 	 *
 	 * @param int    $people      number of people of the reservation.
@@ -297,13 +341,13 @@ class WPRB_Reservation_Widget {
 					}
 
 					$not_available = false === $is_available ? ' not-available' : '';
-					$title         = $not_available ? __( 'Not available', 'wprb' ) : '';
+					$title         = self::get_hour_title( $int, $ext, $not_available );
 
 					/*Define data for li element*/
 					$data = 'data-internal=' . $int;
 
 					if ( self::are_externals_active() ) {
-						
+
 						$data .= ' data-external=' . $ext;
 
 					}
@@ -390,32 +434,6 @@ class WPRB_Reservation_Widget {
 			echo '<p>' . esc_html__( 'Only available outdoor', 'wprb' ) . '</p>';
 			echo '<a class="yes only">' . esc_html__( 'Yes, no problem', 'wprb' ) . '</a>';
 		echo '</div>';
-
-	}
-
-
-	/**
-	 * Get the external seats element after time selection by the user
-	 */
-	public function external_seats_element_callback() {
-
-		if ( isset( $_POST['date'], $_POST['time'], $_POST['people'], $_POST['wprb-external-nonce'] ) && wp_verify_nonce( $_POST['wprb-external-nonce'], 'wprb-external' ) ) {
-
-			$date        = sanitize_text_field( wp_unslash( $_POST['date'] ) );
-			$the_date    = date( 'Y-m-d', strtotime( $date ) );
-			$time        = sanitize_text_field( wp_unslash( $_POST['time'] ) );
-			$people      = sanitize_text_field( wp_unslash( $_POST['people'] ) );
-			$back_end    = isset( $_POST['back-end'] ) ? sanitize_text_field( wp_unslash( $_POST['back-end'] ) ) : '';
-			$is_external = isset( $_POST['is_external'] ) ? sanitize_text_field( wp_unslash( $_POST['is_external'] ) ) : '';
-
-
-			$bookable = WPRB_Reservations::get_available_externals_seats( $the_date, $time, $people, $back_end, $is_external );
-
-			echo $bookable;
-
-			exit;
-
-		}
 
 	}
 

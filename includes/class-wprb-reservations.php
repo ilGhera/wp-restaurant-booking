@@ -581,11 +581,10 @@ class WPRB_Reservations {
 
 				foreach ( $last_minute_el as $element ) {
 
-
 					/*Difference between set and already booked*/
 					$available = 0;
 
-					if( isset( $element['people'], $element['from'], $day_last_minute[ $element['from'] ] ) ) {
+					if ( isset( $element['people'], $element['from'], $day_last_minute[ $element['from'] ] ) ) {
 
 						$available = $element['people'] - $day_last_minute[ $element['from'] ];
 
@@ -600,7 +599,7 @@ class WPRB_Reservations {
 
 						if ( $element['from'] === $time ) {
 
-							$available += $people; 
+							$available += $people;
 
 						}
 
@@ -624,65 +623,6 @@ class WPRB_Reservations {
 
 			return $output;
 		}
-
-	}
-
-
-
-	/**temp
-	 * Get external seats already used for a date specific
-	 *
-	 * @param  string $date the reservation date.
-	 * @param  string $time the reservation time.
-	 * @return int the number of externals booked of the day
-	 */
-	public static function get_day_externals( $date, $time ) {
-
-		$output = 0;
-
-		$args = array(
-			'post_type'      => 'reservation',
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'meta_query'     => array(
-				'relation' => 'and',
-				array(
-					'key'     => 'wprb-date',
-					'value'   => $date,
-					'compare' => '=',
-				),
-				array(
-					'key'     => 'wprb-time',
-					'value'   => $time,
-					'compare' => '=',
-				),
-				array(
-					'key'     => 'wprb-external',
-					'value'   => 1,
-					'compare' => '=',
-				),
-			),
-		);
-
-		$reservations = get_posts( $args );
-
-		if ( $reservations ) {
-
-			foreach ( $reservations as $res ) {
-
-				$people = get_post_meta( $res->ID, 'wprb-people', true );
-
-				if ( $people ) {
-
-					$output += $people;
-
-				}
-
-			}
-
-		}
-
-		return $output;
 
 	}
 
@@ -711,7 +651,7 @@ class WPRB_Reservations {
 				$available = $available - $people;
 
 			}
-			
+
 			return $available;
 
 		}
@@ -896,7 +836,7 @@ class WPRB_Reservations {
 
 				} elseif ( $external ) {
 
-					echo esc_html( $time ) . '<span class="external" title="' . __( 'Outdor table', 'wprb' ) .'">' . esc_html__( 'EXT', 'wprb' ) . '</span>';
+					echo esc_html( $time ) . '<span class="external" title="' . esc_attr__( 'Outdor table', 'wprb' ) . '">' . esc_html__( 'EXT', 'wprb' ) . '</span>';
 
 				} else {
 

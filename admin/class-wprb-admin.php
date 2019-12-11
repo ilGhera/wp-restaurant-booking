@@ -455,9 +455,12 @@ class WPRB_Admin {
 			$button_position = isset( $_POST['wprb-button-position'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-button-position'] ) ) : '';
 			update_option( 'wprb-button-position', $button_position );
 
+			/*Display availables option*/
+			$display_number_availables = isset( $_POST['wprb-display-number-availables'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-display-number-availables'] ) ) : 0;
+			update_option( 'wprb-display-number-availables', $display_number_availables );
+
 			/*External seats option*/
 			$external_seats = isset( $_POST['wprb-activate-external-seats'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-activate-external-seats'] ) ) : 0;
-
 			update_option( 'wprb-activate-external-seats', $external_seats );
 
 			/*Bookable seats*/
