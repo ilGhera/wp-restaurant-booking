@@ -39,6 +39,9 @@ var wprbEditController = function() {
 			var last_minute = 0;
 			var reservation_time;
 
+			/*Delete until value*/
+			$('.until-field').val('');
+
 			/*Editing a last minute reservation*/
 			if( $('table.wprb-reservation').hasClass('last-minute') ) {
 				

@@ -47,7 +47,12 @@ var wprbController = function() {
 
 		jQuery(function($){
 
-			var data = {
+			var data;
+
+			/*Delete until value*/
+			$('.until-field').val('');
+
+			data = {
 				'action': 'wprb-hours-available',
 				'wprb-change-date-nonce': wprbSettings.changeDateNonce,
 				'people': people,

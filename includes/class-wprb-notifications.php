@@ -66,13 +66,36 @@ class WPRB_Notifications {
 	/**
 	 * The default user email message
 	 *
+	 * @param string $until reservation until value.
+	 * @param string $notes reservation notes value.
 	 * @return string
 	 */
-	public static function default_user_message() {
+	public static function default_user_message( $until = null, $notes = null ) {
 
 		$output  = __( "Hi [first-name],\nhere are the details of your reservation:\n\n", 'wprb' );
-		$output .= __( "Day: [date]\nTime: [time]\nPeople: [people]\n", 'wprb' );
-		$output .= __( "Name: [first-name] [last-name]\nEmail: [email]\nPhone: [phone]\nNotes: [notes]\n\n", 'wprb' );
+		$output .= __( "Day: [date]\n", 'wprb' );
+		$output .= __( "Time: [time]\n", 'wprb' );
+
+		if ( $until ) {
+
+			$output .= __( "\nLAST MINUTE\n", 'wprb' );
+			$output .= __( "Until: [until]\n\n", 'wprb' );
+
+		}
+
+		$output .= __( "People: [people]\n", 'wprb' );
+		$output .= __( "Name: [first-name] [last-name]\nEmail: [email]\nPhone: [phone]\n", 'wprb' );
+
+		if ( $notes ) {
+
+			$output .= __( "Notes: [notes]\n\n", 'wprb' );
+
+		} else {
+
+			$output .= "\n";
+
+		}
+
 		$output .= __( 'We are waiting for you!', 'wprb' );
 
 		return $output;
@@ -82,13 +105,30 @@ class WPRB_Notifications {
 	/**
 	 * The default admin email message
 	 *
+	 * @param string $until reservation until value.
+	 * @param string $notes reservation notes value.
 	 * @return string
 	 */
-	public static function default_admin_message() {
+	public static function default_admin_message( $until = null, $notes = null ) {
 
 		$output  = __( "Hi,\nhere are the details of the new reservation:\n\n", 'wprb' );
-		$output .= __( "Day: [date]\nTime: [time]\nPeople: [people]\n", 'wprb' );
-		$output .= __( "Name: [first-name] [last-name]\nEmail: [email]\nPhone: [phone]\nNotes: [notes]\n\n", 'wprb' );
+		$output .= __( "Day: [date]\nTime: [time]\n", 'wprb' );
+
+		if ( $until ) {
+
+			$output .= __( "\nLAST MINUTE\n", 'wprb' );
+			$output .= __( "Until: [until]\n\n", 'wprb' );
+
+		}
+
+		$output .= __( "People: [people]\n", 'wprb' );
+		$output .= __( "Name: [first-name] [last-name]\nEmail: [email]\nPhone: [phone]\n", 'wprb' );
+
+		if ( $notes ) {
+
+			$output .= __( "Notes: [notes]\n\n", 'wprb' );
+
+		}
 
 		return $output;
 
@@ -174,7 +214,7 @@ class WPRB_Notifications {
 			/* Translators: 1: the user first name 2: the date */
 			$subject = sprintf( __( 'New reservation from %1$s for %2$s', 'wprb' ), $this->first_name, $this->date );
 
-			$message = do_shortcode( self::default_admin_message() );
+			$message = do_shortcode( self::default_admin_message( $this->until, $this->notes ) );
 
 			$this->mail_from_filters();
 
@@ -195,8 +235,7 @@ class WPRB_Notifications {
 			$to = $this->email;
 			$get_subject = get_option( 'wprb-user-notification-subject' ) ? get_option( 'wprb-user-notification-subject' ) : self::default_user_object();
 			$subject     = do_shortcode( $get_subject );
-
-			$get_content = get_option( 'wprb-user-notification-message' ) ? get_option( 'wprb-user-notification-message' ) : self::default_user_message();
+			$get_content = get_option( 'wprb-user-notification-message' ) ? get_option( 'wprb-user-notification-message' ) : self::default_user_message( $this->until, $this->notes );
 
 			ob_start();
 			// include( WPRB_INCLUDES . 'email/wprb-email-header-template.php' );.
