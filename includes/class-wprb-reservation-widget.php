@@ -103,8 +103,13 @@ class WPRB_Reservation_Widget {
 
 		if ( $this->power_on ) {
 
-			$position = get_option( 'wprb-button-position' );
-			$class    = 'custom' !== $position ? ' top ' . $position : '';
+			/*Button position*/
+			$position  = get_option( 'wprb-button-position' );
+			$class     = 'custom' !== $position ? ' top ' . $position : '';
+
+			/*Change position if admin-bar is visible*/
+			$admin_bar = is_admin_bar_showing();
+			$class     = $admin_bar ? $class . ' admin-bar' : $class;
 
 			if ( $class || $shortcode ) {
 

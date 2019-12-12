@@ -6,13 +6,13 @@
  */
 
 .padding-2 {
-	padding: 2rem;
+	padding: 20px;
 }
 
 .wprb-booking-button {
 	/*box-shadow: 2px 0px 10px 1px #fff;*/
 	display: inline-block;
-	padding: 0.5rem 2rem; 
+	padding: 2px 20px; 
 	background: #f5b016;
 	border-radius: 5px;
 	cursor: pointer;
@@ -33,6 +33,10 @@
 	right: 1rem;
 }
 
+.wprb-booking-button.admin-bar {
+	top: 3rem;	
+}
+
 .wprb-booking-button:hover {
 	webkit-filter: brightness(110%);
 	filter: brightness(110%);
@@ -41,7 +45,9 @@
 .wprb-booking-button a,
 .wprb-booking-button a:hover {
 	color: #fff !important;
-	text-decoration: none; 
+	text-decoration: none;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
 }
 
 .jquery-modal.blocker.current {
@@ -49,8 +55,13 @@
 }
 
 #wprb-booking-modal {
-	padding: 0 0 2rem;
+	padding: 0 0 20px;
 	width: 320px;
+	color: #333;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+	line-height: 1.42857143;
+	word-wrap: normal;
 	z-index: 9999999;
 }
 
@@ -86,7 +97,7 @@
 #wprb-booking-modal ul {
 	list-style: none;
 	margin: 0;
-	padding: 2rem 0;
+	padding: 10px 0;
 }
 
 #wprb-booking-modal ul li {
@@ -186,10 +197,13 @@ p.wprb-step-description.last-minute {
 .booking-people_numbers__number input {
 	width: 30px;
 	height: 30px;
+	padding: 0;
 	background-color: #fff !important;
 	border-radius: 50% !important;
 	border: 1px solid #cdcdcd !important;
 	font-size: 10px !important; 
+	font-weight: normal;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 .booking-people_numbers__number input:hover,
@@ -232,7 +246,10 @@ p.wprb-step-description.last-minute {
 	appearance: none;
 	border-radius: 15px;
 	padding: 0 15px;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 14px;
+	background-color: #fff;
+	border: 1px solid #cdcdcd;
 }
 
 .booking-people_numbers__number.active select {
@@ -246,8 +263,8 @@ p.wprb-step-description.last-minute {
 
 .booking-date {
 	text-align: center;
-	padding-bottom: 4rem;
-	margin-bottom: 4rem;
+	padding-bottom: 30px;
+	margin-bottom: 30px;
 	border-bottom: 1px solid #d7d7d7;
 }
 
@@ -285,6 +302,7 @@ p.wprb-step-description.last-minute {
 	width: 90%;
 	height: 30px;
 	margin-bottom: 8px;
+	padding: 0;
 	cursor: pointer;
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -292,6 +310,8 @@ p.wprb-step-description.last-minute {
 	background-color: #fff;
 	border-radius: 20px;
 	font-size: 12px;
+	font-weight: normal;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 	text-align: center;
 	color: #212121;
 }
