@@ -75,7 +75,7 @@ $expiration_time           = get_option( 'wprb-expiration-time' );
 						echo '<div class="wprb-col">';
 
 							/*Single data from the db*/
-							$bookable_value = isset( $bookable[ $key ]['bookable'] ) ? $bookable[ $key ]['bookable'] : null;
+							$bookable_value = isset( $bookable[ $key ]['bookable'] ) ? $bookable[ $key ]['bookable'] : 0;
 
 							echo '<input type="number" name="wprb-bookable-seats-' . esc_attr( $key ) . '" id="wprb-bookable-seats" class="' . esc_attr( $key ) . '" placeholder="0" value="' . esc_attr( $bookable_value ) . '">';
 						echo '</div>';
@@ -83,7 +83,7 @@ $expiration_time           = get_option( 'wprb-expiration-time' );
 						echo '<div class="wprb-col external">';
 
 							/*Single data from the db*/
-							$externals_value = isset( $bookable[ $key ]['externals'] ) ? $bookable[ $key ]['externals'] : null;
+							$externals_value = isset( $bookable[ $key ]['externals'] ) ? $bookable[ $key ]['externals'] : 0;
 
 							echo '<input type="number" name="wprb-external-seats-' . esc_attr( $key ) . '" id="wprb-external-seats" class="' . esc_attr( $key ) . '" placeholder="0" value="' . esc_html( $externals_value ) . '">';
 						echo '</div>';
@@ -91,7 +91,7 @@ $expiration_time           = get_option( 'wprb-expiration-time' );
 						echo '<div class="wprb-col max-bookable">';
 
 							/*Single data from the db*/
-							$max_bookable = isset( $bookable[ $key ]['max'] ) ? $bookable[ $key ]['max'] : null;
+							$max_bookable = isset( $bookable[ $key ]['max'] ) ? $bookable[ $key ]['max'] : 0;
 
 							echo '<input type="number" name="wprb-max-bookable-' . esc_attr( $key ) . '" id="wprb-max-bookable" class="' . esc_attr( $key ) . '" placeholder="0" value="' . esc_html( $max_bookable ) . '">';
 						echo '</div>';
