@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WordPress Restaurant Booking - Premium
+ * Plugin Name: WP Restaurant Booking - Premium
  * Plugin URI: https://www.ilghera.com/product/wordpress-restaurant-booking-premium
  * Description: A feature-rich and easy to use reservation system for bars and restaurants.
  * Author: ilGhera

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP restaurant Booking 0.9.0\n"
-"POT-Creation-Date: 2019-12-12 15:56+0100\n"
+"POT-Creation-Date: 2019-12-12 16:16+0100\n"
 "PO-Revision-Date: 2019-11-04 21:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
@@ -90,7 +90,7 @@ msgid "It seems like you don't have permission to see this page"
 msgstr ""
 
 #: admin/class-wprb-admin.php:633
-msgid "WordPress Restaurant Booking - Premium"
+msgid "WP Restaurant Booking - Premium"
 msgstr ""
 
 #: admin/class-wprb-admin.php:648

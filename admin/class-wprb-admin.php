@@ -630,7 +630,7 @@ class WPRB_Admin {
 			echo '<div class="wrap-left">';
 
 				/*Header*/
-				echo '<h1 class="wprb main">' . esc_html( __( 'WordPress Restaurant Booking - Premium', 'wprb' ) ) . '</h1>';
+				echo '<h1 class="wprb main">' . esc_html( __( 'WP Restaurant Booking - Premium', 'wprb' ) ) . '</h1>';
 
 				/*Plugin premium key*/
 				$key = sanitize_text_field( get_option( 'wprb-premium-key' ) );
