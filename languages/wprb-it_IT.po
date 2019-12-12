@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP Restaurant Booking 0.9.0\n"
-"POT-Creation-Date: 2019-12-12 15:36+0100\n"
-"PO-Revision-Date: 2019-12-12 15:39+0100\n"
+"POT-Creation-Date: 2019-12-12 15:56+0100\n"
+"PO-Revision-Date: 2019-12-12 15:57+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
 "Language: it_IT\n"
@@ -181,11 +181,6 @@ msgstr "Attiva le notifiche per l'utente."
 msgid "Object"
 msgstr "Oggetto"
 
-#: admin/wprb-set-notifications-template.php:62
-#: admin/wprb-set-notifications-template.php:69
-msgid "Thanks for your reservation John!"
-msgstr "Grazie per la tua prenotazione Franco!"
-
 #: admin/wprb-set-notifications-template.php:63
 msgid "Specify a different email object."
 msgstr "Specifica un oggetto differente."
@@ -295,7 +290,7 @@ msgstr "Orari disponibili quotidianamente per la prenotazione."
 
 #: includes/class-wprb-notifications.php:61
 msgid "Thanks for your reservation [first-name]"
-msgstr "Grazie per la tua prenotazione Franco!"
+msgstr "Grazie per la tua prenotazione [first-name]"
 
 #: includes/class-wprb-notifications.php:75
 msgid ""
@@ -680,6 +675,9 @@ msgstr "Stato update checker sconosciuto \"%s\""
 #: plugin-update-checker/Puc/v4p8/Vcs/PluginUpdateChecker.php:98
 msgid "There is no changelog available."
 msgstr "Il changelog non è disponibile."
+
+#~ msgid "Thanks for your reservation John!"
+#~ msgstr "Grazie per la tua prenotazione Franco!"
 
 #~ msgid "here"
 #~ msgstr "Clicca qui"

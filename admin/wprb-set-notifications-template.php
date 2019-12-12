@@ -13,11 +13,11 @@ $user_activate        = get_option( 'wprb-activate-user-notification' );
 
 /*Define the user object*/
 $default_user_object  = WPRB_Notifications::default_user_object();
-$user_object          = get_option( 'wprb-user-notification-object' ) ? get_option( 'wprb-user-notification-object' ) : $default_user_object;
+$user_object          = get_option( 'wprb-user-notification-object' ) ? get_option( 'wprb-user-notification-object' ) : '';
 
 /*Define the admin object*/
 $default_user_message = WPRB_Notifications::default_user_message();
-$user_message         = get_option( 'wprb-user-notification-message' ) ? get_option( 'wprb-user-notification-message' ) : $default_user_message;
+$user_message         = get_option( 'wprb-user-notification-message' ) ? get_option( 'wprb-user-notification-message' ) : '';
 ?>
 
 <form name="wprb-set-notifications" class="wprb-form"  method="post" action="">
@@ -59,14 +59,14 @@ $user_message         = get_option( 'wprb-user-notification-message' ) ? get_opt
 		<tr class="wprb-user-notification-field" style="display: none;">
 			<th scope="row"><?php esc_html_e( 'Object', 'wprb' ); ?></th>
 			<td>
-				<input type="text" name="wprb-user-notification-object" class="wprb-user-notification-object regular-text" placeholder="<?php esc_html_e( 'Thanks for your reservation John!', 'wprb' ); ?>" value="<?php echo esc_html( $user_object ); ?>">
+				<input type="text" name="wprb-user-notification-object" class="wprb-user-notification-object regular-text" placeholder="<?php echo esc_attr( $default_user_object ); ?>" value="<?php echo esc_attr( $user_object ); ?>">
 				<p class="description"><?php esc_html_e( 'Specify a different email object.', 'wprb' ); ?></p>
 			</td>
 		</tr>
 		<tr class="wprb-user-notification-field" style="display: none;">
 			<th scope="row"><?php esc_html_e( 'Message', 'wprb' ); ?></th>
 			<td>
-				<textarea type="text" name="wprb-user-notification-message" class="wprb-user-notification-message regular-text" rows="6" placeholder="<?php esc_html_e( 'Thanks for your reservation John!', 'wprb' ); ?>"><?php echo esc_html( $user_message ); ?></textarea>
+				<textarea type="text" name="wprb-user-notification-message" class="wprb-user-notification-message regular-text" rows="6" placeholder="<?php echo esc_attr( $default_user_message ); ?>"><?php echo esc_html( $user_message ); ?></textarea>
 				<p class="description">
 					<?php
 					echo '<span class="shortcodes">';

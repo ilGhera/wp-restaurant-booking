@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP restaurant Booking 0.9.0\n"
-"POT-Creation-Date: 2019-12-12 15:36+0100\n"
+"POT-Creation-Date: 2019-12-12 15:56+0100\n"
 "PO-Revision-Date: 2019-11-04 21:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
@@ -179,11 +179,6 @@ msgstr ""
 
 #: admin/wprb-set-notifications-template.php:60
 msgid "Object"
-msgstr ""
-
-#: admin/wprb-set-notifications-template.php:62
-#: admin/wprb-set-notifications-template.php:69
-msgid "Thanks for your reservation John!"
 msgstr ""
 
 #: admin/wprb-set-notifications-template.php:63

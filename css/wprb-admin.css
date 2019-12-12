@@ -410,6 +410,10 @@ td.column-time span.last-minute {
 	color: red;
 }
 
+tr.wprb-user-notification-field textarea {
+	height: 220px;
+}
+
 tr.wprb-user-notification-field .description .shortcodes {
 	display: block;
 	width: 350px;
