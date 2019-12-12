@@ -447,7 +447,7 @@ class WPRB_Reservations {
 	 * @param  boool  $external get only external available hours.
 	 * @return array time as key and bookables as value
 	 */
-	public static function get_available_hours( $date = null, $time = null, $people = null, $external = false ) {
+	public static function get_available_hours( $date = null, $time = null, $people = null, $external = false, $is_external = false ) {
 
 		$bookables = self::get_initial_bookables( $date, $external );
 
@@ -464,7 +464,11 @@ class WPRB_Reservations {
 
 						if ( $key === $time && isset( $day_reservations[ $time ] ) ) {
 
-							$value = $value - $people;
+							if ( ( $external && $is_external ) || ! $external ) {
+
+								$value = $value - $people;
+
+							}
 
 						}
 
@@ -643,14 +647,7 @@ class WPRB_Reservations {
 
 			$externals     = self::get_initial_bookables( $date, true, $time );
 			$day_bookables = self::get_available_hours( $date, $time, $people, true );
-			$available     = isset( $day_bookables[ $time ] ) ? $day_bookables[ $time ] : '';
-
-			/*If in edit reservation exclude current reservation people*/
-			if ( $available && $edit && $is_external ) {
-
-				$available = $available - $people;
-
-			}
+			$available     = isset( $day_bookables[ $time ] ) ? $day_bookables[ $time ] : 0;
 
 			return $available;
 

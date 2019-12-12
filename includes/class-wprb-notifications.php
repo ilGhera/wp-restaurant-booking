@@ -211,8 +211,6 @@ class WPRB_Notifications {
 
 			$sent = wp_mail( $to, $subject, $message, $headers );
 
-			// error_log( 'MAIL USER: ' . print_r( $sent, true ) );.
-
 		}
 
 	}

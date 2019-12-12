@@ -194,8 +194,8 @@ var wprbController = function() {
 				$(number).removeClass('active');
 				$(this).closest('li').addClass('active');
 
-				/*Activate time element*/
-				$('.time').addClass('active');
+				/*Activate date element*/
+				$('.date').addClass('active');
 
 				/*Activate the calendar*/
 				$(calendar).addClass('active');
@@ -250,8 +250,8 @@ var wprbController = function() {
 
 		jQuery(function($){
 
-			var date                = $('.date-field').val();
-			var people              = $('.people-field').val();
+			var date   = $('.date-field').val();
+			var people = $('.people-field').val();
 			var interested;
 
 			if ( people <= parseInt(externals) && people > parseInt(internals) ) {

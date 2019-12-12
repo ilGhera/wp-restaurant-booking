@@ -234,7 +234,7 @@ var wprbEditController = function() {
 			var people           = $('.wprb-people').val();
 			var input            = $('input.wprb-external');
 			var hour_selected    = $('.wprb-hour input.active');
-			var available_people = $(hour_selected).closest('li').attr('title');
+			var internals 	     = $(hour_selected).closest('li').data('internal');
 			var interested;
 
 			if ( on_load && $('table.wprb-reservation').hasClass('external') ) {
@@ -262,25 +262,24 @@ var wprbEditController = function() {
 				'is_external': is_external
 			}
 
-			console.log( 'DATA:' + JSON.stringify(data) );
-
 			$.post(ajaxurl, data, function(response){
 				
 				if ( response ) {
 
-					if ( parseInt(response) >= parseInt(available_people) ) {
+					if ( people <= parseInt(response) && people > parseInt(internals) ) {
 
 						$('.wprb-external-container.choise').slideUp();
 						$('.wprb-external-container.only').slideDown();
 
-						$('.yes').addClass('active');
-						$(input).val(1);
+					} else if (  people <= parseInt(response) && people <= parseInt(internals) ) {
 
+						$('.wprb-external-container.only').slideUp();
+						$('.wprb-external-container.choise').slideDown();
 
 					} else {
 
 						$('.wprb-external-container.only').slideUp();
-						$('.wprb-external-container.choise').slideDown();
+						$('.wprb-external-container.choise').slideUp();
 
 					}
 
