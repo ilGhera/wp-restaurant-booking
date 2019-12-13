@@ -25,6 +25,7 @@ class WPRB_Admin {
 			add_action( 'admin_menu', array( $this, 'register_wprb_admin' ) );
 			add_action( 'wp_ajax_wprb-add-hours', array( $this, 'hours_element_callback' ) );
 			add_action( 'wp_ajax_wprb-add-last-minute', array( $this, 'last_minute_element_callback' ) );
+			add_action( 'in_plugin_update_message-wp-restaurant-booking/wp-restaurant-booking.php', array( $this, 'wprb_update_message' ), 10, 2 );
 
 		}
 
@@ -79,6 +80,13 @@ class WPRB_Admin {
 				)
 			);
 
+		}
+
+		if ( 'plugins' === $admin_page->id ) {
+
+			/*css*/
+			wp_enqueue_style( 'wprb-plugins-style', WPRB_URI . 'css/wprb-plugins.css' );
+		
 		}
 
 	}
@@ -684,6 +692,60 @@ class WPRB_Admin {
 			echo '</div>';
 			echo '<div class="wrap-right"></div>';
 		echo '</div>';
+
+	}
+
+
+	/**
+	 * Plugin update message for the admin
+	 *
+	 * @param  array $plugin_data the plugin metadata.
+	 * @param  array $response    an array of metadata about the available plugin update.
+	 */
+	public function wprb_update_message( $plugin_data, $response ) {
+
+		$message = null;
+		$key     = get_option( 'wprb-premium-key' );
+
+		if ( ! $key ) {
+
+			$message  = __( 'A <strong>Premium Key</strong> is required for keeping this plugin up to date. ', 'wprb' );
+
+			/* Translators: the admin url */
+			$message .= sprintf( __( 'Please, add yours in the <a href="%sadmin.php/?page=wprb-settings">options page</a> ', 'wprb' ), admin_url() );
+			$message .= __( 'or click <a href="https://www.ilghera.com/product/wp-restaurant-booking-premium/" target="_blank">here</a> for prices and details.', 'wprb' );
+
+		} else {
+
+			$decoded_key = explode( '|', base64_decode( $key ) );
+			$bought_date = isset( $decoded_key[1] ) ? date( 'd-m-Y', strtotime( $decoded_key[1] ) ) : '';
+			$limit       = strtotime( $bought_date . ' + 365 day' );
+			$now         = strtotime( 'today' );
+
+			if ( $limit < $now ) {
+
+				$message  = __( 'It seems like your <strong>Premium Key</strong> is expired. ', 'wprb' );
+				$message .= __( 'Please, click <a href="https://www.ilghera.com/product/wp-restaurant-booking-premium/" target="_blank">here</a> for prices and details.', 'wprb' );
+
+			} elseif ( ! isset( $decoded_key[2] ) || ( isset( $decoded_key[2] ) && 7302 !== $decoded_key[2] ) ) {
+
+				$message  = __( 'It seems like your <strong>Premium Key</strong> is not valid. ', 'wprb' );
+				$message .= __( 'Please, click <a href="https://www.ilghera.com/product/wp-restaurant-booking-premium/" target="_blank">here</a> for prices and details.', 'wprb' );
+
+			}
+
+		}
+
+		$allowed_html = array(
+			'a' => array(
+				'href'  => [],
+				'title' => [],
+			),
+			'br'     => [],
+			'strong' => [],
+		);
+
+		echo ( $message ) ? '<br><span class="wprb-alert">' . wp_kses( $message, $allowed_html ) . '</span>' : '';
 
 	}
 
