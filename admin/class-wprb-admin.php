@@ -738,8 +738,8 @@ class WPRB_Admin {
 
 		$allowed_html = array(
 			'a' => array(
-				'href'  => [],
-				'title' => [],
+				'href'   => [],
+				'target' => [],
 			),
 			'br'     => [],
 			'strong' => [],
