@@ -25,7 +25,16 @@ class WPRB_Admin {
 			add_action( 'admin_menu', array( $this, 'register_wprb_admin' ) );
 			add_action( 'wp_ajax_wprb-add-hours', array( $this, 'hours_element_callback' ) );
 			add_action( 'wp_ajax_wprb-add-last-minute', array( $this, 'last_minute_element_callback' ) );
-			add_action( 'in_plugin_update_message-wp-restaurant-booking/wp-restaurant-booking.php', array( $this, 'wprb_update_message' ), 10, 2 );
+
+			add_action(
+				'in_plugin_update_message-' . basename( WPRB_DIR ) . '/wp-restaurant-booking.php',
+				array(
+					$this,
+					'wprb_update_message',
+				),
+				10,
+				2
+			);
 
 		}
 
