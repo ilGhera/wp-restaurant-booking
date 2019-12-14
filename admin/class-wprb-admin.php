@@ -233,6 +233,29 @@ class WPRB_Admin {
 
 
 	/**
+	 * Go premium button
+	 */
+	public function go_premium() {
+
+		$output = '<span class="label label-warning premium">';
+			$output .= '<a href="https://www.ilghera.com/product/wp-restaurant-booking-premium" target="_blank">Premium</a>';
+		$output .= '</span>';
+
+		$allowed = array(
+			'span' => array(
+				'class' => [],
+			),
+			'a'    => array(
+				'target' => [],
+			),
+		);
+
+		echo wp_kses( $output, $allowed );
+
+	}
+
+
+	/**
 	 * Return a single hours element as ajax callback
 	 */
 	public function hours_element_callback() {
@@ -346,87 +369,31 @@ class WPRB_Admin {
 	 */
 	public function last_minute( $number = 0, $data = array() ) {
 
-		$date   = isset( $data['date'] ) ? $data['date'] : '';
-		$from   = isset( $data['from'] ) ? $data['from'] : '';
-		$to     = isset( $data['to'] ) ? $data['to'] : '';
-		$people = isset( $data['people'] ) ? $data['people'] : '';
+		$date   = null;
+		$from   = null;
+		$to     = null;
+		$people = null;
 
 		echo '<div class="wprb-last-minute-element-' . esc_attr( $number ) . ' last-minute-element">';
 
 			echo '<label for="wprb-last-minute-date">' . esc_html__( 'On', 'wprb' ) . '</label>';
-			echo '<input type="date" name="wprb-last-minute-date-' . esc_attr( $number ) . '" id="wprb-last-minute-date" class="wprb-last-minute-date" min="' . esc_html( date( 'Y-m-d' ) ) . '" value="' . esc_attr( $date ) . '">';
+			echo '<input type="date" name="wprb-last-minute-date-' . esc_attr( $number ) . '" id="wprb-last-minute-date" class="wprb-last-minute-date" min="' . esc_html( date( 'Y-m-d' ) ) . '" value="' . esc_attr( $date ) . '" disabled>';
 
 			echo '<label for="wprb-last-minute-from">' . esc_html__( 'from', 'wprb' ) . '</label>';
-			echo '<input type="time" name="wprb-last-minute-from-' . esc_attr( $number ) . '" id="wprb-last-minute-from" class="wprb-last-minute-from" min="12:00" max="23:00" value="' . esc_attr( $from ) . '" required>';
+			echo '<input type="time" name="wprb-last-minute-from-' . esc_attr( $number ) . '" id="wprb-last-minute-from" class="wprb-last-minute-from" min="12:00" max="23:00" value="' . esc_attr( $from ) . '" required disabled>';
 
 			echo '<label for="wprb-last-minute-to">' . esc_html__( 'to', 'wprb' ) . '</label>';
-			echo '<input type="time" name="wprb-last-minute-to-' . esc_attr( $number ) . '" id="wprb-last-minute-to" class="wprb-last-minute-to" min="12:00" max="23:00" value="' . esc_attr( $to ) . '" required>';
+			echo '<input type="time" name="wprb-last-minute-to-' . esc_attr( $number ) . '" id="wprb-last-minute-to" class="wprb-last-minute-to" min="12:00" max="23:00" value="' . esc_attr( $to ) . '" required disabled>';
 
 			echo '<label for="wprb-last-minute-people">' . esc_html__( 'people', 'wprb' ) . '</label>';
-			echo '<input type="number" name="wprb-last-minute-people-' . esc_attr( $number ) . '" id="wprb-last-minute-people" class="wprb-last-minute-people" step="1" value="' . esc_attr( $people ) . '" required>';
+			echo '<input type="number" name="wprb-last-minute-people-' . esc_attr( $number ) . '" id="wprb-last-minute-people" class="wprb-last-minute-people" step="1" value="' . esc_attr( $people ) . '" required disabled>';
 
-			if ( 0 === $number ) {
-
-				echo '<div class="wprb-add-last-minute-container">';
-					echo '<img class="add-last-minute" src="' . esc_url( WPRB_URI . 'images/add-icon.png' ) . '">';
-					echo '<img class="add-last-minute-hover" src="' . esc_url( WPRB_URI . 'images/add-icon-hover.png' ) . '">';
-				echo '</div>';
-
-			} else {
-
-				echo '<div class="wprb-remove-last-minute-container">';
-					echo '<img class="remove-last-minute" src="' . esc_url( WPRB_URI . 'images/remove-icon.png' ) . '">';
-					echo '<img class="remove-last-minute-hover" src="' . esc_url( WPRB_URI . 'images/remove-icon-hover.png' ) . '">';
-				echo '</div>';
-
-			}
-
+			echo '<div class="wprb-add-last-minute-container">';
+				echo '<img class="add-last-minute" src="' . esc_url( WPRB_URI . 'images/add-icon.png' ) . '">';
+				echo '<img class="add-last-minute-hover" src="' . esc_url( WPRB_URI . 'images/add-icon-hover.png' ) . '">';
+			echo '</div>';
+			
 		echo '</div>';
-
-	}
-
-
-	/**
-	 * Auto-delete the last minute out of date
-	 */
-	public function get_filtered_last_minute() {
-
-		$output = null;
-
-		$last_minute = get_option( 'wprb-last-minute' );
-
-		if ( $last_minute ) {
-
-			$count = count( $last_minute );
-
-			for ( $i = 0; $i < $count; $i++ ) {
-
-				$date = isset( $last_minute[ $i ]['date'] ) ? $last_minute[ $i ]['date'] : '';
-				$from = isset( $last_minute[ $i ]['from'] ) ? $last_minute[ $i ]['from'] : '';
-
-				/*Check for expired elements*/
-				if ( $date && $from ) {
-
-					$time = strtotime( $date . ' ' . $from );
-					$now  = strtotime( 'now' );
-
-					if ( $now > $time ) {
-
-						unset( $last_minute[ $i ] );
-
-					}
-
-				}
-
-			}
-
-			$output = array_values( $last_minute );
-
-			update_option( 'wprb-last-minute', $output );
-
-			return $output;
-
-		}
 
 	}
 
@@ -436,23 +403,7 @@ class WPRB_Admin {
 	 */
 	public function display_last_minute_elements() {
 
-		$last_minute = $this->get_filtered_last_minute();
-
-		if ( $last_minute ) {
-
-			$count = count( $last_minute );
-
-			for ( $i = 0; $i < $count; $i++ ) {
-
-				$this->last_minute( $i, $last_minute[ $i ] );
-
-			}
-
-		} else {
-
-			$this->last_minute();
-
-		}
+		$this->last_minute();
 
 	}
 
@@ -617,15 +568,6 @@ class WPRB_Admin {
 
 			$admin_recipients = isset( $_POST['wprb-admin-recipients'] ) && '' !== $_POST['wprb-admin-recipients'] ? explode( ' ', sanitize_text_field( wp_unslash( $_POST['wprb-admin-recipients'] ) ) ) : '';
 			update_option( 'wprb-admin-recipients', $admin_recipients );
-
-			$user_activate = isset( $_POST['wprb-activate-user-notification'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-activate-user-notification'] ) ) : '';
-			update_option( 'wprb-activate-user-notification', $user_activate );
-
-			$user_object   = isset( $_POST['wprb-user-notification-object'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-user-notification-object'] ) ) : '';
-			update_option( 'wprb-user-notification-object', $user_object );
-
-			$user_message  = isset( $_POST['wprb-user-notification-message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['wprb-user-notification-message'] ) ) : '';
-			update_option( 'wprb-user-notification-message', $user_message );
 
 		}
 
