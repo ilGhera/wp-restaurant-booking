@@ -20,7 +20,7 @@ class WPRB_Reservations {
 			add_action( 'admin_enqueue_scripts', array( $this, 'wprb_edit_scripts' ) );
 			add_action( 'init', array( $this, 'register_post_type' ) );
 			add_action( 'add_meta_boxes', array( $this, 'wprb_add_meta_box' ) );
-			add_action( 'save_post', array( __CLASS__, 'save_single_reservation' ), 10, 1 );
+			add_action( 'save_post', array( __CLASS__, 'save_single_reservation' ), 10, 3 );
 			add_filter( 'manage_edit-reservation_columns', array( $this, 'edit_reservation_columns' ) );
 			add_action( 'manage_reservation_posts_custom_column', array( $this, 'manage_reservation_columns' ), 10, 2 );
 			add_filter( 'manage_edit-reservation_sortable_columns', array( $this, 'reservation_sortable_columns' ) );
@@ -661,10 +661,12 @@ class WPRB_Reservations {
 	/**
 	 * Save the single reservations
 	 *
-	 * @param  int $post_id the post id.
+	 * @param  int    $post_id the post id.
+	 * @param  object $post    the post.
+	 * @param  bool   $update  whether this is an existing post being updated or not.
 	 * @return void
 	 */
-	public static function save_single_reservation( $post_id ) {
+	public static function save_single_reservation( $post_id, $post, $update ) {
 
 		if ( ( isset( $_POST['wprb-first-name'] ) || isset( $_POST['wprb-people'] ) && isset( $_POST['wprb-save-reservation-nonce'] ) ) && wp_verify_nonce( wp_unslash( $_POST['wprb-save-reservation-nonce'] ), 'wprb-save-reservation' ) ) {
 
@@ -714,7 +716,7 @@ class WPRB_Reservations {
 
 			}
 
-			if ( get_post( $post_id ) ) {
+			if ( get_post( $post_id ) && ! $update ) {
 
 				$sent = new WPRB_Notifications( $values );
 
