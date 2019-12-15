@@ -391,11 +391,22 @@ class WPRB_Admin {
 			echo '<label for="wprb-last-minute-people">' . esc_html__( 'people', 'wprb' ) . '</label>';
 			echo '<input type="number" name="wprb-last-minute-people-' . esc_attr( $number ) . '" id="wprb-last-minute-people" class="wprb-last-minute-people" step="1" value="' . esc_attr( $people ) . '" required disabled>';
 
-			echo '<div class="wprb-add-last-minute-container">';
-				echo '<img class="add-last-minute" src="' . esc_url( WPRB_URI . 'images/add-icon.png' ) . '">';
-				echo '<img class="add-last-minute-hover" src="' . esc_url( WPRB_URI . 'images/add-icon-hover.png' ) . '">';
-			echo '</div>';
-			
+			if ( 0 === $number ) {
+
+				echo '<div class="wprb-add-last-minute-container">';
+					echo '<img class="add-last-minute" src="' . esc_url( WPRB_URI . 'images/add-icon.png' ) . '">';
+					echo '<img class="add-last-minute-hover" src="' . esc_url( WPRB_URI . 'images/add-icon-hover.png' ) . '">';
+				echo '</div>';
+
+			} else {
+
+				echo '<div class="wprb-remove-last-minute-container">';
+					echo '<img class="remove-last-minute" src="' . esc_url( WPRB_URI . 'images/remove-icon.png' ) . '">';
+					echo '<img class="remove-last-minute-hover" src="' . esc_url( WPRB_URI . 'images/remove-icon-hover.png' ) . '">';
+				echo '</div>';
+
+			}
+						
 		echo '</div>';
 
 	}
