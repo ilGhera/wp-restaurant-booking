@@ -271,7 +271,7 @@ class WPRB_Admin {
 			echo '<input type="time" name="wprb-bookable-hours-to-' . esc_attr( $number ) . '" id="wprb-bookable-hours-to" class="wprb-bookable-hours-to" min="12:00" max="23:00" value="' . esc_attr( $to ) . '" required>';
 
 			echo '<label for="wprb-bookable-hours-every">' . esc_html__( 'every (minutes)', 'wprb' ) . '</label>';
-			echo '<input type="number" name="wprb-bookable-hours-every-' . esc_attr( $number ) . '" id="wprb-bookable-hours-every" class="wprb-bookable-hours-every" min="5" max="60" step="5" value="' . esc_attr( $every ) . '" required>';
+			echo '<input type="number" name="wprb-bookable-hours-every-' . esc_attr( $number ) . '" id="wprb-bookable-hours-every" class="wprb-bookable-hours-every" min="5" max="60" step="5" placeholder="15" value="' . esc_attr( $every ) . '" required>';
 
 			if ( 1 === $number ) {
 

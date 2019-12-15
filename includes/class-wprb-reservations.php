@@ -421,16 +421,20 @@ class WPRB_Reservations {
 		/*Create the begin time*/
 		$begin->add( $margin );
 
-		/*Create the interval*/
-		$interval = DateInterval::createFromDateString( $get_interval . ' min' ); // temp.
+		if ( $get_interval ) {
+			
+			/*Create the interval*/
+			$interval = DateInterval::createFromDateString( $get_interval . ' min' ); // temp.
 
-		/*Define the hours*/
-		$times = new DatePeriod( $begin, $interval, $end, DatePeriod::EXCLUDE_START_DATE );
+			/*Define the hours*/
+			$times = new DatePeriod( $begin, $interval, $end, DatePeriod::EXCLUDE_START_DATE );
 
-		foreach ( $times as $time ) {
+			foreach ( $times as $time ) {
 
-			$output[] = $time->format( 'H:i' );
+				$output[] = $time->format( 'H:i' );
 
+			}
+			
 		}
 
 		return $output;
