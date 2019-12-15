@@ -487,6 +487,7 @@ span.external {
 
 .label-warning {
     display: inline-block;
+    margin-top: 10px;
 	padding: 7px 14px;
 	font-size: 12px;
 	font-weight: bold;

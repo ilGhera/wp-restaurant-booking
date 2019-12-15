@@ -75,11 +75,8 @@ $user_message         = null;
 					esc_html_e( 'Specify a different email message.', 'wprb' );
 					?>
 				</p>
+				<?php $admin->go_premium(); ?>
 			</td>
-		</tr>
-		<tr>
-			<th></th>
-			<td><?php $admin->go_premium(); ?></td>
 		</tr>
 	</table>
 

@@ -237,8 +237,9 @@ class WPRB_Admin {
 	 */
 	public function go_premium() {
 
+		$title = __( 'This is a premium functionality, click here for more information', 'wprb' );
 		$output = '<span class="label label-warning premium">';
-			$output .= '<a href="https://www.ilghera.com/product/wp-restaurant-booking-premium" target="_blank">Premium</a>';
+			$output .= '<a href="https://www.ilghera.com/product/wp-restaurant-booking-premium" target="_blank" title="' . esc_attr( $title ) . '">Premium</a>';
 		$output .= '</span>';
 
 		$allowed = array(
@@ -247,6 +248,7 @@ class WPRB_Admin {
 			),
 			'a'    => array(
 				'target' => [],
+				'title' => [],
 			),
 		);
 
@@ -284,17 +286,18 @@ class WPRB_Admin {
 		$from  = isset( $data['from'] ) ? $data['from'] : '';
 		$to    = isset( $data['to'] ) ? $data['to'] : '';
 		$every = isset( $data['every'] ) ? $data['every'] : '';
+		$disabled = 1 !== $number ? ' disabled' : '';
 
 		echo '<div class="wprb-hours-element-' . esc_attr( $number ) . ' hours-element">';
 
 			echo '<label for="wprb-bookable-hours-from">' . esc_html__( 'From', 'wprb' ) . '</label>';
-			echo '<input type="time" name="wprb-bookable-hours-from-' . esc_attr( $number ) . '" id="wprb-bookable-hours-from" class="wprb-bookable-hours-from" min="12:00" max="23:00" value="' . esc_attr( $from ) . '" required>';
+			echo '<input type="time" name="wprb-bookable-hours-from-' . esc_attr( $number ) . '" id="wprb-bookable-hours-from" class="wprb-bookable-hours-from" min="12:00" max="23:00" value="' . esc_attr( $from ) . '" required' . $disabled . '>';
 
 			echo '<label for="wprb-bookable-hours-to">' . esc_html__( 'to', 'wprb' ) . '</label>';
-			echo '<input type="time" name="wprb-bookable-hours-to-' . esc_attr( $number ) . '" id="wprb-bookable-hours-to" class="wprb-bookable-hours-to" min="12:00" max="23:00" value="' . esc_attr( $to ) . '" required>';
+			echo '<input type="time" name="wprb-bookable-hours-to-' . esc_attr( $number ) . '" id="wprb-bookable-hours-to" class="wprb-bookable-hours-to" min="12:00" max="23:00" value="' . esc_attr( $to ) . '" required' . $disabled . '>';
 
 			echo '<label for="wprb-bookable-hours-every">' . esc_html__( 'every (minutes)', 'wprb' ) . '</label>';
-			echo '<input type="number" name="wprb-bookable-hours-every-' . esc_attr( $number ) . '" id="wprb-bookable-hours-every" class="wprb-bookable-hours-every" min="5" max="60" step="5" value="' . esc_attr( $every ) . '" required>';
+			echo '<input type="number" name="wprb-bookable-hours-every-' . esc_attr( $number ) . '" id="wprb-bookable-hours-every" class="wprb-bookable-hours-every" min="5" max="60" step="5" value="' . esc_attr( $every ) . '" required' . $disabled . '>';
 
 			if ( 1 === $number ) {
 
@@ -326,7 +329,7 @@ class WPRB_Admin {
 
 		if ( $saved_hours ) {
 
-			$count = count( $saved_hours );
+			$count = 1;
 
 			for ( $i = 1; $i <= $count; $i++ ) {
 
@@ -475,28 +478,19 @@ class WPRB_Admin {
 			/*Hours*/
 			$save_hours = array();
 
-			/*20 is the current limit*/
-			for ( $i = 1; $i <= 20; $i++ ) {
+			$from = isset( $_POST[ 'wprb-bookable-hours-from-1' ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-bookable-hours-from-1' ] ) ) : null;
 
-				$from = isset( $_POST[ 'wprb-bookable-hours-from-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-bookable-hours-from-' . $i ] ) ) : null;
+			$to = isset( $_POST[ 'wprb-bookable-hours-to-1' ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-bookable-hours-to-1' ] ) ) : null;
 
-				$to = isset( $_POST[ 'wprb-bookable-hours-to-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-bookable-hours-to-' . $i ] ) ) : null;
+			$every = isset( $_POST[ 'wprb-bookable-hours-every-1' ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-bookable-hours-every-1' ] ) ) : null;
 
-				$every = isset( $_POST[ 'wprb-bookable-hours-every-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-bookable-hours-every-' . $i ] ) ) : null;
+			if ( $from && $to && $every ) {
 
-				if ( $from && $to && $every ) {
-
-					$save_hours[ $i ] = array(
-						'from'  => $from,
-						'to'    => $to,
-						'every' => $every,
-					);
-
-				} else {
-
-					break;
-
-				}
+				$save_hours[1] = array(
+					'from'  => $from,
+					'to'    => $to,
+					'every' => $every,
+				);
 
 			}
 

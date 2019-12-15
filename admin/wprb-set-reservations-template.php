@@ -11,7 +11,6 @@ $admin                     = new WPRB_Admin();
 $power_on                  = get_option( 'wprb-power-on' );
 $button_position           = get_option( 'wprb-button-position' );
 $display_number_availables = get_option( 'wprb-display-number-availables' );
-$external_seats            = get_option( 'wprb-activate-external-seats' );
 $bookable                  = get_option( 'wprb-bookable' );
 $hours                     = get_option( 'wprb-hours' );
 $margin_time               = get_option( 'wprb-margin-time' );
@@ -50,8 +49,9 @@ $expiration_time           = get_option( 'wprb-expiration-time' );
 		<tr class="wprb-activate-external-seats-field">
 			<th scope="row"><?php esc_html_e( 'External seats', 'wprb' ); ?></th>
 			<td>
-				<input type="checkbox" name="wprb-activate-external-seats" id="wprb-activate-external-seats" value="1"<?php echo ( 1 == $external_seats ? ' checked="checked"' : '' ); ?>>
+				<input type="checkbox" name="wprb-activate-external-seats" id="wprb-activate-external-seats" value="1">
 				<p class="description"><?php esc_html_e( 'Activate if external seats are available in your restaurant in this season.', 'wprb' ); ?></p>
+				<?php $admin->go_premium(); ?>
 			</td>
 		</tr>
 		<tr>
@@ -83,9 +83,9 @@ $expiration_time           = get_option( 'wprb-expiration-time' );
 						echo '<div class="wprb-col external">';
 
 							/*Single data from the db*/
-							$externals_value = isset( $bookable[ $key ]['externals'] ) ? $bookable[ $key ]['externals'] : 0;
+							$externals_value = 0;
 
-							echo '<input type="number" name="wprb-external-seats-' . esc_attr( $key ) . '" id="wprb-external-seats" class="' . esc_attr( $key ) . '" placeholder="0" value="' . esc_html( $externals_value ) . '">';
+							echo '<input type="number" name="wprb-external-seats-' . esc_attr( $key ) . '" id="wprb-external-seats" class="' . esc_attr( $key ) . '" placeholder="0" disabled>';
 						echo '</div>';
 
 						echo '<div class="wprb-col max-bookable">';
@@ -138,6 +138,9 @@ $expiration_time           = get_option( 'wprb-expiration-time' );
 				$admin->display_hours_elements();
 				?>
 				<p class="description"><?php esc_html_e( 'Times available every day for reservations.', 'wprb' ); ?></p>
+
+				<?php $admin->go_premium(); ?>
+				
 			</td>
 		</tr>
 	</table>
