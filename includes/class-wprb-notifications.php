@@ -29,7 +29,6 @@ class WPRB_Notifications {
 
 		$this->define_shortcodes();
 		$this->send_admin_notification();
-		$this->send_user_notification();
 
 	}
 
@@ -219,36 +218,6 @@ class WPRB_Notifications {
 			$this->mail_from_filters();
 
 			$sent = wp_mail( $to, $subject, $message );
-
-		}
-
-	}
-
-
-	/**
-	 * Send user notification if activated
-	 */
-	public function send_user_notification() {
-
-		if ( get_option( 'wprb-activate-user-notification' ) ) {
-
-			$to = $this->email;
-			$get_subject = get_option( 'wprb-user-notification-subject' ) ? get_option( 'wprb-user-notification-subject' ) : self::default_user_object();
-			$subject     = do_shortcode( $get_subject );
-			$get_content = get_option( 'wprb-user-notification-message' ) ? get_option( 'wprb-user-notification-message' ) : self::default_user_message( $this->until, $this->notes );
-
-			ob_start();
-			// include( WPRB_INCLUDES . 'email/wprb-email-header-template.php' );.
-			echo do_shortcode( str_replace( '\n', '<br>', $get_content ) );
-			// include( WPRB_INCLUDES . 'email/wprb-email-content-template.php' );.
-			// include( WPRB_INCLUDES . 'email/wprb-email-footer-template.php' );.
-			$message  = ob_get_clean();
-			// $headers = array('Content-Type: text/html; charset=UTF-8');
-			$headers = null;
-
-			$this->mail_from_filters();
-
-			$sent = wp_mail( $to, $subject, $message, $headers );
 
 		}
 

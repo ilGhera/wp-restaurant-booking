@@ -534,10 +534,10 @@ class WPRB_Reservation_Widget {
 				echo '<i class="far fa-check-circle"></i><br>';
 
 				/* Translators: %s: customer first name */
-				printf( esc_html__( 'Thanks %s! ', 'wprb' ), esc_html( $first_name ) ) . '<br>';
+				printf( esc_html__( "Thanks %s!\n", 'wprb' ), esc_html( $first_name ) );
 
-				echo esc_html__( 'We sent an e-mail with the confirmation data to', 'wprb' ) . '<br>';
-				echo '<span class="wprb-confirmation-email">' . esc_html( $email ) . '</span>';
+				echo esc_html__( 'Your reservation has been received.', 'wprb' );
+
 			echo '</p>';
 
 		echo '</div>';
