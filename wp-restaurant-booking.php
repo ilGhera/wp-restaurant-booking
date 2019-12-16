@@ -4,7 +4,7 @@
  * Plugin URI: https://www.ilghera.com/product/wordpress-restaurant-booking-premium
  * Description: A feature-rich and easy to use reservation system for bars and restaurants.
  * Author: ilGhera
- * Version: 0.8.0
+ * Version: 0.9.0
  * Author URI: https://ilghera.com
  * Requires at least: 4.0
  * Tested up to: 5.3
@@ -18,11 +18,19 @@
  *
  * @return void
  */
-function load_wp_restaurant_booking() {
+function load_wp_restaurant_booking_premium() {
 
-	/*Function check */
 	if ( ! function_exists( 'is_plugin_active' ) ) {
 		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+	}
+
+	/*Deactivate the free version*/
+	if ( is_plugin_active( 'wp-restaurant-booking/wp-restaurant-booking.php' ) && function_exists( 'load_wp_restaurant_booking' ) ) {
+
+		deactivate_plugins( 'wp-restaurant-booking/wp-restaurant-booking.php' );
+		remove_action( 'plugins_loaded', 'load_wp_restaurant_booking' );
+		wp_redirect( admin_url( 'plugins.php?plugin_status=all&paged=1&s' ) );
+
 	}
 
 	/*Internationalization*/
@@ -34,7 +42,7 @@ function load_wp_restaurant_booking() {
 	define( 'WPRB_INCLUDES', WPRB_DIR . 'includes/' );
 	define( 'WPRB_ADMIN', WPRB_DIR . 'admin/' );
 	define( 'WPRB_SETTINGS', admin_url( 'admin.php?page=wp-restaurant-booking' ) );
-	
+
 
 	/*Files required*/
 	require( WPRB_ADMIN . 'class-wprb-admin.php' );
@@ -46,7 +54,7 @@ function load_wp_restaurant_booking() {
 	WPRB_Admin::add_user_role();
 
 }
-add_action( 'after_setup_theme', 'load_wp_restaurant_booking', 10 );
+add_action( 'plugins_loaded', 'load_wp_restaurant_booking_premium', 1 );
 
 /**
  * Update checker Builder
