@@ -25,7 +25,7 @@ $last_minute             = get_option( 'wprb-last-minute' );
 		<tr class="wprb-last-minute-description-field">
 			<th scope="row"><?php esc_html_e( 'Description', 'wprb' ); ?></th>
 			<td>
-				<textarea name="wprb-last-minute-description" class="wprb-last-minute-description regular-text" rows="3" placeholder="<?php esc_html_e( 'Last minutes are tables available only for a limited time', 'wprb' ); ?>"><?php echo esc_html( $last_minute_description ); ?></textarea>
+				<textarea name="wprb-last-minute-description" class="wprb-last-minute-description regular-text" rows="3" placeholder="<?php esc_html_e( 'Last minutes are tables available only for a limited time', 'wprb' ); ?>" disabled><?php echo esc_html( $last_minute_description ); ?></textarea>
 				<p class="description"><?php esc_html_e( 'A short description for the user about last minute.', 'wprb' ); ?></p>
 			</td>
 		</tr>

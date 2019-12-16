@@ -594,27 +594,7 @@ class WPRB_Admin {
 			echo '<div class="wrap-left">';
 
 				/*Header*/
-				echo '<h1 class="wprb main">' . esc_html( __( 'WP Restaurant Booking - Premium', 'wprb' ) ) . '</h1>';
-
-				/*Plugin premium key*/
-				$key = sanitize_text_field( get_option( 'wprb-premium-key' ) );
-
-				if ( isset( $_POST['wprb-premium-key'], $_POST['wprb-premium-key-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-premium-key-nonce'] ), 'wprb-premium-key' ) ) {
-
-					$key = sanitize_text_field( wp_unslash( $_POST['wprb-premium-key'] ) );
-
-					update_option( 'wprb-premium-key', $key );
-
-				}
-
-				/*Premium Key Form*/
-				echo '<form id="wprb-premium-key" method="post" action="">';
-					echo '<label>' . esc_html( __( 'Premium Key', 'wprb' ) ) . '</label>';
-					echo '<input type="text" class="regular-text code" name="wprb-premium-key" id="wprb-premium-key" placeholder="' . esc_html( __( 'Add your Premium Key', 'wprb' ) ) . '" value="' . esc_attr( $key ) . '" />';
-					echo '<p class="description">' . esc_html( __( 'Add your Premium Key and keep update your copy of WP Restaurant Booking - Premium.', 'wprb' ) ) . '</p>';
-					wp_nonce_field( 'wprb-premium-key', 'wprb-premium-key-nonce' );
-					echo '<input type="submit" class="button button-primary" value="' . esc_html( __( 'Save settings', 'wprb' ) ) . '" />';
-				echo '</form>';
+				echo '<h1 class="wprb main">' . esc_html( __( 'WP Restaurant Booking', 'wprb' ) ) . '</h1>';
 
 				/*Plugin options menu*/
 				echo '<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"><br></div>';
@@ -648,60 +628,6 @@ class WPRB_Admin {
 			echo '</div>';
 			echo '<div class="wrap-right"></div>';
 		echo '</div>';
-
-	}
-
-
-	/**
-	 * Plugin update message for the admin
-	 *
-	 * @param  array $plugin_data the plugin metadata.
-	 * @param  array $response    an array of metadata about the available plugin update.
-	 */
-	public function wprb_update_message( $plugin_data, $response ) {
-
-		$message = null;
-		$key     = get_option( 'wprb-premium-key' );
-
-		if ( ! $key ) {
-
-			$message  = __( 'A <strong>Premium Key</strong> is required for keeping this plugin up to date. ', 'wprb' );
-
-			/* Translators: the admin url */
-			$message .= sprintf( __( 'Please, add yours in the <a href="%sadmin.php/?page=wprb-settings">options page</a> ', 'wprb' ), admin_url() );
-			$message .= __( 'or click <a href="https://www.ilghera.com/product/wp-restaurant-booking-premium/" target="_blank">here</a> for prices and details.', 'wprb' );
-
-		} else {
-
-			$decoded_key = explode( '|', base64_decode( $key ) );
-			$bought_date = isset( $decoded_key[1] ) ? date( 'd-m-Y', strtotime( $decoded_key[1] ) ) : '';
-			$limit       = strtotime( $bought_date . ' + 365 day' );
-			$now         = strtotime( 'today' );
-
-			if ( $limit < $now ) {
-
-				$message  = __( 'It seems like your <strong>Premium Key</strong> is expired. ', 'wprb' );
-				$message .= __( 'Please, click <a href="https://www.ilghera.com/product/wp-restaurant-booking-premium/" target="_blank">here</a> for prices and details.', 'wprb' );
-
-			} elseif ( ! isset( $decoded_key[2] ) || ( isset( $decoded_key[2] ) && 7302 !== $decoded_key[2] ) ) {
-
-				$message  = __( 'It seems like your <strong>Premium Key</strong> is not valid. ', 'wprb' );
-				$message .= __( 'Please, click <a href="https://www.ilghera.com/product/wp-restaurant-booking-premium/" target="_blank">here</a> for prices and details.', 'wprb' );
-
-			}
-
-		}
-
-		$allowed_html = array(
-			'a' => array(
-				'href'   => [],
-				'target' => [],
-			),
-			'br'     => [],
-			'strong' => [],
-		);
-
-		echo ( $message ) ? '<br><span class="wprb-alert">' . wp_kses( $message, $allowed_html ) . '</span>' : '';
 
 	}
 
