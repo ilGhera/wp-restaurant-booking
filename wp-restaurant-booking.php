@@ -46,4 +46,4 @@ function load_wp_restaurant_booking() {
 	WPRB_Admin::add_user_role();
 
 }
-add_action( 'after_setup_theme', 'load_wp_restaurant_booking', 100 );
+add_action( 'plugins_loaded', 'load_wp_restaurant_booking', 100 );
