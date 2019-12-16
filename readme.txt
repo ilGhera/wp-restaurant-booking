@@ -1,4 +1,4 @@
-=== WP Restaurant Booking - Premium ===
+=== WP Restaurant Booking ===
 Contributors: ghera74
 Tags: booking, ticket, reservation, restaurant, bar, table, last minute, calendar, day, hour, outdor
 Version: 0.9.0
@@ -6,11 +6,11 @@ Requires at least: 4.0
 Tested up to: 5.3
 License: GPLv2
 
-**WP Restaurant Booking - Premium** is a feature-rich and easy to use reservation system for bars and restaurants.
+**WP Restaurant Booking** is a feature-rich and easy to use reservation system for bars and restaurants.
 
 == Description ==
 
-**WP Restaurant Booking - Premium** is a feature-rich and easy to use reservation system for bars and restaurants.
+**WP Restaurant Booking** is a feature-rich and easy to use reservation system for bars and restaurants.
 
 **AVAILABLE FUNCTIONALITIES**
 
@@ -30,8 +30,16 @@ License: GPLv2
 
 == Installation ==
 
-* Upload the 'wp-restaurant-booking-premium’ directory to your '/wp-content/plugins/' directory, using your favorite method (ftp, sftp, scp, etc...)
-* Activate WP Restaurant Booking - Premium from your Plugins page.
+* Download WP Restaurant Booking
+* Upload the 'wp-restaurant-booking’ directory to your '/wp-content/plugins/' directory, using your favorite method (ftp, sftp, scp, etc...)
+* Activate WP Restaurant Booking from your Plugins page.
+* Once Activated, go to **WPRB** menu and set you preferences.
+
+**From your WordPress dashboard**
+
+* Visit *Plugins > Add New*
+* Search for *WP Restaurant Booking* and download it.
+* Activate WP Restaurant Booking from your Plugins page.
 * Once Activated, go to **WPRB** menu and set you preferences.
 
 
