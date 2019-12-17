@@ -720,7 +720,7 @@ class WPRB_Reservations {
 
 			}
 
-			if ( get_post( $post_id ) && ! $update ) {
+			if ( isset( $post->post_date, $post->post_modified ) && $post->post_date === $post->post_modified ) {
 
 				$sent = new WPRB_Notifications( $values );
 
@@ -768,7 +768,7 @@ class WPRB_Reservations {
 		$data_post_id = $post_id ? ' data-post-id=' . $post_id : '';
 		$class_active = $active ? 'active ' : '';
 
-		return '<a href="#wprb-status-modal" rel="modal:open" class="' . esc_attr( $class_active ) . 'wprb-status-label ' . esc_html( $status ) . '" ' . esc_attr( $data_post_id ) . ' data-status="' . esc_html( $status ) . '">' . ucfirst( esc_html__( $status, 'wprb' ) ) . '</a>';
+		return '<a href="#wprb-status-modal" rel="modal:open" class="' . esc_attr( $class_active ) . 'wprb-status-label ' . esc_html( $status ) . '" ' . esc_attr( $data_post_id ) . ' data-status="' . esc_html( $status ) . '">' . esc_html__( ucfirst( $status ), 'wprb' ) . '</a>';
 
 	}
 
