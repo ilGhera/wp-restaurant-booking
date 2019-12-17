@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP restaurant Booking 0.9.0\n"
-"POT-Creation-Date: 2019-12-13 10:56+0100\n"
+"POT-Creation-Date: 2019-12-17 17:34+0100\n"
 "PO-Revision-Date: 2019-11-04 21:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
@@ -17,146 +17,146 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: admin/class-wprb-admin.php:106
+#: admin/class-wprb-admin.php:115
 msgid "Reservations Manager"
 msgstr ""
 
-#: admin/class-wprb-admin.php:195 includes/class-wprb-reservations.php:93
+#: admin/class-wprb-admin.php:204 includes/class-wprb-reservations.php:93
 msgid "All reservations"
 msgstr ""
 
-#: admin/class-wprb-admin.php:198
+#: admin/class-wprb-admin.php:207
 msgid "Add New"
 msgstr ""
 
-#: admin/class-wprb-admin.php:201
+#: admin/class-wprb-admin.php:210
 msgid "Settings"
 msgstr ""
 
-#: admin/class-wprb-admin.php:214
+#: admin/class-wprb-admin.php:223
 msgid "Monday"
 msgstr ""
 
-#: admin/class-wprb-admin.php:215
+#: admin/class-wprb-admin.php:224
 msgid "Tuesday"
 msgstr ""
 
-#: admin/class-wprb-admin.php:216
+#: admin/class-wprb-admin.php:225
 msgid "Wednesday"
 msgstr ""
 
-#: admin/class-wprb-admin.php:217
+#: admin/class-wprb-admin.php:226
 msgid "Thursday"
 msgstr ""
 
-#: admin/class-wprb-admin.php:218
+#: admin/class-wprb-admin.php:227
 msgid "Friday"
 msgstr ""
 
-#: admin/class-wprb-admin.php:219
+#: admin/class-wprb-admin.php:228
 msgid "Saturday"
 msgstr ""
 
-#: admin/class-wprb-admin.php:220
+#: admin/class-wprb-admin.php:229
 msgid "Sunday"
 msgstr ""
 
-#: admin/class-wprb-admin.php:258
+#: admin/class-wprb-admin.php:267
 msgid "From"
 msgstr ""
 
-#: admin/class-wprb-admin.php:261 admin/class-wprb-admin.php:353
+#: admin/class-wprb-admin.php:270 admin/class-wprb-admin.php:362
 msgid "to"
 msgstr ""
 
-#: admin/class-wprb-admin.php:264
+#: admin/class-wprb-admin.php:273
 msgid "every (minutes)"
 msgstr ""
 
-#: admin/class-wprb-admin.php:347
+#: admin/class-wprb-admin.php:356
 msgid "On"
 msgstr ""
 
-#: admin/class-wprb-admin.php:350
+#: admin/class-wprb-admin.php:359
 msgid "from"
 msgstr ""
 
-#: admin/class-wprb-admin.php:356
+#: admin/class-wprb-admin.php:365
 msgid "people"
 msgstr ""
 
-#: admin/class-wprb-admin.php:633
+#: admin/class-wprb-admin.php:642
 msgid "It seems like you don't have permission to see this page"
 msgstr ""
 
-#: admin/class-wprb-admin.php:641
+#: admin/class-wprb-admin.php:650
 msgid "WP Restaurant Booking - Premium"
 msgstr ""
 
-#: admin/class-wprb-admin.php:656
+#: admin/class-wprb-admin.php:665
 msgid "Premium Key"
 msgstr ""
 
-#: admin/class-wprb-admin.php:657
+#: admin/class-wprb-admin.php:666
 msgid "Add your Premium Key"
 msgstr ""
 
-#: admin/class-wprb-admin.php:658
+#: admin/class-wprb-admin.php:667
 msgid ""
 "Add your Premium Key and keep update your copy of WP Restaurant Booking - "
 "Premium."
 msgstr ""
 
-#: admin/class-wprb-admin.php:660 admin/wprb-set-last-minute-template.php:46
+#: admin/class-wprb-admin.php:669 admin/wprb-set-last-minute-template.php:46
 #: admin/wprb-set-notifications-template.php:86
 #: admin/wprb-set-reservations-template.php:148
 msgid "Save settings"
 msgstr ""
 
-#: admin/class-wprb-admin.php:666 includes/class-wprb-reservations.php:84
+#: admin/class-wprb-admin.php:675 includes/class-wprb-reservations.php:84
 #: includes/class-wprb-reservations.php:86
 msgid "Reservations"
 msgstr ""
 
-#: admin/class-wprb-admin.php:667
+#: admin/class-wprb-admin.php:676
 #: includes/class-wprb-reservation-widget.php:380
 msgid "Last minute"
 msgstr ""
 
-#: admin/class-wprb-admin.php:668
+#: admin/class-wprb-admin.php:677
 msgid "Notifications"
 msgstr ""
 
-#: admin/class-wprb-admin.php:712
+#: admin/class-wprb-admin.php:721
 msgid ""
 "A <strong>Premium Key</strong> is required for keeping this plugin up to "
 "date. "
 msgstr ""
 
-#: admin/class-wprb-admin.php:715
+#: admin/class-wprb-admin.php:724
 #, php-format
 msgid ""
 "Please, add yours in the <a href=\"%sadmin.php/?page=wprb-settings"
 "\">options page</a> "
 msgstr ""
 
-#: admin/class-wprb-admin.php:716
+#: admin/class-wprb-admin.php:725
 msgid ""
 "or click <a href=\"https://www.ilghera.com/product/wp-restaurant-booking-"
 "premium/\" target=\"_blank\">here</a> for prices and details."
 msgstr ""
 
-#: admin/class-wprb-admin.php:727
+#: admin/class-wprb-admin.php:736
 msgid "It seems like your <strong>Premium Key</strong> is expired. "
 msgstr ""
 
-#: admin/class-wprb-admin.php:728 admin/class-wprb-admin.php:733
+#: admin/class-wprb-admin.php:737 admin/class-wprb-admin.php:742
 msgid ""
 "Please, click <a href=\"https://www.ilghera.com/product/wp-restaurant-"
 "booking-premium/\" target=\"_blank\">here</a> for prices and details."
 msgstr ""
 
-#: admin/class-wprb-admin.php:732
+#: admin/class-wprb-admin.php:741
 msgid "It seems like your <strong>Premium Key</strong> is not valid. "
 msgstr ""
 
@@ -409,7 +409,7 @@ msgstr ""
 
 #: includes/class-wprb-reservation-widget.php:204
 #: includes/class-wprb-reservation-widget.php:576
-#: includes/class-wprb-reservations.php:741
+#: includes/class-wprb-reservations.php:747
 #: includes/wprb-reservation-template.php:58
 msgid "People"
 msgstr ""
@@ -493,7 +493,7 @@ msgid "Date"
 msgstr ""
 
 #: includes/class-wprb-reservation-widget.php:584
-#: includes/class-wprb-reservations.php:740
+#: includes/class-wprb-reservations.php:746
 #: includes/wprb-reservation-template.php:79
 msgid "Time"
 msgstr ""
@@ -549,38 +549,38 @@ msgstr ""
 msgid "Reservation details"
 msgstr ""
 
-#: includes/class-wprb-reservations.php:738
+#: includes/class-wprb-reservations.php:744
 msgid "Title"
 msgstr ""
 
-#: includes/class-wprb-reservations.php:739
+#: includes/class-wprb-reservations.php:745
 msgid "Day"
 msgstr ""
 
-#: includes/class-wprb-reservations.php:742
+#: includes/class-wprb-reservations.php:748
 #: includes/wprb-reservation-template.php:65
 msgid "Table"
 msgstr ""
 
-#: includes/class-wprb-reservations.php:743
+#: includes/class-wprb-reservations.php:749
 #: includes/wprb-reservation-template.php:97
 msgid "Notes"
 msgstr ""
 
-#: includes/class-wprb-reservations.php:744
+#: includes/class-wprb-reservations.php:750
 #: includes/wprb-reservation-template.php:104
 msgid "Status"
 msgstr ""
 
-#: includes/class-wprb-reservations.php:836
+#: includes/class-wprb-reservations.php:842
 msgid "EXT"
 msgstr ""
 
-#: includes/class-wprb-reservations.php:856
+#: includes/class-wprb-reservations.php:862
 msgid "No table assigned"
 msgstr ""
 
-#: includes/class-wprb-reservations.php:1063
+#: includes/class-wprb-reservations.php:1069
 msgid "Select the new reservation status"
 msgstr ""
 
