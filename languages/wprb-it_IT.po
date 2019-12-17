@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP Restaurant Booking 0.9.0\n"
 "POT-Creation-Date: 2019-12-16 06:37+0100\n"
-"PO-Revision-Date: 2019-12-16 06:39+0100\n"
+"PO-Revision-Date: 2019-12-17 21:57+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
 "Language: it_IT\n"
@@ -234,7 +234,7 @@ msgstr "Posti prenotabili"
 
 #: admin/wprb-set-reservations-template.php:66
 msgid "Internal seats"
-msgstr "Posti esterni"
+msgstr "Posti interni"
 
 #: admin/wprb-set-reservations-template.php:68
 msgid "Maximum bookable number"
