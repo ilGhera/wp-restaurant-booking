@@ -241,7 +241,7 @@ var wprbAdminController = function() {
 
 				$('.wprb-set-reservations-day').each(function(){
 
-					if( ! $(element, this).val()) {
+					if( ! $(element, this).val() || 0 == $(element, this).val() ) {
 
 						$(element, this).val(value);
 
