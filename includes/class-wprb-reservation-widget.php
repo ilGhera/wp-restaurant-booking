@@ -47,7 +47,7 @@ class WPRB_Reservation_Widget {
 		/*css*/
 		wp_enqueue_style( 'wprb-style', WPRB_URI . 'css/wprb.css' );
 		wp_enqueue_style( 'modal-style', WPRB_URI . 'css/jquery.modal.min.css' );
-		wp_enqueue_style( 'font-awesome', '//use.fontawesome.com/releases/v5.8.1/css/all.css' );
+		wp_enqueue_style( 'font-awesome', WPRB_URI . 'css/fontawesome/all.min.css' );
 		wp_enqueue_style( 'datepicker-css', WPRB_URI . 'js/air-datepicker/dist/css/datepicker.min.css' );
 
 		/*js*/
