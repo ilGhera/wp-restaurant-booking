@@ -56,11 +56,9 @@ class WPRB_Admin {
 		if ( in_array( $admin_page->id, $pages ) ) {
 
 			/*css*/
-			wp_enqueue_style( 'chosen-style', WPRB_URI . '/vendor/harvesthq/chosen/chosen.min.css' );
 			wp_enqueue_style( 'modal-style', WPRB_URI . 'css/jquery.modal.min.css' );
 
 			/*js*/
-			wp_enqueue_script( 'chosen', WPRB_URI . '/vendor/harvesthq/chosen/chosen.jquery.min.js' );
 			wp_enqueue_script( 'modal-js', WPRB_URI . 'js/jquery.modal.min.js', array( 'jquery' ), '0.9.0', true );
 
 			/*Nonce*/
