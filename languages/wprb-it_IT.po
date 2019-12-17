@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP Restaurant Booking 0.9.0\n"
-"POT-Creation-Date: 2019-12-16 06:37+0100\n"
-"PO-Revision-Date: 2019-12-17 21:57+0100\n"
+"POT-Creation-Date: 2019-12-17 22:07+0100\n"
+"PO-Revision-Date: 2019-12-17 22:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
 "Language: it_IT\n"
@@ -15,97 +15,98 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e;esc_html_e;esc_html__\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: admin/class-wprb-admin.php:115
+#: admin/class-wprb-admin.php:113
 msgid "Reservations Manager"
 msgstr "Manager Prenotazioni"
 
-#: admin/class-wprb-admin.php:204 includes/class-wprb-reservations.php:93
+#: admin/class-wprb-admin.php:202 includes/class-wprb-reservations.php:93
 msgid "All reservations"
 msgstr "Prenotazioni"
 
-#: admin/class-wprb-admin.php:207
+#: admin/class-wprb-admin.php:205
 msgid "Add New"
 msgstr "Nuova prenotazione"
 
-#: admin/class-wprb-admin.php:210
+#: admin/class-wprb-admin.php:208
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: admin/class-wprb-admin.php:223
+#: admin/class-wprb-admin.php:221
 msgid "Monday"
 msgstr "Lunedì"
 
-#: admin/class-wprb-admin.php:224
+#: admin/class-wprb-admin.php:222
 msgid "Tuesday"
 msgstr "Martedì"
 
-#: admin/class-wprb-admin.php:225
+#: admin/class-wprb-admin.php:223
 msgid "Wednesday"
 msgstr "Mercoledì"
 
-#: admin/class-wprb-admin.php:226
+#: admin/class-wprb-admin.php:224
 msgid "Thursday"
 msgstr "Giovedì"
 
-#: admin/class-wprb-admin.php:227
+#: admin/class-wprb-admin.php:225
 msgid "Friday"
 msgstr "Venerdì"
 
-#: admin/class-wprb-admin.php:228
+#: admin/class-wprb-admin.php:226
 msgid "Saturday"
 msgstr "Sabato"
 
-#: admin/class-wprb-admin.php:229
+#: admin/class-wprb-admin.php:227
 msgid "Sunday"
 msgstr "Domenica"
 
-#: admin/class-wprb-admin.php:240
+#: admin/class-wprb-admin.php:238
 msgid "This is a premium functionality, click here for more information"
 msgstr ""
+"Questa è una funzionalità premium, clicca qui per maggiori informazioni"
 
-#: admin/class-wprb-admin.php:293
+#: admin/class-wprb-admin.php:291
 msgid "From"
 msgstr "Da"
 
-#: admin/class-wprb-admin.php:296 admin/class-wprb-admin.php:388
+#: admin/class-wprb-admin.php:294 admin/class-wprb-admin.php:386
 msgid "to"
 msgstr "a"
 
-#: admin/class-wprb-admin.php:299
+#: admin/class-wprb-admin.php:297
 msgid "every (minutes)"
 msgstr "ogni (minuti\t)"
 
-#: admin/class-wprb-admin.php:382
+#: admin/class-wprb-admin.php:380
 msgid "On"
 msgstr "Il"
 
-#: admin/class-wprb-admin.php:385
+#: admin/class-wprb-admin.php:383
 msgid "from"
 msgstr "da"
 
-#: admin/class-wprb-admin.php:391
+#: admin/class-wprb-admin.php:389
 msgid "people"
 msgstr "persone"
 
-#: admin/class-wprb-admin.php:589
+#: admin/class-wprb-admin.php:587
 msgid "It seems like you don't have permission to see this page"
 msgstr "Sembra che tu non abbia il premesso di accedere a questa pagina"
 
-#: admin/class-wprb-admin.php:597
+#: admin/class-wprb-admin.php:595
 msgid "WP Restaurant Booking"
 msgstr ""
 
-#: admin/class-wprb-admin.php:602 includes/class-wprb-reservations.php:84
+#: admin/class-wprb-admin.php:600 includes/class-wprb-reservations.php:84
 #: includes/class-wprb-reservations.php:86
 msgid "Reservations"
 msgstr "Prenotazioni"
 
-#: admin/class-wprb-admin.php:603
+#: admin/class-wprb-admin.php:601
 #: includes/class-wprb-reservation-widget.php:380
 msgid "Last minute"
 msgstr ""
 
-#: admin/class-wprb-admin.php:604
+#: admin/class-wprb-admin.php:602
 msgid "Notifications"
 msgstr "Notifiche"
 
