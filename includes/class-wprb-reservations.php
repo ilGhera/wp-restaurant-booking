@@ -720,7 +720,7 @@ class WPRB_Reservations {
 
 			}
 
-			if ( get_post( $post_id ) && ! $update ) {
+			if ( isset( $post->post_date, $post->post_modified ) && $post->post_date === $post->post_modified ) {
 
 				$sent = new WPRB_Notifications( $values );
 
