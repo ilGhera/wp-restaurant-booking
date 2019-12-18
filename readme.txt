@@ -18,8 +18,8 @@ License: GPLv2
 * Booking widget position, even using the shortcode *[booking-button]*.
 * Set a number of bookable seats for each day of the week.
 * Define the time slots that can be booked every day
-* Outdor tables option.
-* Last minute table option.
+* Outdor tables option (Premium).
+* Last minute table option (Premium).
 * Set time limit within which to book a table.
 * Set an average time of the customer at the table, useful for calculating availability.
 * Assign a table to each reservation.
@@ -43,9 +43,22 @@ License: GPLv2
 * Once Activated, go to **WPRB** menu and set you preferences.
 
 
+== Screenshots ==
+
+1. Select date and number of people
+2. Select the booking time
+3. Add your data
+4. The reservation was completed
+5. General settings
+6. Last minute settings (Premium)
+7. Admin and user email settings
+8. Admin reservations
+9. Edit single reservation
+
+
 == Changelog ==
 
 = 0.9.0 = 
-Release Date: 12 December 2019
+Release Date: 18 December 2019
 
 * First release
