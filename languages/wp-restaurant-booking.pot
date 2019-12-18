@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP restaurant Booking 0.9.0\n"
-"POT-Creation-Date: 2019-12-18 12:22+0100\n"
+"POT-Creation-Date: 2019-12-18 16:02+0100\n"
 "PO-Revision-Date: 2019-11-04 21:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
@@ -13,7 +13,8 @@ msgstr ""
 "X-Generator: Poedit 2.2.4\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-KeywordsList: __;_e;esc_html_e;esc_html__\n"
+"X-Poedit-KeywordsList: __;_e;esc_html_e;esc_html__;esc_attr_e;"
+"esc_attr__\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
@@ -356,6 +357,7 @@ msgid "Please select a date first"
 msgstr ""
 
 #: includes/class-wprb-reservation-widget.php:118
+#: includes/class-wprb-reservation-widget.php:513
 #: includes/class-wprb-reservation-widget.php:555
 msgid "Book now"
 msgstr ""
@@ -429,6 +431,26 @@ msgstr ""
 
 #: includes/class-wprb-reservation-widget.php:496
 msgid "Complete your reservation"
+msgstr ""
+
+#: includes/class-wprb-reservation-widget.php:500
+msgid "First name*"
+msgstr ""
+
+#: includes/class-wprb-reservation-widget.php:501
+msgid "Last name*"
+msgstr ""
+
+#: includes/class-wprb-reservation-widget.php:502
+msgid "Email*"
+msgstr ""
+
+#: includes/class-wprb-reservation-widget.php:503
+msgid "Phone number*"
+msgstr ""
+
+#: includes/class-wprb-reservation-widget.php:505
+msgid "Add more details"
 msgstr ""
 
 #: includes/class-wprb-reservation-widget.php:531
@@ -527,6 +549,10 @@ msgstr ""
 #: includes/class-wprb-reservations.php:750
 #: includes/wprb-reservation-template.php:104
 msgid "Status"
+msgstr ""
+
+#: includes/class-wprb-reservations.php:842
+msgid "Outdor table"
 msgstr ""
 
 #: includes/class-wprb-reservations.php:842
