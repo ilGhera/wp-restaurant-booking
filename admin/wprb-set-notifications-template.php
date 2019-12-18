@@ -23,10 +23,10 @@ $user_message         = null;
 
 	<table class="form-table">
 		<tr class="wprb-activate-admin-notifications-field">
-			<th scope="row"><?php esc_html_e( 'Admin notifications', 'wprb' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Admin notifications', 'wp-restaurant-booking' ); ?></th>
 			<td>
 				<input type="checkbox" name="wprb-activate-admin-notification" id="wprb-activate-admin-notification" value="1"<?php echo ( 1 == $admin_activate ? ' checked="checked"' : '' ); ?>>
-				<p class="description"><?php esc_html_e( 'Activate email notifications for the admin.', 'wprb' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Activate email notifications for the admin.', 'wp-restaurant-booking' ); ?></p>
 			</td>
 		</tr>
 		<tr class="wprb-admin-recipients" style="display: none;">
@@ -45,25 +45,25 @@ $user_message         = null;
 				}
 				echo '</textarea>';
 				?>
-				<p class="description"><?php esc_html_e( 'Add all the recipients necessary divided by a comma.', 'wprb' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Add all the recipients necessary divided by a comma.', 'wp-restaurant-booking' ); ?></p>
 			</td>
 		</tr>
 		<tr class="wprb-activate-user-notifications-field">
-			<th scope="row"><?php esc_html_e( 'User notifications', 'wprb' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'User notifications', 'wp-restaurant-booking' ); ?></th>
 			<td>
 				<input type="checkbox" name="wprb-activate-user-notification" id="wprb-activate-user-notification" value="1">
-				<p class="description"><?php esc_html_e( 'Activate email notifications for the user.', 'wprb' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Activate email notifications for the user.', 'wp-restaurant-booking' ); ?></p>
 			</td>
 		</tr>
 		<tr class="wprb-user-notification-field" style="display: none;">
-			<th scope="row"><?php esc_html_e( 'Object', 'wprb' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Object', 'wp-restaurant-booking' ); ?></th>
 			<td>
 				<input type="text" name="wprb-user-notification-object" class="wprb-user-notification-object regular-text" placeholder="<?php echo esc_attr( $default_user_object ); ?>" value="<?php echo esc_attr( $user_object ); ?>" disabled>
-				<p class="description"><?php esc_html_e( 'Specify a different email object.', 'wprb' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Specify a different email object.', 'wp-restaurant-booking' ); ?></p>
 			</td>
 		</tr>
 		<tr class="wprb-user-notification-field" style="display: none;">
-			<th scope="row"><?php esc_html_e( 'Message', 'wprb' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Message', 'wp-restaurant-booking' ); ?></th>
 			<td>
 				<textarea type="text" name="wprb-user-notification-message" class="wprb-user-notification-message regular-text" rows="6" placeholder="<?php echo esc_attr( $default_user_message ); ?>" disabled><?php echo esc_html( $user_message ); ?></textarea>
 				<p class="description">
@@ -72,7 +72,7 @@ $user_message         = null;
 						echo '<code>[first-name]</code> <code>[last-name]</code> <code>[email]</code> <code>[phone]</code>';
 						echo '<code>[people]</code> <code>[date]</code> <code>[time]</code> <code>[until]</code> <code>[notes]</code>';
 					echo '</span>';
-					esc_html_e( 'Specify a different email message.', 'wprb' );
+					esc_html_e( 'Specify a different email message.', 'wp-restaurant-booking' );
 					?>
 				</p>
 				<?php $admin->go_premium(); ?>
@@ -83,6 +83,6 @@ $user_message         = null;
 	<?php wp_nonce_field( 'wprb-set-notifications', 'wprb-set-notifications-nonce' ); ?>
 
 	<input type="hidden" name="wprb-set-notifications-sent" value="1">
-	<input type="submit" class="button-primary wprb" value="<?php esc_html_e( 'Save settings', 'wprb' ); ?>">
+	<input type="submit" class="button-primary wprb" value="<?php esc_html_e( 'Save settings', 'wp-restaurant-booking' ); ?>">
 
 </form>

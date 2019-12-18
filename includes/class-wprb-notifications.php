@@ -57,7 +57,7 @@ class WPRB_Notifications {
 	 */
 	public static function default_user_object() {
 
-		return __( 'Thanks for your reservation [first-name]', 'wprb' );
+		return __( 'Thanks for your reservation [first-name]', 'wp-restaurant-booking' );
 
 	}
 
@@ -71,23 +71,23 @@ class WPRB_Notifications {
 	 */
 	public static function default_user_message( $until = null, $notes = null ) {
 
-		$output  = __( "Hi [first-name],\nhere are the details of your reservation:\n\n", 'wprb' );
-		$output .= __( "Day: [date]\n", 'wprb' );
-		$output .= __( "Time: [time]\n", 'wprb' );
+		$output  = __( "Hi [first-name],\nhere are the details of your reservation:\n\n", 'wp-restaurant-booking' );
+		$output .= __( "Day: [date]\n", 'wp-restaurant-booking' );
+		$output .= __( "Time: [time]\n", 'wp-restaurant-booking' );
 
 		if ( $until ) {
 
-			$output .= __( "\nLAST MINUTE\n", 'wprb' );
-			$output .= __( "Until: [until]\n\n", 'wprb' );
+			$output .= __( "\nLAST MINUTE\n", 'wp-restaurant-booking' );
+			$output .= __( "Until: [until]\n\n", 'wp-restaurant-booking' );
 
 		}
 
-		$output .= __( "People: [people]\n", 'wprb' );
-		$output .= __( "Name: [first-name] [last-name]\nEmail: [email]\nPhone: [phone]\n", 'wprb' );
+		$output .= __( "People: [people]\n", 'wp-restaurant-booking' );
+		$output .= __( "Name: [first-name] [last-name]\nEmail: [email]\nPhone: [phone]\n", 'wp-restaurant-booking' );
 
 		if ( $notes ) {
 
-			$output .= __( "Notes: [notes]\n\n", 'wprb' );
+			$output .= __( "Notes: [notes]\n\n", 'wp-restaurant-booking' );
 
 		} else {
 
@@ -95,7 +95,7 @@ class WPRB_Notifications {
 
 		}
 
-		$output .= __( 'We are waiting for you!', 'wprb' );
+		$output .= __( 'We are waiting for you!', 'wp-restaurant-booking' );
 
 		return $output;
 
@@ -110,22 +110,22 @@ class WPRB_Notifications {
 	 */
 	public static function default_admin_message( $until = null, $notes = null ) {
 
-		$output  = __( "Hi,\nhere are the details of the new reservation:\n\n", 'wprb' );
-		$output .= __( "Day: [date]\nTime: [time]\n", 'wprb' );
+		$output  = __( "Hi,\nhere are the details of the new reservation:\n\n", 'wp-restaurant-booking' );
+		$output .= __( "Day: [date]\nTime: [time]\n", 'wp-restaurant-booking' );
 
 		if ( $until ) {
 
-			$output .= __( "\nLAST MINUTE\n", 'wprb' );
-			$output .= __( "Until: [until]\n\n", 'wprb' );
+			$output .= __( "\nLAST MINUTE\n", 'wp-restaurant-booking' );
+			$output .= __( "Until: [until]\n\n", 'wp-restaurant-booking' );
 
 		}
 
-		$output .= __( "People: [people]\n", 'wprb' );
-		$output .= __( "Name: [first-name] [last-name]\nEmail: [email]\nPhone: [phone]\n", 'wprb' );
+		$output .= __( "People: [people]\n", 'wp-restaurant-booking' );
+		$output .= __( "Name: [first-name] [last-name]\nEmail: [email]\nPhone: [phone]\n", 'wp-restaurant-booking' );
 
 		if ( $notes ) {
 
-			$output .= __( "Notes: [notes]\n\n", 'wprb' );
+			$output .= __( "Notes: [notes]\n\n", 'wp-restaurant-booking' );
 
 		}
 
@@ -211,7 +211,7 @@ class WPRB_Notifications {
 			$to = get_option( 'wprb-admin-recipients' ) ? get_option( 'wprb-admin-recipients' ) : get_option( 'admin_email' );
 
 			/* Translators: 1: the user first name 2: the date */
-			$subject = sprintf( __( 'New reservation from %1$s for %2$s', 'wprb' ), $this->first_name, $this->date );
+			$subject = sprintf( __( 'New reservation from %1$s for %2$s', 'wp-restaurant-booking' ), $this->first_name, $this->date );
 
 			$message = do_shortcode( self::default_admin_message( $this->until, $this->notes ) );
 

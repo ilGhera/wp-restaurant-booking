@@ -9,7 +9,7 @@
  * Requires at least: 4.0
  * Tested up to: 5.3
  * WC tested up to: 3
- * Text Domain: wprb
+ * Text Domain: wp-restaurant-booking
  * Domain Path: /languages
  */
 
@@ -26,7 +26,7 @@ function load_wp_restaurant_booking() {
 	}
 
 	/*Internationalization*/
-	load_plugin_textdomain( 'wprb', false, basename( dirname( __FILE__ ) ) . '/languages' );
+	load_plugin_textdomain( 'wp-restaurant-booking', false, basename( dirname( __FILE__ ) ) . '/languages' );
 
 	/*Constants declaration*/
 	define( 'WPRB_DIR', plugin_dir_path( __FILE__ ) );

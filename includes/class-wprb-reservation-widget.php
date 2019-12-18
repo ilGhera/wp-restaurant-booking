@@ -61,7 +61,7 @@ class WPRB_Reservation_Widget {
 		$external_nonce         = wp_create_nonce( 'wprb-external' );
 		$max_bookable_nonce     = wp_create_nonce( 'wprb-max-bookable' );
 		$save_reservation_nonce = wp_create_nonce( 'wprb-save-reservation' );
-		$date_first_message     = esc_html__( 'Please select a date first', 'wprb' );
+		$date_first_message     = esc_html__( 'Please select a date first', 'wp-restaurant-booking' );
 		$locale                 = str_replace( '_', '-', get_locale() );
 
 		/*Pass data to the script file*/
@@ -115,7 +115,7 @@ class WPRB_Reservation_Widget {
 
 				echo '<div class="wprb-booking-button' . esc_attr( $class ) . '">';
 
-					echo '<a href="#wprb-booking-modal" rel="modal:open">' . esc_html( wp_unslash( __( 'Book now', 'wprb' ) ) ) . '</a>';
+					echo '<a href="#wprb-booking-modal" rel="modal:open">' . esc_html( wp_unslash( __( 'Book now', 'wp-restaurant-booking' ) ) ) . '</a>';
 
 				echo '</div>';
 
@@ -190,7 +190,7 @@ class WPRB_Reservation_Widget {
 		/*Date*/
 		echo '<div class="booking-step booking-date active">';
 
-			echo '<p class="wprb-step-description">' . esc_html__( 'Select the date', 'wprb' ) . '</p>';
+			echo '<p class="wprb-step-description">' . esc_html__( 'Select the date', 'wp-restaurant-booking' ) . '</p>';
 
 			echo '<div class="datepicker-here" data-language="it" data-inline="true"></div>';
 
@@ -201,7 +201,7 @@ class WPRB_Reservation_Widget {
 
 			echo '<div class="people-container">';
 
-				echo '<div class="booking-label left-20">' . esc_html( wp_unslash( __( 'People', 'wprb' ) ) ) . '</div>';
+				echo '<div class="booking-label left-20">' . esc_html( wp_unslash( __( 'People', 'wp-restaurant-booking' ) ) ) . '</div>';
 
 				echo '<ul class="booking-people_numbers">';
 					echo '<li class="booking-people_numbers__number"><input type="button" value="1"></li>';
@@ -227,7 +227,7 @@ class WPRB_Reservation_Widget {
 	 */
 	public static function last_minute_text() {
 
-		$default     = __( 'Last minutes are tables available only for a limited time', 'wprb' );
+		$default     = __( 'Last minutes are tables available only for a limited time', 'wp-restaurant-booking' );
 		$description = get_option( 'wprb-last-minute-description' ) ? get_option( 'wprb-last-minute-description' ) : $default;
 
 		if ( $description ) {
@@ -259,7 +259,7 @@ class WPRB_Reservation_Widget {
 
 		if ( $not_available ) {
 
-			$title = __( 'Not available', 'wprb' );
+			$title = __( 'Not available', 'wp-restaurant-booking' );
 
 		} else {
 
@@ -268,17 +268,17 @@ class WPRB_Reservation_Widget {
 				if ( ! $externals ) {
 
 					/* Translators: number of available seats */
-					$title = sprintf( __( 'Available seats: %d', 'wprb' ), $internals + $externals );
+					$title = sprintf( __( 'Available seats: %d', 'wp-restaurant-booking' ), $internals + $externals );
 
 				} else {
 
-					$title  = __( "AVAILABLE SEATS\n", 'wprb' );
+					$title  = __( "AVAILABLE SEATS\n", 'wp-restaurant-booking' );
 
 					/* Translators: number of internals available */
-					$title .= sprintf( __( "Indor: %d\n", 'wprb' ), $internals );
+					$title .= sprintf( __( "Indor: %d\n", 'wp-restaurant-booking' ), $internals );
 
 					/* Translators: number of externals available */
-					$title .= sprintf( __( 'Outdor: %d', 'wprb' ), $externals );
+					$title .= sprintf( __( 'Outdor: %d', 'wp-restaurant-booking' ), $externals );
 
 				}
 
@@ -311,7 +311,7 @@ class WPRB_Reservation_Widget {
 
 			if ( false === $back_end ) {
 
-				echo '<p class="wprb-step-description">' . esc_html__( 'Select the time', 'wprb' ) . '</p>';
+				echo '<p class="wprb-step-description">' . esc_html__( 'Select the time', 'wp-restaurant-booking' ) . '</p>';
 
 			}
 
@@ -377,7 +377,7 @@ class WPRB_Reservation_Widget {
 
 		if ( is_array( $last_minute_av ) && ! empty( $last_minute_av ) ) {
 
-			$description = $back_end ? __( 'Last minute', 'wprb' ) : __( 'Last minute available', 'wprb' );
+			$description = $back_end ? __( 'Last minute', 'wp-restaurant-booking' ) : __( 'Last minute available', 'wp-restaurant-booking' );
 
 			echo '<p class="wprb-step-description last-minute">' . esc_html( $description ) . '</p>';
 
@@ -386,7 +386,7 @@ class WPRB_Reservation_Widget {
 				foreach ( $last_minute_av as $last ) {
 
 					/* Translators: %s: the time until the table booked will be available */
-					$title = sprintf( __( 'Available until %s', 'wprb' ), $last['to'] );
+					$title = sprintf( __( 'Available until %s', 'wp-restaurant-booking' ), $last['to'] );
 
 					echo '<li class="wprb-hour' . esc_attr( $not_available ) . '" title="' . esc_attr( $title ) . '"><input type="button" class="last-minute" data-until="' . esc_attr( $last['to'] ) . '" value="' . esc_attr( $last['from'] ) . '"></li>';
 
@@ -434,14 +434,14 @@ class WPRB_Reservation_Widget {
 	public static function external_seats_element() {
 
 		echo '<div class="wprb-external-container choise">';
-			echo '<p>' . esc_html__( 'Outdoor table available', 'wprb' ) . '</p>';
-			echo '<a class="yes">' . esc_html__( 'Yes', 'wprb' ) . '</a>';
-			echo '<a class="no">' . esc_html__( 'No', 'wprb' ) . '</a>';
+			echo '<p>' . esc_html__( 'Outdoor table available', 'wp-restaurant-booking' ) . '</p>';
+			echo '<a class="yes">' . esc_html__( 'Yes', 'wp-restaurant-booking' ) . '</a>';
+			echo '<a class="no">' . esc_html__( 'No', 'wp-restaurant-booking' ) . '</a>';
 		echo '</div>';
 
 		echo '<div class="wprb-external-container only">';
-			echo '<p>' . esc_html__( 'Only available outdoor', 'wprb' ) . '</p>';
-			echo '<a class="yes only">' . esc_html__( 'Yes, no problem', 'wprb' ) . '</a>';
+			echo '<p>' . esc_html__( 'Only available outdoor', 'wp-restaurant-booking' ) . '</p>';
+			echo '<a class="yes only">' . esc_html__( 'Yes, no problem', 'wp-restaurant-booking' ) . '</a>';
 		echo '</div>';
 
 	}
@@ -493,16 +493,16 @@ class WPRB_Reservation_Widget {
 
 		echo '<div class="booking-step booking-complete">';
 
-			echo '<p class="wprb-step-description">' . esc_html__( 'Complete your reservation', 'wprb' ) . '</p>';
+			echo '<p class="wprb-step-description">' . esc_html__( 'Complete your reservation', 'wp-restaurant-booking' ) . '</p>';
 
 			echo '<form id="wprb-reservation">';
 
-				echo '<input type="text" name="first-name-field" required placeholder="' . esc_attr__( 'First name*', 'wprb' ) . '" value="">';
-				echo '<input type="text" name="last-name-field" required placeholder="' . esc_attr__( 'Last name*', 'wprb' ) . '" value="">';
-				echo '<input type="email" name="email-field" required placeholder="' . esc_attr__( 'Email*', 'wprb' ) . '" value="">';
-				echo '<input type="tel" name="phone-field" required placeholder="' . esc_attr__( 'Phone number*', 'wprb' ) . '" value="">';
+				echo '<input type="text" name="first-name-field" required placeholder="' . esc_attr__( 'First name*', 'wp-restaurant-booking' ) . '" value="">';
+				echo '<input type="text" name="last-name-field" required placeholder="' . esc_attr__( 'Last name*', 'wp-restaurant-booking' ) . '" value="">';
+				echo '<input type="email" name="email-field" required placeholder="' . esc_attr__( 'Email*', 'wp-restaurant-booking' ) . '" value="">';
+				echo '<input type="tel" name="phone-field" required placeholder="' . esc_attr__( 'Phone number*', 'wp-restaurant-booking' ) . '" value="">';
 
-				echo '<textarea name="notes-field" class="notes-field" placeholder="' . esc_attr__( 'Add more details', 'wprb' ) . '"></textarea>';
+				echo '<textarea name="notes-field" class="notes-field" placeholder="' . esc_attr__( 'Add more details', 'wp-restaurant-booking' ) . '"></textarea>';
 
 				echo '<input type="hidden" name="people-field" class="people-field" value="">';
 				echo '<input type="hidden" name="date-field" class="date-field" value="">';
@@ -510,7 +510,7 @@ class WPRB_Reservation_Widget {
 				echo '<input type="hidden" name="external-field" class="external-field" value="">';
 				echo '<input type="hidden" name="until-field" class="until-field" value="">';
 
-				echo '<input type="submit" class="wprb-complete-reservation" value="' . esc_attr__( 'Book now', 'wprb' ) . '">';
+				echo '<input type="submit" class="wprb-complete-reservation" value="' . esc_attr__( 'Book now', 'wp-restaurant-booking' ) . '">';
 
 			echo '</form>';
 
@@ -528,15 +528,15 @@ class WPRB_Reservation_Widget {
 	 */
 	public function step_4( $first_name, $email ) {
 
-		echo '<div class="booking-end" data-title="' . esc_html__( 'Reservation completed', 'wprb' ) . '">';
+		echo '<div class="booking-end" data-title="' . esc_html__( 'Reservation completed', 'wp-restaurant-booking' ) . '">';
 
 			echo '<p class="wprb-step-description">';
 				echo '<i class="far fa-check-circle"></i><br>';
 
 				/* Translators: %s: customer first name */
-				printf( esc_html__( "Thanks %s!\n", 'wprb' ), esc_html( $first_name ) );
+				printf( esc_html__( "Thanks %s!\n", 'wp-restaurant-booking' ), esc_html( $first_name ) );
 
-				echo esc_html__( 'Your reservation has been received.', 'wprb' );
+				echo esc_html__( 'Your reservation has been received.', 'wp-restaurant-booking' );
 
 			echo '</p>';
 
@@ -552,7 +552,7 @@ class WPRB_Reservation_Widget {
 
 		echo '<div id="wprb-booking-modal" class="wprb_modal">';
 
-			echo '<h2 class="wprb-widget-title">' . esc_html( wp_unslash( __( 'Book now', 'wprb' ) ) ) . '</h2>';
+			echo '<h2 class="wprb-widget-title">' . esc_html( wp_unslash( __( 'Book now', 'wp-restaurant-booking' ) ) ) . '</h2>';
 
 			/*Header*/
 			echo '<div class="header-bar">';
@@ -564,7 +564,7 @@ class WPRB_Reservation_Widget {
 						echo '<span>';
 							echo '<i class="far fa-calendar-alt"></i>';
 						echo '</span><br>';
-						echo '<div class="value">' . esc_html( wp_unslash( __( 'Date', 'wprb' ) ) ) . '</div>';
+						echo '<div class="value">' . esc_html( wp_unslash( __( 'Date', 'wp-restaurant-booking' ) ) ) . '</div>';
 					echo '</li>';
 
 					/*People*/
@@ -573,7 +573,7 @@ class WPRB_Reservation_Widget {
 							echo '<i class="fas fa-user-friends"></i>';
 						echo '</span><br>';
 						echo '<div class="value"></div>';
-						echo esc_html( wp_unslash( __( 'People', 'wprb' ) ) );
+						echo esc_html( wp_unslash( __( 'People', 'wp-restaurant-booking' ) ) );
 					echo '</li>';
 
 					/*Time*/
@@ -581,7 +581,7 @@ class WPRB_Reservation_Widget {
 						echo '<span>';
 							echo '<i class="far fa-clock"></i>';
 						echo '</span><br>';
-						echo '<div class="value">' . esc_html( wp_unslash( __( 'Time', 'wprb' ) ) ) . '</div>';
+						echo '<div class="value">' . esc_html( wp_unslash( __( 'Time', 'wp-restaurant-booking' ) ) ) . '</div>';
 					echo '</li>';
 
 					/*Complete*/
@@ -589,7 +589,7 @@ class WPRB_Reservation_Widget {
 						echo '<span>';
 							echo '<i class="fas fa-check-circle"></i>';
 						echo '</span><br>';
-						echo '<div class="value">' . esc_html( wp_unslash( __( 'Complete', 'wprb' ) ) ) . '</div>';
+						echo '<div class="value">' . esc_html( wp_unslash( __( 'Complete', 'wp-restaurant-booking' ) ) ) . '</div>';
 					echo '</li>';
 
 					echo '<div class="clear"></div>';

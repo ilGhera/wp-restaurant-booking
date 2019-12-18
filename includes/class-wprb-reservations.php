@@ -81,25 +81,25 @@ class WPRB_Reservations {
 	public function register_post_type() {
 
 		$labels = array(
-			'name'               => __( 'Reservations', 'wprb' ),
-			'singular_name'      => __( 'Reservation', 'wprb' ),
-			'menu_name'          => __( 'Reservations', 'wprb' ),
-			'name_admin_bar'     => __( 'Reservation', 'wprb' ),
-			'add_new'            => __( 'New reservation', 'wprb' ),
-			'add_new_item'       => __( 'New reservation', 'wprb' ),
-			'new_item'           => __( 'New reservation', 'wprb' ),
-			'edit_item'          => __( 'Edit reservation', 'wprb' ),
-			'view_item'          => __( 'View reservation', 'wprb' ),
-			'all_items'          => __( 'All reservations', 'wprb' ),
-			'search_items'       => __( 'Search reservation', 'wprb' ),
-			'parent_item_colon'  => __( 'Parent reservation:', 'wprb' ),
-			'not_found'          => __( 'No reservations found.', 'wprb' ),
-			'not_found_in_trash' => __( 'No reservations found in Trash.', 'wprb' ),
+			'name'               => __( 'Reservations', 'wp-restaurant-booking' ),
+			'singular_name'      => __( 'Reservation', 'wp-restaurant-booking' ),
+			'menu_name'          => __( 'Reservations', 'wp-restaurant-booking' ),
+			'name_admin_bar'     => __( 'Reservation', 'wp-restaurant-booking' ),
+			'add_new'            => __( 'New reservation', 'wp-restaurant-booking' ),
+			'add_new_item'       => __( 'New reservation', 'wp-restaurant-booking' ),
+			'new_item'           => __( 'New reservation', 'wp-restaurant-booking' ),
+			'edit_item'          => __( 'Edit reservation', 'wp-restaurant-booking' ),
+			'view_item'          => __( 'View reservation', 'wp-restaurant-booking' ),
+			'all_items'          => __( 'All reservations', 'wp-restaurant-booking' ),
+			'search_items'       => __( 'Search reservation', 'wp-restaurant-booking' ),
+			'parent_item_colon'  => __( 'Parent reservation:', 'wp-restaurant-booking' ),
+			'not_found'          => __( 'No reservations found.', 'wp-restaurant-booking' ),
+			'not_found_in_trash' => __( 'No reservations found in Trash.', 'wp-restaurant-booking' ),
 		);
 
 		$args = array(
 			'labels'             => $labels,
-			'description'        => __( 'Description.', 'wprb' ),
+			'description'        => __( 'Description.', 'wp-restaurant-booking' ),
 			'public'             => false,
 			'publicly_queryable' => true,
 			'show_ui'            => true,
@@ -129,7 +129,7 @@ class WPRB_Reservations {
 
 		if ( 'reservation' === $post->post_type ) {
 
-			$title = __( 'Add the reservation title or leave blank to use the customer name', 'wprb' );
+			$title = __( 'Add the reservation title or leave blank to use the customer name', 'wp-restaurant-booking' );
 
 		}
 
@@ -145,7 +145,7 @@ class WPRB_Reservations {
 	 */
 	public function wprb_add_meta_box( $post_type ) {
 
-		add_meta_box( 'wprb-box', __( 'Reservation details', 'wprb' ), array( $this, 'wprb_add_meta_box_callback' ), 'reservation' );
+		add_meta_box( 'wprb-box', __( 'Reservation details', 'wp-restaurant-booking' ), array( $this, 'wprb_add_meta_box_callback' ), 'reservation' );
 
 	}
 
@@ -742,12 +742,12 @@ class WPRB_Reservations {
 		$columns = array(
 			'cb'     => '&lt;input type="checkbox" />',
 			'title'  => __( 'Title' ),
-			'day'    => __( 'Day', 'wprb' ),
-			'time'   => __( 'Time', 'wprb' ),
-			'people' => __( 'People', 'wprb' ),
-			'table'  => __( 'Table', 'wprb' ),
-			'notes'  => __( 'Notes', 'wprb' ),
-			'status' => __( 'Status', 'wprb' ),
+			'day'    => __( 'Day', 'wp-restaurant-booking' ),
+			'time'   => __( 'Time', 'wp-restaurant-booking' ),
+			'people' => __( 'People', 'wp-restaurant-booking' ),
+			'table'  => __( 'Table', 'wp-restaurant-booking' ),
+			'notes'  => __( 'Notes', 'wp-restaurant-booking' ),
+			'status' => __( 'Status', 'wp-restaurant-booking' ),
 		);
 
 		return $columns;
@@ -768,7 +768,7 @@ class WPRB_Reservations {
 		$data_post_id = $post_id ? ' data-post-id=' . $post_id : '';
 		$class_active = $active ? 'active ' : '';
 
-		return '<a href="#wprb-status-modal" rel="modal:open" class="' . esc_attr( $class_active ) . 'wprb-status-label ' . esc_html( $status ) . '" ' . esc_attr( $data_post_id ) . ' data-status="' . esc_html( $status ) . '">' . esc_html__( ucfirst( $status ), 'wprb' ) . '</a>';
+		return '<a href="#wprb-status-modal" rel="modal:open" class="' . esc_attr( $class_active ) . 'wprb-status-label ' . esc_html( $status ) . '" ' . esc_attr( $data_post_id ) . ' data-status="' . esc_html( $status ) . '">' . esc_html__( ucfirst( $status ), 'wp-restaurant-booking' ) . '</a>';
 
 	}
 
@@ -839,7 +839,7 @@ class WPRB_Reservations {
 
 				} elseif ( $external ) {
 
-					echo esc_html( $time ) . '<span class="external" title="' . esc_attr__( 'Outdor table', 'wprb' ) . '">' . esc_html__( 'EXT', 'wprb' ) . '</span>';
+					echo esc_html( $time ) . '<span class="external" title="' . esc_attr__( 'Outdor table', 'wp-restaurant-booking' ) . '">' . esc_html__( 'EXT', 'wp-restaurant-booking' ) . '</span>';
 
 				} else {
 
@@ -859,7 +859,7 @@ class WPRB_Reservations {
 			case 'table':
 				$table = get_post_meta( $post_id, 'wprb-table', true );
 
-				echo $table ? esc_html( $table ) : esc_html__( 'No table assigned', 'wprb' );
+				echo $table ? esc_html( $table ) : esc_html__( 'No table assigned', 'wp-restaurant-booking' );
 
 				break;
 
@@ -1066,7 +1066,7 @@ class WPRB_Reservations {
 			$statuses = array( 'received', 'managed', 'completed', 'expired' );
 
 			echo '<div id="wprb-status-modal" class="wprb_modal">';
-				echo '<h3>' . esc_html__( 'Select the new reservation status', 'wprb' ) . '</h3>';
+				echo '<h3>' . esc_html__( 'Select the new reservation status', 'wp-restaurant-booking' ) . '</h3>';
 				echo '<ul>';
 
 					foreach ( $statuses as $status ) {
