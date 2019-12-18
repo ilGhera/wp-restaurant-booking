@@ -628,7 +628,7 @@ class WPRB_Admin {
 
 			echo '<div class="wrap-right">';
 		
-				echo '<iframe width="300" height="1300" scrolling="no" src="http://www.ilghera.com/images/wprb-iframe.html"></iframe>';
+				echo '<iframe width="300" height="1300" scrolling="no" src="https://www.ilghera.com/images/wprb-iframe.html"></iframe>';
 		
 			echo '</div>';
 		
