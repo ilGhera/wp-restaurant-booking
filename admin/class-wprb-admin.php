@@ -112,7 +112,7 @@ class WPRB_Admin {
 
 			add_role(
 				'wprb_manager',
-				__( 'Reservations Manager', 'wprb' ),
+				__( 'Reservations Manager', 'wp-restaurant-booking' ),
 				array(
 					'moderate_comments'      => 1,
 					'manage_categories'      => 1,
@@ -201,13 +201,13 @@ class WPRB_Admin {
 		$hook = add_menu_page( 'WP Restaurant Booking', $menu_label, 'wprb_edit_reservations', 'edit.php?post_type=reservation', null, 'dashicons-food', 59 );
 
 		/*Reservations*/
-		add_submenu_page( 'edit.php?post_type=reservation', __( 'All reservations', 'wprb' ), __( 'All reservations', 'wprb' ), 'wprb_edit_reservations', 'edit.php?post_type=reservation' );
+		add_submenu_page( 'edit.php?post_type=reservation', __( 'All reservations', 'wp-restaurant-booking' ), __( 'All reservations', 'wp-restaurant-booking' ), 'wprb_edit_reservations', 'edit.php?post_type=reservation' );
 
 		/*New Reservation*/
-		add_submenu_page( 'edit.php?post_type=reservation', __( 'Add New', 'wprb' ), __( 'Add New', 'wprb' ), 'wprb_edit_reservations', 'post-new.php?post_type=reservation' );
+		add_submenu_page( 'edit.php?post_type=reservation', __( 'Add New', 'wp-restaurant-booking' ), __( 'Add New', 'wp-restaurant-booking' ), 'wprb_edit_reservations', 'post-new.php?post_type=reservation' );
 
 		/*Options*/
-		add_submenu_page( 'edit.php?post_type=reservation', __( 'Settings', 'wprb' ), __( 'Settings', 'wprb' ), 'wprb_edit_reservations', 'wprb-settings', array( $this, 'wprb_settings' ) );
+		add_submenu_page( 'edit.php?post_type=reservation', __( 'Settings', 'wp-restaurant-booking' ), __( 'Settings', 'wp-restaurant-booking' ), 'wprb_edit_reservations', 'wprb-settings', array( $this, 'wprb_settings' ) );
 
 	}
 
@@ -220,13 +220,13 @@ class WPRB_Admin {
 	public function week() {
 
 		return array(
-			'mon' => __( 'Monday', 'wprb' ),
-			'tue' => __( 'Tuesday', 'wprb' ),
-			'wed' => __( 'Wednesday', 'wprb' ),
-			'thu' => __( 'Thursday', 'wprb' ),
-			'fri' => __( 'Friday', 'wprb' ),
-			'sat' => __( 'Saturday', 'wprb' ),
-			'sun' => __( 'Sunday', 'wprb' ),
+			'mon' => __( 'Monday', 'wp-restaurant-booking' ),
+			'tue' => __( 'Tuesday', 'wp-restaurant-booking' ),
+			'wed' => __( 'Wednesday', 'wp-restaurant-booking' ),
+			'thu' => __( 'Thursday', 'wp-restaurant-booking' ),
+			'fri' => __( 'Friday', 'wp-restaurant-booking' ),
+			'sat' => __( 'Saturday', 'wp-restaurant-booking' ),
+			'sun' => __( 'Sunday', 'wp-restaurant-booking' ),
 		);
 
 	}
@@ -264,13 +264,13 @@ class WPRB_Admin {
 
 		echo '<div class="wprb-hours-element-' . esc_attr( $number ) . ' hours-element">';
 
-			echo '<label for="wprb-bookable-hours-from">' . esc_html__( 'From', 'wprb' ) . '</label>';
+			echo '<label for="wprb-bookable-hours-from">' . esc_html__( 'From', 'wp-restaurant-booking' ) . '</label>';
 			echo '<input type="time" name="wprb-bookable-hours-from-' . esc_attr( $number ) . '" id="wprb-bookable-hours-from" class="wprb-bookable-hours-from" min="12:00" max="23:00" value="' . esc_attr( $from ) . '" required>';
 
-			echo '<label for="wprb-bookable-hours-to">' . esc_html__( 'to', 'wprb' ) . '</label>';
+			echo '<label for="wprb-bookable-hours-to">' . esc_html__( 'to', 'wp-restaurant-booking' ) . '</label>';
 			echo '<input type="time" name="wprb-bookable-hours-to-' . esc_attr( $number ) . '" id="wprb-bookable-hours-to" class="wprb-bookable-hours-to" min="12:00" max="23:00" value="' . esc_attr( $to ) . '" required>';
 
-			echo '<label for="wprb-bookable-hours-every">' . esc_html__( 'every (minutes)', 'wprb' ) . '</label>';
+			echo '<label for="wprb-bookable-hours-every">' . esc_html__( 'every (minutes)', 'wp-restaurant-booking' ) . '</label>';
 			echo '<input type="number" name="wprb-bookable-hours-every-' . esc_attr( $number ) . '" id="wprb-bookable-hours-every" class="wprb-bookable-hours-every" min="5" max="60" step="5" placeholder="15" value="' . esc_attr( $every ) . '" required>';
 
 			if ( 1 === $number ) {
@@ -353,16 +353,16 @@ class WPRB_Admin {
 
 		echo '<div class="wprb-last-minute-element-' . esc_attr( $number ) . ' last-minute-element">';
 
-			echo '<label for="wprb-last-minute-date">' . esc_html__( 'On', 'wprb' ) . '</label>';
+			echo '<label for="wprb-last-minute-date">' . esc_html__( 'On', 'wp-restaurant-booking' ) . '</label>';
 			echo '<input type="date" name="wprb-last-minute-date-' . esc_attr( $number ) . '" id="wprb-last-minute-date" class="wprb-last-minute-date" min="' . esc_html( date( 'Y-m-d' ) ) . '" value="' . esc_attr( $date ) . '">';
 
-			echo '<label for="wprb-last-minute-from">' . esc_html__( 'from', 'wprb' ) . '</label>';
+			echo '<label for="wprb-last-minute-from">' . esc_html__( 'from', 'wp-restaurant-booking' ) . '</label>';
 			echo '<input type="time" name="wprb-last-minute-from-' . esc_attr( $number ) . '" id="wprb-last-minute-from" class="wprb-last-minute-from" min="12:00" max="23:00" value="' . esc_attr( $from ) . '" required>';
 
-			echo '<label for="wprb-last-minute-to">' . esc_html__( 'to', 'wprb' ) . '</label>';
+			echo '<label for="wprb-last-minute-to">' . esc_html__( 'to', 'wp-restaurant-booking' ) . '</label>';
 			echo '<input type="time" name="wprb-last-minute-to-' . esc_attr( $number ) . '" id="wprb-last-minute-to" class="wprb-last-minute-to" min="12:00" max="23:00" value="' . esc_attr( $to ) . '" required>';
 
-			echo '<label for="wprb-last-minute-people">' . esc_html__( 'people', 'wprb' ) . '</label>';
+			echo '<label for="wprb-last-minute-people">' . esc_html__( 'people', 'wp-restaurant-booking' ) . '</label>';
 			echo '<input type="number" name="wprb-last-minute-people-' . esc_attr( $number ) . '" id="wprb-last-minute-people" class="wprb-last-minute-people" step="1" placeholder="0" value="' . esc_attr( $people ) . '" required>';
 
 			if ( 0 === $number ) {
@@ -639,7 +639,7 @@ class WPRB_Admin {
 
 		/*Right of access*/
 		if ( ! current_user_can( 'wprb_edit_reservations' ) ) {
-			wp_die( esc_html( __( 'It seems like you don\'t have permission to see this page', 'wprb' ) ) );
+			wp_die( esc_html( __( 'It seems like you don\'t have permission to see this page', 'wp-restaurant-booking' ) ) );
 		}
 
 		/*Page template start*/
@@ -647,7 +647,7 @@ class WPRB_Admin {
 			echo '<div class="wrap-left">';
 
 				/*Header*/
-				echo '<h1 class="wprb main">' . esc_html( __( 'WP Restaurant Booking - Premium', 'wprb' ) ) . '</h1>';
+				echo '<h1 class="wprb main">' . esc_html( __( 'WP Restaurant Booking - Premium', 'wp-restaurant-booking' ) ) . '</h1>';
 
 				/*Plugin premium key*/
 				$key = sanitize_text_field( get_option( 'wprb-premium-key' ) );
@@ -662,19 +662,19 @@ class WPRB_Admin {
 
 				/*Premium Key Form*/
 				echo '<form id="wprb-premium-key" method="post" action="">';
-					echo '<label>' . esc_html( __( 'Premium Key', 'wprb' ) ) . '</label>';
-					echo '<input type="text" class="regular-text code" name="wprb-premium-key" id="wprb-premium-key" placeholder="' . esc_html( __( 'Add your Premium Key', 'wprb' ) ) . '" value="' . esc_attr( $key ) . '" />';
-					echo '<p class="description">' . esc_html( __( 'Add your Premium Key and keep update your copy of WP Restaurant Booking - Premium.', 'wprb' ) ) . '</p>';
+					echo '<label>' . esc_html( __( 'Premium Key', 'wp-restaurant-booking' ) ) . '</label>';
+					echo '<input type="text" class="regular-text code" name="wprb-premium-key" id="wprb-premium-key" placeholder="' . esc_html( __( 'Add your Premium Key', 'wp-restaurant-booking' ) ) . '" value="' . esc_attr( $key ) . '" />';
+					echo '<p class="description">' . esc_html( __( 'Add your Premium Key and keep update your copy of WP Restaurant Booking - Premium.', 'wp-restaurant-booking' ) ) . '</p>';
 					wp_nonce_field( 'wprb-premium-key', 'wprb-premium-key-nonce' );
-					echo '<input type="submit" class="button button-primary" value="' . esc_html( __( 'Save settings', 'wprb' ) ) . '" />';
+					echo '<input type="submit" class="button button-primary" value="' . esc_html( __( 'Save settings', 'wp-restaurant-booking' ) ) . '" />';
 				echo '</form>';
 
 				/*Plugin options menu*/
 				echo '<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"><br></div>';
 				echo '<h2 id="wprb-admin-menu" class="nav-tab-wrapper woo-nav-tab-wrapper">';
-					echo '<a href="#" data-link="wprb-set-reservations" class="nav-tab nav-tab-active" onclick="return false;">' . esc_html( __( 'Reservations', 'wprb' ) ) . '</a>';
-					echo '<a href="#" data-link="wprb-set-last-minute" class="nav-tab" onclick="return false;">' . esc_html( __( 'Last minute', 'wprb' ) ) . '</a>';
-					echo '<a href="#" data-link="wprb-set-notifications" class="nav-tab" onclick="return false;">' . esc_html( __( 'Notifications', 'wprb' ) ) . '</a>';
+					echo '<a href="#" data-link="wprb-set-reservations" class="nav-tab nav-tab-active" onclick="return false;">' . esc_html( __( 'Reservations', 'wp-restaurant-booking' ) ) . '</a>';
+					echo '<a href="#" data-link="wprb-set-last-minute" class="nav-tab" onclick="return false;">' . esc_html( __( 'Last minute', 'wp-restaurant-booking' ) ) . '</a>';
+					echo '<a href="#" data-link="wprb-set-notifications" class="nav-tab" onclick="return false;">' . esc_html( __( 'Notifications', 'wp-restaurant-booking' ) ) . '</a>';
 				echo '</h2>';
 
 				/*Set reservations*/
@@ -726,11 +726,11 @@ class WPRB_Admin {
 
 		if ( ! $key ) {
 
-			$message  = __( 'A <strong>Premium Key</strong> is required for keeping this plugin up to date. ', 'wprb' );
+			$message  = __( 'A <strong>Premium Key</strong> is required for keeping this plugin up to date. ', 'wp-restaurant-booking' );
 
 			/* Translators: the admin url */
-			$message .= sprintf( __( 'Please, add yours in the <a href="%sadmin.php/?page=wprb-settings">options page</a> ', 'wprb' ), admin_url() );
-			$message .= __( 'or click <a href="https://www.ilghera.com/product/wp-restaurant-booking-premium/" target="_blank">here</a> for prices and details.', 'wprb' );
+			$message .= sprintf( __( 'Please, add yours in the <a href="%sadmin.php/?page=wprb-settings">options page</a> ', 'wp-restaurant-booking' ), admin_url() );
+			$message .= __( 'or click <a href="https://www.ilghera.com/product/wp-restaurant-booking-premium/" target="_blank">here</a> for prices and details.', 'wp-restaurant-booking' );
 
 		} else {
 
@@ -741,13 +741,13 @@ class WPRB_Admin {
 
 			if ( $limit < $now ) {
 
-				$message  = __( 'It seems like your <strong>Premium Key</strong> is expired. ', 'wprb' );
-				$message .= __( 'Please, click <a href="https://www.ilghera.com/product/wp-restaurant-booking-premium/" target="_blank">here</a> for prices and details.', 'wprb' );
+				$message  = __( 'It seems like your <strong>Premium Key</strong> is expired. ', 'wp-restaurant-booking' );
+				$message .= __( 'Please, click <a href="https://www.ilghera.com/product/wp-restaurant-booking-premium/" target="_blank">here</a> for prices and details.', 'wp-restaurant-booking' );
 
 			} elseif ( ! isset( $decoded_key[2] ) || ( isset( $decoded_key[2] ) && 7302 !== $decoded_key[2] ) ) {
 
-				$message  = __( 'It seems like your <strong>Premium Key</strong> is not valid. ', 'wprb' );
-				$message .= __( 'Please, click <a href="https://www.ilghera.com/product/wp-restaurant-booking-premium/" target="_blank">here</a> for prices and details.', 'wprb' );
+				$message  = __( 'It seems like your <strong>Premium Key</strong> is not valid. ', 'wp-restaurant-booking' );
+				$message .= __( 'Please, click <a href="https://www.ilghera.com/product/wp-restaurant-booking-premium/" target="_blank">here</a> for prices and details.', 'wp-restaurant-booking' );
 
 			}
 
