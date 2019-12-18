@@ -236,7 +236,7 @@ class WPRB_Admin {
 	public function go_premium() {
 
 		$title = __( 'This is a premium functionality, click here for more information', 'wprb' );
-		$output = '<span class="label label-warning premium">';
+		$output = '<span class="wprb label label-warning premium">';
 			$output .= '<a href="https://www.ilghera.com/product/wp-restaurant-booking-premium" target="_blank" title="' . esc_attr( $title ) . '">Premium</a>';
 		$output .= '</span>';
 
@@ -246,7 +246,8 @@ class WPRB_Admin {
 			),
 			'a'    => array(
 				'target' => [],
-				'title' => [],
+				'title'  => [],
+				'href'   => [],
 			),
 		);
 
@@ -624,7 +625,15 @@ class WPRB_Admin {
 				echo '</div>';
 
 			echo '</div>';
-			echo '<div class="wrap-right"></div>';
+
+			echo '<div class="wrap-right">';
+		
+				echo '<iframe width="300" height="1300" scrolling="no" src="http://www.ilghera.com/images/wprb-iframe.html"></iframe>';
+		
+			echo '</div>';
+		
+			echo '<div class="clear"></div>';
+		
 		echo '</div>';
 
 	}
