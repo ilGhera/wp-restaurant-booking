@@ -196,7 +196,7 @@ p.wprb-step-description.last-minute {
 	padding-right: 2px;
 }
 
-.booking-people_numbers__number input {
+.booking-people_numbers__number input[type="button"] {
 	width: 30px;
 	height: 30px;
 	padding: 0;
@@ -208,8 +208,8 @@ p.wprb-step-description.last-minute {
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
-.booking-people_numbers__number input:hover,
-.booking-people_numbers__number input.active {
+.booking-people_numbers__number input[type="button"]:hover,
+.booking-people_numbers__number input[type="button"].active {
 	background: #f5b016 !important;
 	color: #fff; 	
 }
