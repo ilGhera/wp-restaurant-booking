@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP restaurant Booking 0.9.0\n"
-"POT-Creation-Date: 2019-12-17 22:07+0100\n"
+"POT-Creation-Date: 2019-12-18 12:22+0100\n"
 "PO-Revision-Date: 2019-11-04 21:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
@@ -65,49 +65,49 @@ msgstr ""
 msgid "This is a premium functionality, click here for more information"
 msgstr ""
 
-#: admin/class-wprb-admin.php:291
+#: admin/class-wprb-admin.php:292
 msgid "From"
 msgstr ""
 
-#: admin/class-wprb-admin.php:294 admin/class-wprb-admin.php:386
+#: admin/class-wprb-admin.php:295 admin/class-wprb-admin.php:387
 msgid "to"
 msgstr ""
 
-#: admin/class-wprb-admin.php:297
+#: admin/class-wprb-admin.php:298
 msgid "every (minutes)"
 msgstr ""
 
-#: admin/class-wprb-admin.php:380
+#: admin/class-wprb-admin.php:381
 msgid "On"
 msgstr ""
 
-#: admin/class-wprb-admin.php:383
+#: admin/class-wprb-admin.php:384
 msgid "from"
 msgstr ""
 
-#: admin/class-wprb-admin.php:389
+#: admin/class-wprb-admin.php:390
 msgid "people"
 msgstr ""
 
-#: admin/class-wprb-admin.php:587
+#: admin/class-wprb-admin.php:588
 msgid "It seems like you don't have permission to see this page"
 msgstr ""
 
-#: admin/class-wprb-admin.php:595
+#: admin/class-wprb-admin.php:596
 msgid "WP Restaurant Booking"
 msgstr ""
 
-#: admin/class-wprb-admin.php:600 includes/class-wprb-reservations.php:84
+#: admin/class-wprb-admin.php:601 includes/class-wprb-reservations.php:84
 #: includes/class-wprb-reservations.php:86
 msgid "Reservations"
 msgstr ""
 
-#: admin/class-wprb-admin.php:601
+#: admin/class-wprb-admin.php:602
 #: includes/class-wprb-reservation-widget.php:380
 msgid "Last minute"
 msgstr ""
 
-#: admin/class-wprb-admin.php:602
+#: admin/class-wprb-admin.php:603
 msgid "Notifications"
 msgstr ""
 
@@ -646,4 +646,3 @@ msgstr ""
 #: plugin-update-checker/Puc/v4p8/Vcs/PluginUpdateChecker.php:98
 msgid "There is no changelog available."
 msgstr ""
-
