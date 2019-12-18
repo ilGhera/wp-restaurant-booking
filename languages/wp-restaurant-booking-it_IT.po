@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP Restaurant Booking 0.9.0\n"
-"POT-Creation-Date: 2019-12-18 11:43+0100\n"
-"PO-Revision-Date: 2019-12-18 11:43+0100\n"
+"POT-Creation-Date: 2019-12-18 15:32+0100\n"
+"PO-Revision-Date: 2019-12-18 15:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
 "Language: it_IT\n"
@@ -12,7 +12,7 @@ msgstr ""
 "X-Generator: Poedit 2.2.4\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-KeywordsList: __;_e;esc_html_e;esc_html__\n"
+"X-Poedit-KeywordsList: __;_e;esc_html_e;esc_html__;esc_attr_e;esc_attr__\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: admin/class-wprb-admin.php:115
@@ -424,6 +424,7 @@ msgid "Please select a date first"
 msgstr "Occorre prima indicare una data"
 
 #: includes/class-wprb-reservation-widget.php:118
+#: includes/class-wprb-reservation-widget.php:513
 #: includes/class-wprb-reservation-widget.php:555
 msgid "Book now"
 msgstr "Prenota ora"
@@ -498,6 +499,26 @@ msgstr "Ok, va bene"
 #: includes/class-wprb-reservation-widget.php:496
 msgid "Complete your reservation"
 msgstr "Completa la tua prenotazione"
+
+#: includes/class-wprb-reservation-widget.php:500
+msgid "First name*"
+msgstr "Nome*"
+
+#: includes/class-wprb-reservation-widget.php:501
+msgid "Last name*"
+msgstr "Cognome*"
+
+#: includes/class-wprb-reservation-widget.php:502
+msgid "Email*"
+msgstr ""
+
+#: includes/class-wprb-reservation-widget.php:503
+msgid "Phone number*"
+msgstr "Numero di telefono*"
+
+#: includes/class-wprb-reservation-widget.php:505
+msgid "Add more details"
+msgstr "Aggiungi una nota"
 
 #: includes/class-wprb-reservation-widget.php:531
 msgid "Reservation completed"
@@ -598,6 +619,10 @@ msgstr "Note"
 #: includes/wprb-reservation-template.php:104
 msgid "Status"
 msgstr "Stato"
+
+#: includes/class-wprb-reservations.php:842
+msgid "Outdor table"
+msgstr "Tavolo esterno"
 
 #: includes/class-wprb-reservations.php:842
 msgid "EXT"
@@ -734,15 +759,6 @@ msgstr "Il changelog non è disponibile."
 
 #~ msgid "expired"
 #~ msgstr "scaduta"
-
-#~ msgid "First name*"
-#~ msgstr "Nome*"
-
-#~ msgid "Last name*"
-#~ msgstr "Cognome*"
-
-#~ msgid "Phone number*"
-#~ msgstr "Numero di telefono*"
 
 #~ msgid "People = "
 #~ msgstr "Persone = "
