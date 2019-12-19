@@ -33,9 +33,6 @@ function load_wp_restaurant_booking_premium() {
 
 	}
 
-	/*Internationalization*/
-	load_plugin_textdomain( 'wp-restaurant-booking', false, basename( dirname( __FILE__ ) ) . '/languages' );
-
 	/*Constants declaration*/
 	define( 'WPRB_DIR', plugin_dir_path( __FILE__ ) );
 	define( 'WPRB_URI', plugin_dir_url( __FILE__ ) );
@@ -43,6 +40,10 @@ function load_wp_restaurant_booking_premium() {
 	define( 'WPRB_ADMIN', WPRB_DIR . 'admin/' );
 	define( 'WPRB_SETTINGS', admin_url( 'admin.php?page=wp-restaurant-booking' ) );
 
+	/*Internationalization*/
+	$locale = apply_filters( 'plugin_locale', get_locale(), 'wp-restaurant-booking' );
+	load_plugin_textdomain( 'wp-restaurant-booking', false, basename( WPRB_DIR ) . '/languages' );
+	load_textdomain( 'wp-restaurant-booking', trailingslashit( WP_LANG_DIR ) . basename( WPRB_DIR ) . '/wp-restaurant-booking-' . $locale . '.mo' );
 
 	/*Files required*/
 	require( WPRB_ADMIN . 'class-wprb-admin.php' );
