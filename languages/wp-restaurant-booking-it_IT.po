@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP Restaurant Booking 0.9.0\n"
-"POT-Creation-Date: 2019-12-18 16:03+0100\n"
-"PO-Revision-Date: 2019-12-18 16:04+0100\n"
+"POT-Creation-Date: 2019-12-19 10:33+0100\n"
+"PO-Revision-Date: 2019-12-19 10:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
 "Language: it_IT\n"
@@ -94,7 +94,7 @@ msgstr "Sembra che tu non abbia il premesso di accedere a questa pagina"
 
 #: admin/class-wprb-admin.php:596
 msgid "WP Restaurant Booking"
-msgstr ""
+msgstr "WP Restaurant Booking"
 
 #: admin/class-wprb-admin.php:601 includes/class-wprb-reservations.php:84
 #: includes/class-wprb-reservations.php:86
@@ -104,7 +104,7 @@ msgstr "Prenotazioni"
 #: admin/class-wprb-admin.php:602
 #: includes/class-wprb-reservation-widget.php:380
 msgid "Last minute"
-msgstr ""
+msgstr "Last minute"
 
 #: admin/class-wprb-admin.php:603
 msgid "Notifications"
@@ -200,7 +200,7 @@ msgstr "Altro - Destra"
 
 #: admin/wprb-set-reservations-template.php:37
 msgid "Custom"
-msgstr ""
+msgstr "Custom"
 
 #: admin/wprb-set-reservations-template.php:39
 msgid ""
@@ -305,6 +305,8 @@ msgid ""
 "\n"
 "LAST MINUTE\n"
 msgstr ""
+"\n"
+"LAST MINUTE\n"
 
 #: includes/class-wprb-notifications.php:81
 #: includes/class-wprb-notifications.php:119
@@ -434,7 +436,7 @@ msgstr "Si"
 
 #: includes/class-wprb-reservation-widget.php:439
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: includes/class-wprb-reservation-widget.php:443
 msgid "Only available outdoor"
@@ -458,7 +460,7 @@ msgstr "Cognome*"
 
 #: includes/class-wprb-reservation-widget.php:502
 msgid "Email*"
-msgstr ""
+msgstr "Email*"
 
 #: includes/class-wprb-reservation-widget.php:503
 msgid "Phone number*"
@@ -610,7 +612,7 @@ msgstr "Il cognome del cliente"
 
 #: includes/wprb-reservation-template.php:44
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: includes/wprb-reservation-template.php:46
 msgid "john@doe.com"
