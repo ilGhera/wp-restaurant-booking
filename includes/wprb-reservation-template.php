@@ -25,7 +25,7 @@ $last_minute_class = $last_minute ? ' last-minute' : '';
 $external_class    = $external ? ' external' : '';
 ?>
 
-<table class="wprb-reservation form-table<?php echo esc_html( $last_minute_class . $external_class ); ?>" data-date="<?php echo esc_attr( $date ); ?>" data-time="<?php echo esc_attr( $time ); ?>">
+<table class="wprb-reservation form-table<?php echo esc_html( $last_minute_class . $external_class ); ?>" data-date="<?php echo esc_attr( $date ); ?>" data-time="<?php echo esc_attr( $time ); ?>" data-people="<?php echo esc_attr( $people ); ?>">
 	<tr>
 		<th scope="row"><?php esc_html_e( 'First name', 'wp-restaurant-booking' ); ?></th>
 		<td>

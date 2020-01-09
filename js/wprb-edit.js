@@ -38,6 +38,7 @@ var wprbEditController = function() {
 			var hours_tr    = $('.wprb-hours');
 			var last_minute = 0;
 			var reservation_time;
+			var reservation_people;
 
 			/*Delete until value*/
 			$('.until-field').val('');
@@ -52,7 +53,8 @@ var wprbEditController = function() {
 			/*Get current booking time if editing a reservation*/
 			if (back_end) {
 
-				reservation_time = $('table.wprb-reservation').data('time');
+				reservation_time   = $('table.wprb-reservation').data('time');
+				reservation_people = $('table.wprb-reservation').data('people');
 
 			}
 
@@ -60,6 +62,7 @@ var wprbEditController = function() {
 				'action': 'wprb-hours-available',
 				'wprb-change-date-nonce': wprbSettings.changeDateNonce,
 				'people': people,
+				'res_people': reservation_people,
 				'date': date,
 				'back-end': back_end,
 				'time': reservation_time,
@@ -235,6 +238,7 @@ var wprbEditController = function() {
 
 			var is_external      = 0;
 			var people           = $('.wprb-people').val();
+			var reservation_people = $('table.wprb-reservation').data('people');
 			var input            = $('input.wprb-external');
 			var hour_selected    = $('.wprb-hour input.active');
 			var internals 	     = $(hour_selected).closest('li').data('internal');
@@ -261,6 +265,7 @@ var wprbEditController = function() {
 				'date': date,
 				'time': time,
 				'people': people,
+				'res_people': reservation_people,
 				'back-end': 1,
 				'is_external': is_external
 			}

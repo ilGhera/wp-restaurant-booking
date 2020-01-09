@@ -220,13 +220,13 @@ class WPRB_Reservations {
 					),
 					array(
 						'key'     => 'wprb-until',
-						'value' => '',
+						'value'   => '',
 						'compare' => '=',
 					),
 				),
 				array(
 					'key'     => 'wprb-status',
-					'value' => 'expired',
+					'value'   => 'expired',
 					'compare' => '!=',
 				),
 			),
@@ -252,13 +252,17 @@ class WPRB_Reservations {
 				$time   = get_post_meta( $res->ID, 'wprb-time', true );
 				$people = get_post_meta( $res->ID, 'wprb-people', true );
 
-				if ( isset( $output[ $time ] ) ) {
+				if ( $people ) {
 
-					$output[ $time ] += $people;
+					if ( isset( $output[ $time ] ) ) {
 
-				} else {
+						$output[ $time ] += $people;
 
-					$output[ $time ] = $people;
+					} else {
+
+						$output[ $time ] = $people;
+
+					}
 
 				}
 
@@ -422,7 +426,7 @@ class WPRB_Reservations {
 		$begin->add( $margin );
 
 		if ( $get_interval ) {
-			
+
 			/*Create the interval*/
 			$interval = DateInterval::createFromDateString( $get_interval . ' min' ); // temp.
 
@@ -434,7 +438,7 @@ class WPRB_Reservations {
 				$output[] = $time->format( 'H:i' );
 
 			}
-			
+
 		}
 
 		return $output;
@@ -445,13 +449,16 @@ class WPRB_Reservations {
 	/**
 	 * Get the bookable hours available based on the date provided
 	 *
-	 * @param  string $date     the reservation date.
-	 * @param  string $time     the reservation time.
-	 * @param  int    $people   the reservation people.
-	 * @param  boool  $external get only external available hours.
+	 * @param  string $date        the reservation date.
+	 * @param  string $time        the reservation time.
+	 * @param  int    $people      the reservation people.
+	 * @param  string $res_people  the current booking people if editing an existing reservation.
+	 * @param  boool  $external    get only external available hours.
+	 * @param  boool  $is_external define is the current reservation is external.
+	 * @param  boool  $last_minute define is the current reservation is a last minute.
 	 * @return array time as key and bookables as value
 	 */
-	public static function get_available_hours( $date = null, $time = null, $people = null, $external = false, $is_external = false ) {
+	public static function get_available_hours( $date = null, $time = null, $people = null, $res_people = null, $external = false, $is_external = false, $last_minute = false ) {
 
 		$bookables = self::get_initial_bookables( $date, $external );
 
@@ -482,11 +489,24 @@ class WPRB_Reservations {
 
 					if ( is_array( $temporal_space ) ) {
 
-						foreach ( $temporal_space as $time ) {
+						foreach ( $temporal_space as $the_time ) {
 
-							if ( isset( $bookables[ $time ] ) ) {
+							if ( isset( $bookables[ $the_time ] ) ) {
 
-								$bookables[ $time ] = max( $bookables[ $time ] - $value, 0 );
+								$people_check = ( $res_people && $res_people !== $people ) ? false : true; 
+
+
+								if ( $time === $the_time && $people_check && ! $last_minute ) {
+
+									/*Not values less than people booked*/
+									$bookables[ $the_time ] = max( $bookables[ $the_time ] - $value, $people );
+
+								} else {
+
+									/*Not values less than zero*/
+									$bookables[ $the_time ] = max( $bookables[ $the_time ] - $value, 0 );
+
+								}
 
 							}
 
@@ -583,7 +603,7 @@ class WPRB_Reservations {
 			$output          = array();
 			$last_minute_el  = get_option( 'wprb-last-minute' );
 			$day_last_minute = self::get_day_last_minute( $date );
-			$day_bookables   = self::get_available_hours( $date, $time, $people );
+			$day_bookables   = self::get_available_hours( $date, $time, $people, false, false, false, $last_minute );
 
 			if ( $last_minute_el ) {
 
@@ -642,15 +662,16 @@ class WPRB_Reservations {
 	 * @param string $time        the reservation time.
 	 * @param int    $people      the number of people.
 	 * @param bool   $edit        true if called from edit reservation.
+	 * @param string $res_people  the current booking people if editing an existing reservation.
 	 * @param bool   $is_external define is the current reservation (back-end) is external.
 	 * @return array
 	 */
-	public static function get_available_externals_seats( $date, $time, $people, $edit = false, $is_external = false ) {
+	public static function get_available_externals_seats( $date, $time, $people, $edit = false, $res_people = false, $is_external = false ) {
 
 		if ( get_option( 'wprb-activate-external-seats' ) ) {
 
 			$externals     = self::get_initial_bookables( $date, true, $time );
-			$day_bookables = self::get_available_hours( $date, $time, $people, true );
+			$day_bookables = self::get_available_hours( $date, $time, $people, $res_people, true, $is_external );
 			$available     = isset( $day_bookables[ $time ] ) ? $day_bookables[ $time ] : 0;
 
 			return $available;
