@@ -19,6 +19,8 @@ var wprbAdminController = function() {
 		self.removeHours();
 		self.addLastMinute();
 		self.removeLastMinute();
+		self.addclosingPeriod();
+		self.removeClosingPeriod();
 		self.autoCompleteFields('internal');
 		self.autoCompleteFields('external');
 		self.autoCompleteFields('max');
@@ -335,6 +337,59 @@ var wprbAdminController = function() {
 			$(document).on('click', '.remove-last-minute-hover', function(){
 
 				var element = $(this).closest('.last-minute-element');
+
+				$(element).remove();
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Add a new closing period
+	 */
+	self.addclosingPeriod = function() {
+
+		jQuery(function($){
+
+			$(document).on('click', '.add-closing-period-hover', function(){
+
+				var count = $('.closing-period-element').length;
+				var prev  = $('.wprb-closing-period-element-' + ( count - 1 ) );
+				var next  = count;
+				var data  = {
+					'action': 'wprb-add-closing-period',
+					'wprb-add-closing-period-nonce': wprbSettings.addClosingPeriodNonce,
+					'number': next
+				}
+
+				$.post(ajaxurl, data, function(response){
+
+					$(prev).after(response);
+
+				})
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Remove a closing period
+	 */
+	self.removeClosingPeriod = function() {
+
+		jQuery(function($){
+
+			$(document).on('click', '.remove-closing-period-hover', function(){
+
+				console.log('test 200');
+				
+				var element = $(this).closest('.closing-period-element');
 
 				$(element).remove();
 
