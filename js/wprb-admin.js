@@ -161,13 +161,15 @@ var wprbAdminController = function() {
 
 			$(document).on('click', '.add-hours-hover', function(){
 
-
-				var count = $('.hours-element').length;
-				var prev  = $('.wprb-hours-element-' + count);
-				var next  = count + 1;
-				var data  = {
+				var container = $(this).closest('.wprb-hours-container');
+				var day 	  = $(container).data('day'); 
+				var count     = $('.hours-element', container).length;
+				var prev      = $('.wprb-hours-element-' + count, container);
+				var next      = count + 1;
+				var data      = {
 					'action': 'wprb-add-hours',
 					'wprb-add-hours-nonce': wprbSettings.addHoursNonce,
+					'day': day,
 					'number': next
 				}
 

@@ -276,18 +276,19 @@ class WPRB_Reservations {
 	/**
 	 * Get the reservation hours set by the admin
 	 *
-	 * @param bool $every return the every value as key if true.
+	 * @param string $day the three letters name of the day.
+	 * @param bool   $every return the every value as key if true.
 	 * @return array
 	 */
-	public static function get_hours_set( $every = false ) {
+	public static function get_hours_set( $day, $every = false ) {
 
 		$output = array();
 
 		$hours = get_option( 'wprb-hours' );
 
-		if ( is_array( $hours ) ) {
+		if ( isset( $hours[ $day ] ) && is_array( $hours[ $day ] ) ) {
 
-			foreach ( $hours as $hour ) {
+			foreach ( $hours[ $day ] as $hour ) {
 
 				if ( isset( $hour['from'] ) && isset( $hour['to'] ) && isset( $hour['every'] ) ) {
 
@@ -335,11 +336,11 @@ class WPRB_Reservations {
 	 */
 	public static function get_initial_bookables( $date, $externals = false, $time = null ) {
 
-		$hours              = self::get_hours_set();
+		$day                = strtolower( date( 'D', strtotime( $date ) ) );
+		$hours              = self::get_hours_set( $day );
 		$values             = array();
 		$output             = array();
 		$get_bookable       = get_option( 'wprb-bookable' );
-		$day                = strtolower( date( 'D', strtotime( $date ) ) );
 		$external_activated = get_option( 'wprb-activate-external-seats' );
 		$bookable = ( $externals && $external_activated ) ? $get_bookable[ $day ]['externals'] : $get_bookable[ $day ]['bookable'];
 
@@ -378,12 +379,13 @@ class WPRB_Reservations {
 	/**
 	 * Get the interval time in a specific hour
 	 *
+	 * @param  string $day  the three letters name of the day.
 	 * @param  string $time the hour interested.
 	 * @return int
 	 */
-	public static function get_time_interval( $time ) {
+	public static function get_time_interval( $day, $time ) {
 
-		$hours = self::get_hours_set( true );
+		$hours = self::get_hours_set( $day, true );
 
 		if ( is_array( $hours ) && isset( $hours[ $time ] ) ) {
 
@@ -397,15 +399,16 @@ class WPRB_Reservations {
 	/**
 	 * The range of time influenced by the reservation
 	 *
+	 * @param  string $day  the three letters name of the day.
 	 * @param  string $hour the reservation time.
 	 * @return array the bookable hours interested.
 	 */
-	public static function get_temporal_space( $hour ) {
+	public static function get_temporal_space( $day, $hour ) {
 
 		$output = array();
 
 		$medium_time  = get_option( 'wprb-medium-time' ) ? get_option( 'wprb-medium-time' ) : 60;
-		$get_interval = self::get_time_interval( $hour );
+		$get_interval = self::get_time_interval( $day, $hour );
 		$booked       = new DateTime( $hour );
 		$end          = new DateTime( $hour );
 		$begin        = new DateTime( $hour );
@@ -457,6 +460,7 @@ class WPRB_Reservations {
 
 		if ( $date ) {
 
+			$day              = strtolower( date( 'D', strtotime( $date ) ) );
 			$day_reservations = self::get_day_reservations( $date, $external );
 
 			if ( $day_reservations ) {
@@ -478,7 +482,7 @@ class WPRB_Reservations {
 
 					}
 
-					$temporal_space = self::get_temporal_space( $key );
+					$temporal_space = self::get_temporal_space( $day, $key );
 
 					if ( is_array( $temporal_space ) ) {
 
