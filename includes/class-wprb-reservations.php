@@ -1033,7 +1033,7 @@ class WPRB_Reservations {
 
 		$date = isset( $_REQUEST['wprb-date'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['wprb-date'] ) ) : '';
 
-		echo '<input type="date" name="wprb-date" class="wprb-date list" min="' . esc_html( date( 'Y-m-d' ) ) . '" value="' . esc_attr( $date ) . '">';
+		echo '<input type="date" name="wprb-date" class="wprb-date list" value="' . esc_attr( $date ) . '">';
 
 	}
 
