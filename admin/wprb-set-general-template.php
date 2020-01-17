@@ -29,7 +29,7 @@ $expiration_time           = get_option( 'wprb-expiration-time' );
 		<tr>
 			<th scope="row"><?php esc_html_e( 'Button position', 'wp-restaurant-booking' ); ?></th>
 			<td>
-				<select name="wprb-button-position" id="wprb-button-position">
+				<select name="wprb-button-position" id="wprb-button-position" class="wprb-select">
 					<option value="left"<?php echo 'left' === $button_position ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Top left', 'wp-restaurant-booking' ); ?></option>
 					<option value="right"<?php echo 'right' === $button_position ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Top right', 'wp-restaurant-booking' ); ?></option>
 					<option value="custom"<?php echo 'custom' === $button_position ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Custom', 'wp-restaurant-booking' ); ?></option>

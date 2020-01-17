@@ -15,9 +15,13 @@
 		<?php
 		if ( is_array( WPRB_Admin::week() ) ) {
 
+			$n = 0;
+
 			foreach ( WPRB_Admin::week() as $key => $value ) {
+				$n++;
+				$class = 7 !== $n ? ' class=one-of' : '';
 				?>
-				<tr>
+				<tr<?php echo esc_html( $class ); ?>>
 					<th scope="row"><?php echo esc_html( $value ); ?></th>
 					<td>
 						<?php
@@ -25,8 +29,8 @@
 						?>
 						<p class="description">
 							<?php
-							/* Translators: %s: the day */
-							printf( esc_html__( 'Times available for reservations on %s.', 'wp-restaurant-booking' ), esc_html( $value ) );
+								/* Translators: %s: the day */
+								printf( esc_html__( 'Times available for reservations on %s.', 'wp-restaurant-booking' ), esc_html( $value ) );
 							?>
 						</p>
 					</td>

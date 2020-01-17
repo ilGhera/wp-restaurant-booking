@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP Restaurant Booking 0.9.0\n"
-"POT-Creation-Date: 2020-01-15 12:51+0100\n"
-"PO-Revision-Date: 2020-01-15 12:54+0100\n"
+"POT-Creation-Date: 2020-01-16 14:45+0100\n"
+"PO-Revision-Date: 2020-01-16 14:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
 "Language: it_IT\n"
@@ -15,91 +15,92 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e;esc_html_e;esc_html__;esc_attr_e;esc_attr__\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: admin/class-wprb-admin.php:117
+#: admin/class-wprb-admin.php:121
 msgid "Reservations Manager"
 msgstr "Manager Prenotazioni"
 
-#: admin/class-wprb-admin.php:206 includes/class-wprb-reservations.php:93
+#: admin/class-wprb-admin.php:210 includes/class-wprb-reservations.php:93
 msgid "All reservations"
 msgstr "Prenotazioni"
 
-#: admin/class-wprb-admin.php:209
+#: admin/class-wprb-admin.php:213
 msgid "Add New"
 msgstr "Nuova prenotazione"
 
-#: admin/class-wprb-admin.php:212
+#: admin/class-wprb-admin.php:216
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: admin/class-wprb-admin.php:225
+#: admin/class-wprb-admin.php:229
 msgid "Monday"
 msgstr "Lunedì"
 
-#: admin/class-wprb-admin.php:226
+#: admin/class-wprb-admin.php:230
 msgid "Tuesday"
 msgstr "Martedì"
 
-#: admin/class-wprb-admin.php:227
+#: admin/class-wprb-admin.php:231
 msgid "Wednesday"
 msgstr "Mercoledì"
 
-#: admin/class-wprb-admin.php:228
+#: admin/class-wprb-admin.php:232
 msgid "Thursday"
 msgstr "Giovedì"
 
-#: admin/class-wprb-admin.php:229
+#: admin/class-wprb-admin.php:233
 msgid "Friday"
 msgstr "Venerdì"
 
-#: admin/class-wprb-admin.php:230
+#: admin/class-wprb-admin.php:234
 msgid "Saturday"
 msgstr "Sabato"
 
-#: admin/class-wprb-admin.php:231
+#: admin/class-wprb-admin.php:235
 msgid "Sunday"
 msgstr "Domenica"
 
-#: admin/class-wprb-admin.php:271
+#: admin/class-wprb-admin.php:275 admin/class-wprb-admin.php:503
 msgid "From"
 msgstr "Da"
 
-#: admin/class-wprb-admin.php:274 admin/class-wprb-admin.php:370
+#: admin/class-wprb-admin.php:278 admin/class-wprb-admin.php:374
+#: admin/class-wprb-admin.php:506
 msgid "to"
 msgstr "a"
 
-#: admin/class-wprb-admin.php:277
+#: admin/class-wprb-admin.php:281
 msgid "every (minutes)"
 msgstr "ogni (minuti\t)"
 
-#: admin/class-wprb-admin.php:364
+#: admin/class-wprb-admin.php:368
 msgid "On"
 msgstr "Il"
 
-#: admin/class-wprb-admin.php:367
+#: admin/class-wprb-admin.php:371
 msgid "from"
 msgstr "da"
 
-#: admin/class-wprb-admin.php:373
+#: admin/class-wprb-admin.php:377
 msgid "people"
 msgstr "persone"
 
-#: admin/class-wprb-admin.php:665
+#: admin/class-wprb-admin.php:839
 msgid "It seems like you don't have permission to see this page"
 msgstr "Sembra che tu non abbia il premesso di accedere a questa pagina"
 
-#: admin/class-wprb-admin.php:673
+#: admin/class-wprb-admin.php:847
 msgid "WP Restaurant Booking - Premium"
 msgstr "WP Restaurant Booking - Premium"
 
-#: admin/class-wprb-admin.php:688
+#: admin/class-wprb-admin.php:862
 msgid "Premium Key"
 msgstr "Premium Key"
 
-#: admin/class-wprb-admin.php:689
+#: admin/class-wprb-admin.php:863
 msgid "Add your Premium Key"
 msgstr "Aggiungi la tua Premium Key"
 
-#: admin/class-wprb-admin.php:690
+#: admin/class-wprb-admin.php:864
 msgid ""
 "Add your Premium Key and keep update your copy of WP Restaurant Booking - "
 "Premium."
@@ -107,36 +108,41 @@ msgstr ""
 "Aggiungi la tua Premium Key e mantieni aggiornata la tua copia di WP "
 "Restaurant Booking - Premium."
 
-#: admin/class-wprb-admin.php:692 admin/wprb-set-bookables-template.php:86
-#: admin/wprb-set-general-template.php:73 admin/wprb-set-hours-template.php:44
+#: admin/class-wprb-admin.php:866 admin/wprb-set-bookables-template.php:86
+#: admin/wprb-set-closing-days-template.php:45
+#: admin/wprb-set-general-template.php:73 admin/wprb-set-hours-template.php:52
 #: admin/wprb-set-last-minute-template.php:46
 #: admin/wprb-set-notifications-template.php:86
 msgid "Save settings"
 msgstr "Salva Impostazioni"
 
-#: admin/class-wprb-admin.php:698 includes/class-wprb-reservations.php:84
+#: admin/class-wprb-admin.php:872 includes/class-wprb-reservations.php:84
 #: includes/class-wprb-reservations.php:86
 msgid "Reservations"
 msgstr "Prenotazioni"
 
-#: admin/class-wprb-admin.php:699
+#: admin/class-wprb-admin.php:873
 msgid "Bookables places"
 msgstr "Posti prenotabili"
 
-#: admin/class-wprb-admin.php:700
+#: admin/class-wprb-admin.php:874
 msgid "Hours available"
 msgstr "Orari disponibili"
 
-#: admin/class-wprb-admin.php:701
-#: includes/class-wprb-reservation-widget.php:380
+#: admin/class-wprb-admin.php:875
+msgid "Closing days"
+msgstr "Chiusure"
+
+#: admin/class-wprb-admin.php:876
+#: includes/class-wprb-reservation-widget.php:425
 msgid "Last minute"
 msgstr "Last minute"
 
-#: admin/class-wprb-admin.php:702
+#: admin/class-wprb-admin.php:877
 msgid "Notifications"
 msgstr "Notifiche"
 
-#: admin/class-wprb-admin.php:768
+#: admin/class-wprb-admin.php:950
 msgid ""
 "A <strong>Premium Key</strong> is required for keeping this plugin up to "
 "date. "
@@ -144,7 +150,7 @@ msgstr ""
 "Serve una <strong>Premium Key</strong> per mantenere questo plugin "
 "aggiornato. "
 
-#: admin/class-wprb-admin.php:771
+#: admin/class-wprb-admin.php:953
 #, php-format
 msgid ""
 "Please, add yours in the <a href=\"%sadmin.php/?page=wprb-settings\">options "
@@ -153,7 +159,7 @@ msgstr ""
 "Per cortesia, aggiungila nella <a href=\"%sadmin.php/?page=wprb-settings"
 "\">pagina opzioni</a>  "
 
-#: admin/class-wprb-admin.php:772
+#: admin/class-wprb-admin.php:954
 msgid ""
 "or click <a href=\"https://www.ilghera.com/product/wp-restaurant-booking-"
 "premium/\" target=\"_blank\">here</a> for prices and details."
@@ -161,11 +167,11 @@ msgstr ""
 "o clicca <a href=\"https://www.ilghera.com/product/wp-restaurant-booking-"
 "premium/\" target=\"_blank\">qui</a> per più informazioni."
 
-#: admin/class-wprb-admin.php:783
+#: admin/class-wprb-admin.php:965
 msgid "It seems like your <strong>Premium Key</strong> is expired. "
 msgstr "Sembra che la tua <strong>Premium Key</strong> sia scaduta. "
 
-#: admin/class-wprb-admin.php:784 admin/class-wprb-admin.php:789
+#: admin/class-wprb-admin.php:966 admin/class-wprb-admin.php:971
 msgid ""
 "Please, click <a href=\"https://www.ilghera.com/product/wp-restaurant-"
 "booking-premium/\" target=\"_blank\">here</a> for prices and details."
@@ -173,7 +179,7 @@ msgstr ""
 "Per cortesia, clicca <a href=\"https://www.ilghera.com/product/wp-restaurant-"
 "booking-premium/\" target=\"_blank\">qui</a> per più informazioni."
 
-#: admin/class-wprb-admin.php:788
+#: admin/class-wprb-admin.php:970
 msgid "It seems like your <strong>Premium Key</strong> is not valid. "
 msgstr "Sembra che la tua <strong>Premium Key</strong> non sia valida. "
 
@@ -204,6 +210,22 @@ msgstr "Numero massimo prenotabile"
 #: admin/wprb-set-bookables-template.php:77
 msgid "Set seats that can be booked for each day of the week."
 msgstr "Posti prenotabili per ogni giorno della settimana."
+
+#: admin/wprb-set-closing-days-template.php:17
+msgid "Week days"
+msgstr "Giorni della settimana"
+
+#: admin/wprb-set-closing-days-template.php:28
+msgid "Select the closing day(s) of your business."
+msgstr "Seleziona il/i giorni di chiusura della tua attività"
+
+#: admin/wprb-set-closing-days-template.php:32
+msgid "Periods"
+msgstr "Periodi"
+
+#: admin/wprb-set-closing-days-template.php:37
+msgid "Add a new closing period."
+msgstr "Aggiungi un nuovo periodo di chiusura."
 
 #: admin/wprb-set-general-template.php:23
 #: admin/wprb-set-last-minute-template.php:19
@@ -269,10 +291,10 @@ msgstr "Scadenza"
 msgid "The delay time in minutes to consider a reservation as expired."
 msgstr "Il ritardo in minuti dopo il quale una prenotazione scade."
 
-#: admin/wprb-set-hours-template.php:29
+#: admin/wprb-set-hours-template.php:35
 #, php-format
 msgid "Times available for reservations on %s."
-msgstr "Orari disponibili per la prenotazione di %s."
+msgstr "Orari disponibili per le prenotazioni di %s."
 
 #: admin/wprb-set-last-minute-template.php:22
 msgid "Activate last minute bookable seats."
@@ -283,7 +305,7 @@ msgid "Description"
 msgstr "Descrizione"
 
 #: admin/wprb-set-last-minute-template.php:28
-#: includes/class-wprb-reservation-widget.php:230
+#: includes/class-wprb-reservation-widget.php:274
 msgid "Last minutes are tables available only for a limited time"
 msgstr "I last minute sono tavoli disponibili per un tempo limitato"
 
@@ -427,132 +449,132 @@ msgstr ""
 msgid "New reservation from %1$s for %2$s"
 msgstr "Nuova prenotazione da %1$s per %2$s"
 
-#: includes/class-wprb-reservation-widget.php:64
+#: includes/class-wprb-reservation-widget.php:106
 msgid "Please select a date first"
 msgstr "Occorre prima indicare una data"
 
-#: includes/class-wprb-reservation-widget.php:118
-#: includes/class-wprb-reservation-widget.php:513
-#: includes/class-wprb-reservation-widget.php:555
+#: includes/class-wprb-reservation-widget.php:162
+#: includes/class-wprb-reservation-widget.php:560
+#: includes/class-wprb-reservation-widget.php:602
 msgid "Book now"
 msgstr "Prenota ora"
 
-#: includes/class-wprb-reservation-widget.php:193
+#: includes/class-wprb-reservation-widget.php:237
 msgid "Select the date"
 msgstr "Seleziona l'orario"
 
-#: includes/class-wprb-reservation-widget.php:204
-#: includes/class-wprb-reservation-widget.php:576
-#: includes/class-wprb-reservations.php:751
+#: includes/class-wprb-reservation-widget.php:248
+#: includes/class-wprb-reservation-widget.php:623
+#: includes/class-wprb-reservations.php:772
 #: includes/wprb-reservation-template.php:58
 msgid "People"
 msgstr "Persone"
 
-#: includes/class-wprb-reservation-widget.php:262
+#: includes/class-wprb-reservation-widget.php:306
 msgid "Not available"
 msgstr "Non disponibile"
 
-#: includes/class-wprb-reservation-widget.php:271
+#: includes/class-wprb-reservation-widget.php:315
 #, php-format
 msgid "Available seats: %d"
 msgstr "Posti disponibili: %d"
 
-#: includes/class-wprb-reservation-widget.php:275
+#: includes/class-wprb-reservation-widget.php:319
 msgid "AVAILABLE SEATS\n"
 msgstr "POSTI DISPONIBILI\n"
 
-#: includes/class-wprb-reservation-widget.php:278
+#: includes/class-wprb-reservation-widget.php:322
 #, php-format
 msgid "Indor: %d\n"
 msgstr "Interni: %d\n"
 
-#: includes/class-wprb-reservation-widget.php:281
+#: includes/class-wprb-reservation-widget.php:325
 #, php-format
 msgid "Outdor: %d"
 msgstr "Esterni: %d"
 
-#: includes/class-wprb-reservation-widget.php:314
+#: includes/class-wprb-reservation-widget.php:359
 msgid "Select the time"
 msgstr "Seleziona l'orario"
 
-#: includes/class-wprb-reservation-widget.php:380
+#: includes/class-wprb-reservation-widget.php:425
 msgid "Last minute available"
 msgstr "Last minute disponibile"
 
-#: includes/class-wprb-reservation-widget.php:389
+#: includes/class-wprb-reservation-widget.php:434
 #, php-format
 msgid "Available until %s"
 msgstr "Disponibile fino alle %s"
 
-#: includes/class-wprb-reservation-widget.php:437
+#: includes/class-wprb-reservation-widget.php:483
 msgid "Outdoor table available"
 msgstr "Tavolo esterno disponibile"
 
-#: includes/class-wprb-reservation-widget.php:438
+#: includes/class-wprb-reservation-widget.php:484
 msgid "Yes"
 msgstr "Si"
 
-#: includes/class-wprb-reservation-widget.php:439
+#: includes/class-wprb-reservation-widget.php:485
 msgid "No"
 msgstr "No"
 
-#: includes/class-wprb-reservation-widget.php:443
+#: includes/class-wprb-reservation-widget.php:489
 msgid "Only available outdoor"
 msgstr "Solo tavolo esterno"
 
-#: includes/class-wprb-reservation-widget.php:444
+#: includes/class-wprb-reservation-widget.php:490
 msgid "Yes, no problem"
 msgstr "Ok, va bene"
 
-#: includes/class-wprb-reservation-widget.php:496
+#: includes/class-wprb-reservation-widget.php:543
 msgid "Complete your reservation"
 msgstr "Completa la tua prenotazione"
 
-#: includes/class-wprb-reservation-widget.php:500
+#: includes/class-wprb-reservation-widget.php:547
 msgid "First name*"
 msgstr "Nome*"
 
-#: includes/class-wprb-reservation-widget.php:501
+#: includes/class-wprb-reservation-widget.php:548
 msgid "Last name*"
 msgstr "Cognome*"
 
-#: includes/class-wprb-reservation-widget.php:502
+#: includes/class-wprb-reservation-widget.php:549
 msgid "Email*"
 msgstr "Email*"
 
-#: includes/class-wprb-reservation-widget.php:503
+#: includes/class-wprb-reservation-widget.php:550
 msgid "Phone number*"
 msgstr "Numero di telefono*"
 
-#: includes/class-wprb-reservation-widget.php:505
+#: includes/class-wprb-reservation-widget.php:552
 msgid "Add more details"
 msgstr "Aggiungi una nota"
 
-#: includes/class-wprb-reservation-widget.php:531
+#: includes/class-wprb-reservation-widget.php:578
 msgid "Reservation completed"
 msgstr "Prenotazione completata"
 
-#: includes/class-wprb-reservation-widget.php:537
+#: includes/class-wprb-reservation-widget.php:584
 #, php-format
 msgid "Thanks %s! "
 msgstr "Grazie %s! "
 
-#: includes/class-wprb-reservation-widget.php:539
+#: includes/class-wprb-reservation-widget.php:586
 msgid "We sent an e-mail with the confirmation data to"
 msgstr "Abbiamo inviato una mail di conferma all'indirizzo"
 
-#: includes/class-wprb-reservation-widget.php:567
+#: includes/class-wprb-reservation-widget.php:614
 #: includes/wprb-reservation-template.php:72
 msgid "Date"
 msgstr "Data"
 
-#: includes/class-wprb-reservation-widget.php:584
-#: includes/class-wprb-reservations.php:750
+#: includes/class-wprb-reservation-widget.php:631
+#: includes/class-wprb-reservations.php:771
 #: includes/wprb-reservation-template.php:79
 msgid "Time"
 msgstr "Orario"
 
-#: includes/class-wprb-reservation-widget.php:592
+#: includes/class-wprb-reservation-widget.php:639
 msgid "Complete"
 msgstr "Completa"
 
@@ -605,42 +627,42 @@ msgstr ""
 msgid "Reservation details"
 msgstr "Dettagli prenotazione"
 
-#: includes/class-wprb-reservations.php:748
+#: includes/class-wprb-reservations.php:769
 msgid "Title"
 msgstr "Titolo"
 
-#: includes/class-wprb-reservations.php:749
+#: includes/class-wprb-reservations.php:770
 msgid "Day"
 msgstr "Giorno"
 
-#: includes/class-wprb-reservations.php:752
+#: includes/class-wprb-reservations.php:773
 #: includes/wprb-reservation-template.php:65
 msgid "Table"
 msgstr "Tavolo"
 
-#: includes/class-wprb-reservations.php:753
+#: includes/class-wprb-reservations.php:774
 #: includes/wprb-reservation-template.php:97
 msgid "Notes"
 msgstr "Note"
 
-#: includes/class-wprb-reservations.php:754
+#: includes/class-wprb-reservations.php:775
 #: includes/wprb-reservation-template.php:104
 msgid "Status"
 msgstr "Stato"
 
-#: includes/class-wprb-reservations.php:846
+#: includes/class-wprb-reservations.php:867
 msgid "Outdor table"
 msgstr "Tavolo esterno"
 
-#: includes/class-wprb-reservations.php:846
+#: includes/class-wprb-reservations.php:867
 msgid "EXT"
 msgstr "EST"
 
-#: includes/class-wprb-reservations.php:866
+#: includes/class-wprb-reservations.php:887
 msgid "No table assigned"
 msgstr "Non assegnato"
 
-#: includes/class-wprb-reservations.php:1073
+#: includes/class-wprb-reservations.php:1094
 msgid "Select the new reservation status"
 msgstr "Seleziona il nuovo stato della prenotazione"
 

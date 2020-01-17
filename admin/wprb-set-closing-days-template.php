@@ -16,7 +16,7 @@ $closing_days = get_option( 'wprb-closing-days' );
 		<tr>
 			<th scope="row"><?php esc_html_e( 'Week days', 'wp-restaurant-booking' ); ?></th>
 			<td>
-				<select name="wprb-closing-days[]" id="wprb-button-position" multiple>
+				<select name="wprb-closing-days[]" id="wprb-button-position" class="wprb-select" multiple>
 					<?php
 					foreach ( WPRB_Admin::week() as $key => $value ) {
 						
@@ -29,7 +29,7 @@ $closing_days = get_option( 'wprb-closing-days' );
 			</td>
 		</tr>
 		<tr class="wprb-add-closing-periods-field">
-			<th scope="row"><?php esc_html_e( 'Add', 'wp-restaurant-booking' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Periods', 'wp-restaurant-booking' ); ?></th>
 			<td>
 				<?php
 				$admin->display_closing_period_elements();

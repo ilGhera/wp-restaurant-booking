@@ -13,6 +13,7 @@ var wprbAdminController = function() {
 	self.onLoad = function() {
 
 		self.wprbPagination();
+		self.chosen();
 		self.tzCheckbox();
 		self.externalSeats();
 		self.addHours();
@@ -78,6 +79,7 @@ var wprbAdminController = function() {
 	}
 
 
+
 	/**
 	 * Checkboxes
 	 */
@@ -98,19 +100,22 @@ var wprbAdminController = function() {
 
 		jQuery(function($){
 
-			$('.wprb-select').chosen({
-		
-				disable_search_threshold: 10,
-				width: '200px'
-			
-			});
+			var select = $('.wprb-select');
 
-			$('.wprb-select-large').chosen({
-		
-				disable_search_threshold: 10,
-				width: '290px'
+			if (destroy) {
+
+				$(select).chosen('destroy');
+
+			} else {
 			
-			});
+				$(select).chosen({
+			
+					disable_search_threshold: 10
+					// width: '200px'
+				
+				});
+
+			}
 
 		})
 
@@ -388,7 +393,7 @@ var wprbAdminController = function() {
 			$(document).on('click', '.remove-closing-period-hover', function(){
 
 				console.log('test 200');
-				
+
 				var element = $(this).closest('.closing-period-element');
 
 				$(element).remove();

@@ -40,6 +40,52 @@ class WPRB_Reservation_Widget {
 
 
 	/**
+	 * Get the closing days in number format as day of the week
+	 * @return array
+	 */
+	public function get_days_off() {
+
+		$output = array();
+		$days   = get_option( 'wprb-closing-days' );
+
+		if ( is_array( $days ) ) {
+			
+			foreach ( $days as $day ) {
+				
+				switch ( $day ) {
+					case 'sun':
+						$output[] = 0;
+						break;
+					case 'mon':
+						$output[] = 1;
+						break;
+					case 'tue':
+						$output[] = 2;
+						break;
+					case 'wed':
+						$output[] = 3;
+						break;
+					case 'thu':
+						$output[] = 4;
+						break;
+					case 'fri':
+						$output[] = 5;
+						break;
+					case 'sat':
+						$output[] = 6;
+						break;
+				}
+
+			}
+			
+		}
+
+		return $output;
+
+	}
+
+
+	/**
 	 * Scripts and style
 	 */
 	public function wprb_scripts() {
@@ -63,6 +109,19 @@ class WPRB_Reservation_Widget {
 		$save_reservation_nonce = wp_create_nonce( 'wprb-save-reservation' );
 		$date_first_message     = esc_html__( 'Please select a date first', 'wp-restaurant-booking' );
 		$locale                 = str_replace( '_', '-', get_locale() );
+		$closing_days           = $this->get_days_off();
+		$get_periods            = get_option( 'wprb-closing-periods' );
+		$closing_periods        = array();
+
+		if ( is_array( $get_periods ) ) {
+
+			foreach ($get_periods as $period) {
+			
+				$closing_periods[] = json_encode( $period );
+			
+			}
+		
+		}
 
 		/*Pass data to the script file*/
 		wp_localize_script(
@@ -76,6 +135,8 @@ class WPRB_Reservation_Widget {
 				'saveReservationNonce' => $save_reservation_nonce,
 				'dateFirstMessage'     => $date_first_message,
 				'locale'               => $locale,
+				'closingDays'          => $closing_days,
+				'closingPeriods'       => $closing_periods,
 			)
 		);
 
