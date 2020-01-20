@@ -50,14 +50,34 @@ class WPRB_Reservations {
 
 			/*css*/
 			wp_enqueue_style( 'wprb-admin-style', WPRB_URI . 'css/wprb-admin.css' );
+			wp_enqueue_style( 'datepicker-css', WPRB_URI . 'js/air-datepicker/dist/css/datepicker.min.css' );
 
 			/*js*/
 			wp_enqueue_script( 'wprb-edit-js', WPRB_URI . 'js/wprb-edit.js', array( 'jquery' ), '1.0', true );
+			wp_enqueue_script( 'datepicker-js', WPRB_URI . 'js/air-datepicker/dist/js/datepicker.min.js', array( 'jquery' ), '2.2.3', true );
+			wp_enqueue_script( 'datepicker-eng', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.en.js', array( 'jquery' ), '2.2.3', true );
+			wp_enqueue_script( 'datepicker-it', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.it.js', array( 'jquery' ), '2.2.3', true );
+			wp_enqueue_script( 'datepicker-options', WPRB_URI . 'js/wprb-datepicker-options.js', array( 'jquery' ), '2.2.3', true );
+
 
 			/*Nonce*/
 			$change_status_nonce = wp_create_nonce( 'wprb-change-status' );
 			$change_date_nonce   = wp_create_nonce( 'wprb-change-date' );
 			$external_nonce      = wp_create_nonce( 'wprb-external' );
+			$locale              = str_replace( '_', '-', get_locale() );
+			$closing_days        = WPRB_Reservation_Widget::get_days_off();
+			$get_periods         = get_option( 'wprb-closing-periods' );
+			$closing_periods     = array();
+
+			if ( is_array( $get_periods ) ) {
+
+				foreach ($get_periods as $period) {
+				
+					$closing_periods[] = json_encode( $period );
+				
+				}
+			
+			}
 
 			/*Pass data to the script file*/
 			wp_localize_script(
@@ -67,6 +87,9 @@ class WPRB_Reservations {
 					'changeStatusNonce' => $change_status_nonce,
 					'changeDateNonce'   => $change_date_nonce,
 					'externalNonce'     => $external_nonce,
+					'locale'            => $locale,
+					'closingDays'       => $closing_days,
+					'closingPeriods'    => $closing_periods,
 				)
 			);
 
@@ -707,6 +730,7 @@ class WPRB_Reservations {
 			$people     = isset( $_POST['wprb-people'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-people'] ) ) : '';
 			$table      = isset( $_POST['wprb-table'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-table'] ) ) : '';
 			$date       = isset( $_POST['wprb-date'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-date'] ) ) : '';
+			$the_date   = date( 'Y-m-d', strtotime( $date ) );
 			$time       = isset( $_POST['wprb-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-time'] ) ) : '';
 			$until      = isset( $_POST['wprb-until'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-until'] ) ) : '';
 			$external   = isset( $_POST['wprb-external'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-external'] ) ) : '';
@@ -719,7 +743,7 @@ class WPRB_Reservations {
 			update_post_meta( $post_id, 'wprb-phone', $phone );
 			update_post_meta( $post_id, 'wprb-people', $people );
 			update_post_meta( $post_id, 'wprb-table', $table );
-			update_post_meta( $post_id, 'wprb-date', $date );
+			update_post_meta( $post_id, 'wprb-date', $the_date );
 			update_post_meta( $post_id, 'wprb-time', $time );
 			update_post_meta( $post_id, 'wprb-until', $until );
 			update_post_meta( $post_id, 'wprb-external', $external );
@@ -732,7 +756,7 @@ class WPRB_Reservations {
 				'email-field'      => $email,
 				'phone-field'      => $phone,
 				'people-field'     => $people,
-				'date-field'       => $date,
+				'date-field'       => $the_date,
 				'time-field'       => $time,
 				'notes-field'      => $notes,
 				'until-field'      => $until,
@@ -842,9 +866,10 @@ class WPRB_Reservations {
 		switch ( $column ) {
 
 			case 'day':
-				$day = get_post_meta( $post_id, 'wprb-date', true );
+				$day      = get_post_meta( $post_id, 'wprb-date', true );
+				$the_day = date( 'd-m-Y', strtotime( $day ) );
 
-				echo esc_html( $day );
+				echo esc_html( $the_day );
 
 				break;
 

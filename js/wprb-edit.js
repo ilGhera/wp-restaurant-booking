@@ -116,26 +116,54 @@ var wprbEditController = function() {
 
 		jQuery(function($){
 
-			var hours_tr = $('.wprb-hours');
+			var hours_tr   = $('.wprb-hours');
+			var dateOnLoad = $('.wprb-date').val();
 			var people;
-			var data;
-
-			if('' != $('.wprb-date').val()) {
-				$(hours_tr).show();
+			var date;
+			var date_selected;
+			var display_date;
+			var dateOptions = {
+				day: '2-digit',
+				month: '2-digit', 
+				year: 'numeric'
 			}
 
-			$('.wprb-date').on('change', function(){
 
-				/*Not in the reservations page */
-				if ( $(this).hasClass('list') ) {
+			/*Editing an existing reservation*/
+			if('' != dateOnLoad) {
 
-					return;
+				/*Display hours*/
+				$(hours_tr).show();
+
+				/*Get reservation date*/
+				display_date = new Date( dateOnLoad );
+
+				/*Display formatted resevation date in the field*/
+				setTimeout( function(){
+					
+					$('.datepicker-here').attr( 'value', display_date.toLocaleString(wprbSettings.locale, dateOptions) );
+
+				}, 400)
+
+			}
+
+			$('.datepicker').on('click', function(){
+
+				date_selected = $('.datepicker-here').data('datepicker').selectedDates[0];
+
+				if ( date_selected ) {
+
+					date          = date_selected.toLocaleString('en-EN', dateOptions);
+					display_date  = date_selected.toLocaleString(wprbSettings.locale, dateOptions);
+
+					$('.wprb-date').attr( 'value', date );
+					$('.datepicker-here').attr( 'value', display_date );
+					
+					people = $('.wprb-people').val();
+
+					self.hours_element_update(people, date, true);
 
 				}
-				
-				people = $('.wprb-people').val();
-
-				self.hours_element_update(people, $(this).val(), true);
 
 			})
 
@@ -156,8 +184,8 @@ var wprbEditController = function() {
 			var input       = $('input.wprb-time');
 			var until       = $('input.wprb-until');
 			var current_val = $(input).val();
-			var date        = $('.wprb-date').val();;
-				
+			var date        = $('.wprb-date').val();
+
 			if ( '' != $(until).val() ) {
 
 				time_el = $('li.wprb-hour input.last-minute');

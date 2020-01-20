@@ -16,7 +16,7 @@ class WPRB_Reservation_Widget {
 	 */
 	public function __construct( $init = false ) {
 
-		$this->power_on           = get_option( 'wprb-power-on' );
+		$this->power_on = get_option( 'wprb-power-on' );
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'wprb_scripts' ) );
 		add_action( 'wp_head', array( $this, 'booking_button' ) );
@@ -40,10 +40,21 @@ class WPRB_Reservation_Widget {
 
 
 	/**
+	 * Return the two letters of locale useful for widget translation
+	 * @return string
+	 */
+	public function lang() {
+
+		return explode( '_', get_locale() )[0];
+
+	}
+
+
+	/**
 	 * Get the closing days in number format as day of the week
 	 * @return array
 	 */
-	public function get_days_off() {
+	public static function get_days_off() {
 
 		$output = array();
 		$days   = get_option( 'wprb-closing-days' );
@@ -102,6 +113,7 @@ class WPRB_Reservation_Widget {
 		wp_enqueue_script( 'datepicker-js', WPRB_URI . 'js/air-datepicker/dist/js/datepicker.min.js', array( 'jquery' ), '2.2.3', true );
 		wp_enqueue_script( 'datepicker-eng', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.en.js', array( 'jquery' ), '2.2.3', true );
 		wp_enqueue_script( 'datepicker-it', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.it.js', array( 'jquery' ), '2.2.3', true );
+		wp_enqueue_script( 'datepicker-options', WPRB_URI . 'js/wprb-datepicker-options.js', array( 'jquery' ), '2.2.3', true );
 
 		$change_date_nonce      = wp_create_nonce( 'wprb-change-date' );
 		$external_nonce         = wp_create_nonce( 'wprb-external' );
@@ -109,7 +121,7 @@ class WPRB_Reservation_Widget {
 		$save_reservation_nonce = wp_create_nonce( 'wprb-save-reservation' );
 		$date_first_message     = esc_html__( 'Please select a date first', 'wp-restaurant-booking' );
 		$locale                 = str_replace( '_', '-', get_locale() );
-		$closing_days           = $this->get_days_off();
+		$closing_days           = self::get_days_off();
 		$get_periods            = get_option( 'wprb-closing-periods' );
 		$closing_periods        = array();
 
@@ -253,7 +265,7 @@ class WPRB_Reservation_Widget {
 
 			echo '<p class="wprb-step-description">' . esc_html__( 'Select the date', 'wp-restaurant-booking' ) . '</p>';
 
-			echo '<div class="datepicker-here" data-language="it" data-inline="true"></div>';
+			echo '<div class="datepicker-here" data-language="' . $this->lang() . '" data-inline="true"></div>'; // temp.
 
 		echo '</div>';
 
@@ -391,6 +403,7 @@ class WPRB_Reservation_Widget {
 
 					/*Check if it's too late*/
 					if ( $date ) {
+
 
 						if ( ( strtotime( $date . ' ' . $key ) - ( 60 * $margin_time ) ) < $now ) {
 

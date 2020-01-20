@@ -396,8 +396,8 @@ input#wprb-last-minute-date {
 	cursor: inherit;
 }
 
-.booking-hours ul li.not-available input:hover,
-.booking-hours ul li.not-available input.active {
+/*.booking-hours ul li.not-available input.active,*/
+.booking-hours ul li.not-available input:hover {
 	color: inherit;
 	background: inherit;
 }

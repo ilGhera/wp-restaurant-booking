@@ -22,6 +22,7 @@ var wprbAdminController = function() {
 		self.removeLastMinute();
 		self.addclosingPeriod();
 		self.removeClosingPeriod();
+		self.minDateClosingPeriodTo();
 		self.autoCompleteFields('internal');
 		self.autoCompleteFields('external');
 		self.autoCompleteFields('max');
@@ -392,11 +393,27 @@ var wprbAdminController = function() {
 
 			$(document).on('click', '.remove-closing-period-hover', function(){
 
-				console.log('test 200');
-
 				var element = $(this).closest('.closing-period-element');
 
 				$(element).remove();
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Set closing period from date to "to" date min value
+	 */
+	self.minDateClosingPeriodTo = function() {
+
+		jQuery(function($){
+
+			$('#wprb-closing-period-from').on('change', function(){
+
+				$('#wprb-closing-period-to').attr('min', $(this).val());
 
 			})
 

@@ -15,6 +15,7 @@ $phone             = get_post_meta( $reservation_id, 'wprb-phone', true );
 $people            = get_post_meta( $reservation_id, 'wprb-people', true );
 $table             = get_post_meta( $reservation_id, 'wprb-table', true );
 $date              = get_post_meta( $reservation_id, 'wprb-date', true );
+$get_locale        = explode( '_', get_locale() );
 $time              = get_post_meta( $reservation_id, 'wprb-time', true );
 $external          = get_post_meta( $reservation_id, 'wprb-external', true );
 $until             = get_post_meta( $reservation_id, 'wprb-until', true );
@@ -71,7 +72,8 @@ $external_class    = $external ? ' external' : '';
 	<tr>
 		<th scope="row"><?php esc_html_e( 'Date', 'wp-restaurant-booking' ); ?></th>
 		<td>
-			<input type="date" name="wprb-date" class="wprb-date" min="<?php echo esc_html( wp_unslash( date( 'Y-m-d' ) ) ); ?>" value="<?php echo esc_attr( wp_unslash( $date ) ); ?>" required>
+			<input type="text" class="datepicker-here" placeholder="Select a date" value="" data-language="<?php echo esc_attr( $get_locale[0] ); ?>" required>
+			<input type="hidden" name="wprb-date" class="wprb-date" value="<?php echo esc_attr( wp_unslash( $date ) ); ?>">
 			<p class="description"><?php esc_html_e( 'The reservation date', 'wp-restaurant-booking' ); ?></p>
 		</td>
 	</tr>
