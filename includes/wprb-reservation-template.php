@@ -87,7 +87,7 @@ $external_class    = $external ? ' external' : '';
 				<?php
 				if ( $time && $people ) {
 
-					WPRB_Reservation_Widget::hours_select_element( $people, $date, true, $last_minute, $external, $time );
+					WPRB_Reservation_Widget::hours_select_element( $people, $date, true, $last_minute, $external, $time, $people );
 
 				}
 				?>

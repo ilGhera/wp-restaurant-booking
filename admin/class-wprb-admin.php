@@ -869,7 +869,7 @@ class WPRB_Admin {
 				/*Plugin options menu*/
 				echo '<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"><br></div>';
 				echo '<h2 id="wprb-admin-menu" class="nav-tab-wrapper woo-nav-tab-wrapper">';
-					echo '<a href="#" data-link="wprb-set-generals" class="nav-tab nav-tab-active" onclick="return false;">' . esc_html( __( 'Reservations', 'wp-restaurant-booking' ) ) . '</a>';
+					echo '<a href="#" data-link="wprb-set-generals" class="nav-tab nav-tab-active" onclick="return false;">' . esc_html( __( 'General', 'wp-restaurant-booking' ) ) . '</a>';
 					echo '<a href="#" data-link="wprb-set-bookables" class="nav-tab" onclick="return false;">' . esc_html( __( 'Bookables places', 'wp-restaurant-booking' ) ) . '</a>';
 					echo '<a href="#" data-link="wprb-set-hours" class="nav-tab" onclick="return false;">' . esc_html( __( 'Hours available', 'wp-restaurant-booking' ) ) . '</a>';
 					echo '<a href="#" data-link="wprb-set-closing-days" class="nav-tab" onclick="return false;">' . esc_html( __( 'Closing days', 'wp-restaurant-booking' ) ) . '</a>';

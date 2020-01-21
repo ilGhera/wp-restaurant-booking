@@ -51,6 +51,7 @@ class WPRB_Reservations {
 			/*css*/
 			wp_enqueue_style( 'wprb-admin-style', WPRB_URI . 'css/wprb-admin.css' );
 			wp_enqueue_style( 'datepicker-css', WPRB_URI . 'js/air-datepicker/dist/css/datepicker.min.css' );
+			wp_enqueue_style( 'tooltipster-css', WPRB_URI . 'js/tooltipster/dist/css/tooltipster.bundle.min.css' );
 
 			/*js*/
 			wp_enqueue_script( 'wprb-edit-js', WPRB_URI . 'js/wprb-edit.js', array( 'jquery' ), '1.0', true );
@@ -58,16 +59,18 @@ class WPRB_Reservations {
 			wp_enqueue_script( 'datepicker-eng', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.en.js', array( 'jquery' ), '2.2.3', true );
 			wp_enqueue_script( 'datepicker-it', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.it.js', array( 'jquery' ), '2.2.3', true );
 			wp_enqueue_script( 'datepicker-options', WPRB_URI . 'js/wprb-datepicker-options.js', array( 'jquery' ), '2.2.3', true );
+			wp_enqueue_script( 'tooltipster', WPRB_URI . 'js/tooltipster/dist/js/tooltipster.bundle.min.js', array( 'jquery' ), '2.2.3', true );
 
 
 			/*Nonce*/
-			$change_status_nonce = wp_create_nonce( 'wprb-change-status' );
-			$change_date_nonce   = wp_create_nonce( 'wprb-change-date' );
-			$external_nonce      = wp_create_nonce( 'wprb-external' );
-			$locale              = str_replace( '_', '-', get_locale() );
-			$closing_days        = WPRB_Reservation_Widget::get_days_off();
-			$get_periods         = get_option( 'wprb-closing-periods' );
-			$closing_periods     = array();
+			$change_status_nonce        = wp_create_nonce( 'wprb-change-status' );
+			$change_date_nonce          = wp_create_nonce( 'wprb-change-date' );
+			$external_nonce             = wp_create_nonce( 'wprb-external' );
+			$locale                     = str_replace( '_', '-', get_locale() );
+			$closing_days               = WPRB_Reservation_Widget::get_days_off();
+			$date_not_available_message = esc_html__( 'This date is not available', 'wp-restaurant-booking' );
+			$get_periods                = get_option( 'wprb-closing-periods' );
+			$closing_periods            = array();
 
 			if ( is_array( $get_periods ) ) {
 
@@ -84,12 +87,13 @@ class WPRB_Reservations {
 				'wprb-edit-js',
 				'wprbSettings',
 				array(
-					'changeStatusNonce' => $change_status_nonce,
-					'changeDateNonce'   => $change_date_nonce,
-					'externalNonce'     => $external_nonce,
-					'locale'            => $locale,
-					'closingDays'       => $closing_days,
-					'closingPeriods'    => $closing_periods,
+					'changeStatusNonce'       => $change_status_nonce,
+					'changeDateNonce'         => $change_date_nonce,
+					'externalNonce'           => $external_nonce,
+					'locale'                  => $locale,
+					'dateNotAvailableMessage' => $date_not_available_message,
+					'closingDays'             => $closing_days,
+					'closingPeriods'          => $closing_periods,
 				)
 			);
 
@@ -494,17 +498,17 @@ class WPRB_Reservations {
 			$day_reservations = self::get_day_reservations( $date, $external );
 
 			if ( $day_reservations ) {
-
+			
 				foreach ( $day_reservations as $key => $value ) {
 
 					/*Exclude current reservation if editing an existing one*/
-					if ( $time && $people ) {
+					if ( $time && $res_people && ! $last_minute ) {
 
 						if ( $key === $time && isset( $day_reservations[ $time ] ) ) {
 
 							if ( ( $external && $is_external ) || ! $external ) {
 
-								$value = $value - $people;
+								$value = $value - $res_people;
 
 							}
 
@@ -522,11 +526,10 @@ class WPRB_Reservations {
 
 								$people_check = ( $res_people && $res_people !== $people ) ? false : true; 
 
-
 								if ( $time === $the_time && $people_check && ! $last_minute ) {
 
 									/*Not values less than people booked*/
-									$bookables[ $the_time ] = max( $bookables[ $the_time ] - $value, $people );
+									$bookables[ $the_time ] = max( $bookables[ $the_time ] - $value, $res_people );
 
 								} else {
 
@@ -918,7 +921,7 @@ class WPRB_Reservations {
 
 				if ( $notes ) {
 
-					echo '<img class="wprb-notes-icon" src="' . esc_url( WPRB_URI ) . 'images/notepad.png" title="' . esc_html( $notes ) . '">';
+					echo '<img class="wprb-notes-icon tooltip" src="' . esc_url( WPRB_URI ) . 'images/notepad.png" title="' . esc_html( $notes ) . '">';
 
 				}
 

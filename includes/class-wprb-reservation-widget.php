@@ -106,6 +106,7 @@ class WPRB_Reservation_Widget {
 		wp_enqueue_style( 'modal-style', WPRB_URI . 'css/jquery.modal.min.css' );
 		wp_enqueue_style( 'font-awesome', WPRB_URI . 'css/fontawesome/all.min.css' );
 		wp_enqueue_style( 'datepicker-css', WPRB_URI . 'js/air-datepicker/dist/css/datepicker.min.css' );
+		wp_enqueue_style( 'tooltipster-css', WPRB_URI . 'js/tooltipster/dist/css/tooltipster.bundle.min.css' );
 
 		/*js*/
 		wp_enqueue_script( 'modal-js', WPRB_URI . 'js/jquery.modal.min.js', array( 'jquery' ), '0.9.1', true );
@@ -114,16 +115,18 @@ class WPRB_Reservation_Widget {
 		wp_enqueue_script( 'datepicker-eng', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.en.js', array( 'jquery' ), '2.2.3', true );
 		wp_enqueue_script( 'datepicker-it', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.it.js', array( 'jquery' ), '2.2.3', true );
 		wp_enqueue_script( 'datepicker-options', WPRB_URI . 'js/wprb-datepicker-options.js', array( 'jquery' ), '2.2.3', true );
+		wp_enqueue_script( 'tooltipster', WPRB_URI . 'js/tooltipster/dist/js/tooltipster.bundle.min.js', array( 'jquery' ), '2.2.3', true );
 
-		$change_date_nonce      = wp_create_nonce( 'wprb-change-date' );
-		$external_nonce         = wp_create_nonce( 'wprb-external' );
-		$max_bookable_nonce     = wp_create_nonce( 'wprb-max-bookable' );
-		$save_reservation_nonce = wp_create_nonce( 'wprb-save-reservation' );
-		$date_first_message     = esc_html__( 'Please select a date first', 'wp-restaurant-booking' );
-		$locale                 = str_replace( '_', '-', get_locale() );
-		$closing_days           = self::get_days_off();
-		$get_periods            = get_option( 'wprb-closing-periods' );
-		$closing_periods        = array();
+		$change_date_nonce          = wp_create_nonce( 'wprb-change-date' );
+		$external_nonce             = wp_create_nonce( 'wprb-external' );
+		$max_bookable_nonce         = wp_create_nonce( 'wprb-max-bookable' );
+		$save_reservation_nonce     = wp_create_nonce( 'wprb-save-reservation' );
+		$date_first_message         = esc_html__( 'Please select a date first', 'wp-restaurant-booking' );
+		$date_not_available_message = esc_html__( 'This date is not available', 'wp-restaurant-booking' );
+		$locale                     = str_replace( '_', '-', get_locale() );
+		$closing_days               = self::get_days_off();
+		$get_periods                = get_option( 'wprb-closing-periods' );
+		$closing_periods            = array();
 
 		if ( is_array( $get_periods ) ) {
 
@@ -140,15 +143,16 @@ class WPRB_Reservation_Widget {
 			'wprb-js',
 			'wprbSettings',
 			array(
-				'ajaxURL'              => admin_url( 'admin-ajax.php' ),
-				'changeDateNonce'      => $change_date_nonce,
-				'externalNonce'        => $external_nonce,
-				'maxBookableNonce'     => $max_bookable_nonce,
-				'saveReservationNonce' => $save_reservation_nonce,
-				'dateFirstMessage'     => $date_first_message,
-				'locale'               => $locale,
-				'closingDays'          => $closing_days,
-				'closingPeriods'       => $closing_periods,
+				'ajaxURL'                 => admin_url( 'admin-ajax.php' ),
+				'changeDateNonce'         => $change_date_nonce,
+				'externalNonce'           => $external_nonce,
+				'maxBookableNonce'        => $max_bookable_nonce,
+				'saveReservationNonce'    => $save_reservation_nonce,
+				'dateFirstMessage'        => $date_first_message,
+				'dateNotAvailableMessage' => $date_not_available_message,
+				'locale'                  => $locale,
+				'closingDays'             => $closing_days,
+				'closingPeriods'          => $closing_periods,
 			)
 		);
 
@@ -461,9 +465,21 @@ class WPRB_Reservation_Widget {
 				foreach ( $last_minute_av as $last ) {
 
 					/* Translators: %s: the time until the table booked will be available */
-					$title = sprintf( __( 'Available until %s', 'wp-restaurant-booking' ), $last['to'] );
+					$until_message = sprintf( __( 'Available until %s', 'wp-restaurant-booking' ), $last['to'] );
 
-					echo '<li class="wprb-hour" title="' . esc_attr( $title ) . '"><input type="button" class="last-minute" data-until="' . esc_attr( $last['to'] ) . '" value="' . esc_attr( $last['from'] ) . '"></li>';
+					echo '<li class="wprb-hour" data-tooltip-content="#until-message"><input type="button" class="last-minute" data-until="' . esc_attr( $last['to'] ) . '" value="' . esc_attr( $last['from'] ) . '"></li>';
+
+					/*Tooltip until message*/
+					echo '<div class="tooltip_templates">';
+						echo '<span id="until-message">';
+						echo esc_html( $until_message );
+						echo '<p>';
+							echo '<span class="confirm">' . esc_html( 'Confirm', 'wp-restaurant-booking' ) . '</span>';
+							echo '<span class="cancel">' . esc_html( 'Cancel', 'wp-restaurant-booking' ) . '</span>';
+						echo '</p>';
+						echo '</span>';
+					echo '</div>';
+
 
 				}
 

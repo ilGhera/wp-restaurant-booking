@@ -15,11 +15,49 @@ var wprbEditController = function() {
 		self.people_element();
 		self.date_element();
 		self.hours_element();
+		self.last_minute_select();
 		self.external_element();
 		self.auto_change_reservation_status();
 		self.reservation_id_to_modal();
 		self.modal_status_label_activate();
 		self.modal_change_status();
+		self.wprb_tooltipser();
+
+	}
+
+	
+	/**
+	 * Tooltips
+	 */
+	self.wprb_tooltipser = function() {
+
+		jQuery(function($){
+
+            var targets = ['.wprb-hour.not-available', 'ul.last-minute .wprb-hour'];
+            
+            /*Generic*/
+            $('.tooltip').tooltipster({
+
+        	   trigger: 'click'
+
+            });
+
+            for (var i = 0; i < targets.length; i++) {
+
+            	$('body').on('mouseenter', targets[i] + ':not(.tooltipstered)', function(){
+
+		            $(this).tooltipster({
+
+		        	   trigger: 'click',
+					   interactive: true
+
+		            });
+
+	            });
+            	
+            }
+
+		})
 
 	}
 
@@ -149,6 +187,12 @@ var wprbEditController = function() {
 
 			$('.datepicker').on('click', function(){
 
+				if ( $('.datepicker--cell.-focus-', this).hasClass( '-disabled-' ) ) {
+
+					alert(wprbSettings.dateNotAvailableMessage);
+
+				}
+
 				date_selected = $('.datepicker-here').data('datepicker').selectedDates[0];
 
 				if ( date_selected ) {
@@ -164,6 +208,39 @@ var wprbEditController = function() {
 					self.hours_element_update(people, date, true);
 
 				}
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Confirm the last minute hour selection from the tooltip
+	 */
+	self.last_minute_select = function() {
+
+		jQuery(function($){
+
+			var last_minute;
+			var input = $('input.wprb-time');
+			var until = $('input.wprb-until');
+
+
+			$('body').on('click', '#until-message span', function(){
+
+				last_minute = $('ul.last-minute .wprb-hour');
+				
+				if ($(this).hasClass('cancel')) {
+
+					$('input', last_minute).removeClass('active');
+					$(input).val('');
+					$(until).val('');
+
+				}
+
+				$(last_minute).tooltipster('close');
 
 			})
 
@@ -204,11 +281,15 @@ var wprbEditController = function() {
 
 			$(document).on('click', 'li.wprb-hour input', function(){
 
-				$('li.wprb-hour input').removeClass('active')
-				
-				$(this).addClass('active');
+				if ( ! $(this).parent('li').hasClass( 'not-available' ) ) {
 
-				$(input).val( $(this).val() );
+					$('li.wprb-hour input').removeClass('active')
+					
+					$(this).addClass('active');
+
+					$(input).val( $(this).val() );
+
+				}
 				
 				/*Last minute*/
 				if ($(this).hasClass('last-minute')) {

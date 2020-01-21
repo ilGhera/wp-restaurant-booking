@@ -365,6 +365,26 @@ input#wprb-last-minute-date {
 	cursor: pointer;
 }
 
+.tooltip_templates {
+	display: none;
+}
+
+#until-message span {
+	display: inline-block;
+	padding: 5px 10px;
+	margin: 20px 5px 0 0;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+#until-message span.confirm {
+	background: #74b81f;
+}
+
+#until-message span.cancel {
+	background: red;
+}
+
 .booking-hours ul.last-minute li input {
 	border-color: #f5c6cb;
 	box-shadow: none;
@@ -487,6 +507,7 @@ span.external {
 .wprb-notes-icon {
 	opacity: 0.6;
 	width: 24px;
+	cursor: pointer;
 }
 
 .tablenav .wprb-date {
