@@ -31,15 +31,25 @@ var wprbController = function() {
 
 		jQuery(function($){
 
-            var targets = ['.wprb-hour.not-available', '.last-minute .wprb-hour'];
+            var targets = ['.wprb-hour.regular', 'ul.last-minute .wprb-hour'];
+            var action; 
             
             for (var i = 0; i < targets.length; i++) {
 
             	$('body').on('mouseenter', targets[i] + ':not(.tooltipstered)', function(){
 
+            		/*Using click or hover where required*/
+            		action = 'click';
+
+            		if ( ! $(this).hasClass('not-available') && $(this).hasClass('regular') ) {
+
+	            		action = 'hover';
+
+            		}
+
 		            $(this).tooltipster({
 
-		        	   trigger: 'click',
+		        	   trigger: action,
 					   interactive: true
 
 		            });

@@ -33,8 +33,9 @@ var wprbEditController = function() {
 
 		jQuery(function($){
 
-            var targets = ['.wprb-hour.not-available', 'ul.last-minute .wprb-hour'];
-            
+            var targets = ['.wprb-hour.regular', 'ul.last-minute .wprb-hour'];
+            var action; 
+
             /*Generic*/
             $('.tooltip').tooltipster({
 
@@ -46,9 +47,18 @@ var wprbEditController = function() {
 
             	$('body').on('mouseenter', targets[i] + ':not(.tooltipstered)', function(){
 
+            		/*Using click or hover where required*/
+            		action = 'click';
+
+            		if ( ! $(this).hasClass('not-available') && $(this).hasClass('regular') ) {
+
+	            		action = 'hover';
+
+            		}
+
 		            $(this).tooltipster({
 
-		        	   trigger: 'click',
+		        	   trigger: action,
 					   interactive: true
 
 		            });
