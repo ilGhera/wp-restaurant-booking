@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/admin
- * @since 0.9.0
+ * @since 1.0.0
  */
 
 $external_seats = get_option( 'wprb-activate-external-seats' );
