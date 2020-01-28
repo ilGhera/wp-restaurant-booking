@@ -61,7 +61,6 @@ class WPRB_Reservations {
 			wp_enqueue_script( 'datepicker-options', WPRB_URI . 'js/wprb-datepicker-options.js', array( 'jquery' ), '2.2.3', true );
 			wp_enqueue_script( 'tooltipster', WPRB_URI . 'js/tooltipster/dist/js/tooltipster.bundle.min.js', array( 'jquery' ), '2.2.3', true );
 
-
 			/*Nonce*/
 			$change_status_nonce        = wp_create_nonce( 'wprb-change-status' );
 			$change_date_nonce          = wp_create_nonce( 'wprb-change-date' );
@@ -74,12 +73,12 @@ class WPRB_Reservations {
 
 			if ( is_array( $get_periods ) ) {
 
-				foreach ($get_periods as $period) {
-				
+				foreach ( $get_periods as $period ) {
+
 					$closing_periods[] = json_encode( $period );
-				
+
 				}
-			
+
 			}
 
 			/*Pass data to the script file*/
@@ -440,6 +439,14 @@ class WPRB_Reservations {
 
 		$medium_time  = get_option( 'wprb-medium-time' ) ? get_option( 'wprb-medium-time' ) : 60;
 		$get_interval = self::get_time_interval( $day, $hour );
+
+		/*Medium time must be a multiple of the interval*/
+		if ( 0 !== $medium_time % $get_interval ) {
+
+			$medium_time = $get_interval * round( $medium_time / $get_interval );
+
+		}
+
 		$booked       = new DateTime( $hour );
 		$end          = new DateTime( $hour );
 		$begin        = new DateTime( $hour );
@@ -498,7 +505,7 @@ class WPRB_Reservations {
 			$day_reservations = self::get_day_reservations( $date, $external );
 
 			if ( $day_reservations ) {
-			
+
 				foreach ( $day_reservations as $key => $value ) {
 
 					/*Exclude current reservation if editing an existing one*/
@@ -524,7 +531,7 @@ class WPRB_Reservations {
 
 							if ( isset( $bookables[ $the_time ] ) ) {
 
-								$people_check = ( $res_people && $res_people !== $people ) ? false : true; 
+								$people_check = ( $res_people && $res_people !== $people ) ? false : true;
 
 								if ( $time === $the_time && $people_check && ! $last_minute ) {
 
