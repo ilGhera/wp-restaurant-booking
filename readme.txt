@@ -62,9 +62,9 @@ License: GPLv2
 Release Date: 28 January 2020
 
 * Enhancement: Set the hours available for every single day of the week
-* Enhancement: Set days and closing periods
 * Enhancement: Calendar tool improved in back-end
 * Enhancement: New tooltip system for last-minute reservations
+* Enhancement: Set days and closing periods (Premium)
 * Bug Fix: Hour not highlighted in single booking
 * Bug Fix: Past reservations not callable with the filter in back-end
 * Bug Fix: Translation missed in reservation widget
