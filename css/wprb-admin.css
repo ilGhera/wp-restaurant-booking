@@ -3,7 +3,7 @@
  *
  * @author ilGhera
  * @package wc-restaurant-booking/css
- * @version 0.0.9
+ * @version 1.0.0
  */
 
 .wprb-admin {
@@ -179,7 +179,8 @@ form#wprb-premium-key input.button {
 }
 
 .hours-element label,
-.last-minute-element label {
+.last-minute-element label,
+.closing-period-element label {
 	padding: 0 0.5rem;
 }
 
@@ -204,7 +205,9 @@ input#wprb-last-minute-date {
 .wprb-add-hours-container,
 .wprb-remove-hours-container,
 .wprb-add-last-minute-container,
-.wprb-remove-last-minute-container {
+.wprb-remove-last-minute-container,
+.wprb-add-closing-period-container,
+.wprb-remove-closing-period-container {
 	display: inline;
 	position: relative;
 	top: 0.3rem;
@@ -214,7 +217,9 @@ input#wprb-last-minute-date {
 .add-hours-hover,
 .remove-hours-hover,
 .add-last-minute-hover,
-.remove-last-minute-hover {
+.remove-last-minute-hover,
+.add-closing-period-hover,
+.remove-closing-period-hover {
 	display: none;
 }
 
@@ -225,21 +230,29 @@ input#wprb-last-minute-date {
 .add-last-minute, 
 .add-last-minute-hover,
 .remove-last-minute, 
-.remove-last-minute-hover {
+.remove-last-minute-hover,
+.add-closing-period,
+.add-closing-period-hover,
+.remove-closing-period,
+.remove-closing-period-hover {
 	margin-left: 2px;
 }
 
 .wprb-add-hours-container:hover .add-hours,
 .wprb-remove-hours-container:hover .remove-hours,
 .wprb-add-last-minute-container:hover .add-last-minute,
-.wprb-remove-last-minute-container:hover .remove-last-minute {
+.wprb-remove-last-minute-container:hover .remove-last-minute,
+.wprb-add-closing-period-container:hover .add-closing-period,
+.wprb-remove-closing-period-container:hover .remove-closing-period {
 	display: none;
 }
 
 .wprb-add-hours-container:hover .add-hours-hover,
 .wprb-remove-hours-container:hover .remove-hours-hover,
 .wprb-add-last-minute-container:hover .add-last-minute-hover,
-.wprb-remove-last-minute-container:hover .remove-last-minute-hover {
+.wprb-remove-last-minute-container:hover .remove-last-minute-hover,
+.wprb-add-closing-period-container:hover .add-closing-period-hover,
+.wprb-remove-closing-period-container:hover .remove-closing-period-hover {
 	display: inline;
 }
 
@@ -352,6 +365,26 @@ input#wprb-last-minute-date {
 	cursor: pointer;
 }
 
+.tooltip_templates {
+	display: none;
+}
+
+#until-message span {
+	display: inline-block;
+	padding: 5px 10px;
+	margin: 20px 5px 0 0;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+#until-message span.confirm {
+	background: #74b81f;
+}
+
+#until-message span.cancel {
+	background: red;
+}
+
 .booking-hours ul.last-minute li input {
 	border-color: #f5c6cb;
 	box-shadow: none;
@@ -383,8 +416,8 @@ input#wprb-last-minute-date {
 	cursor: inherit;
 }
 
-.booking-hours ul li.not-available input:hover,
-.booking-hours ul li.not-available input.active {
+/*.booking-hours ul li.not-available input.active,*/
+.booking-hours ul li.not-available input:hover {
 	color: inherit;
 	background: inherit;
 }
@@ -474,6 +507,7 @@ span.external {
 .wprb-notes-icon {
 	opacity: 0.6;
 	width: 24px;
+	cursor: pointer;
 }
 
 .tablenav .wprb-date {

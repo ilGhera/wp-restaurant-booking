@@ -2,3 +2,6 @@
 	path = js/air-datepicker
 	url = https://github.com/ilGhera/air-datepicker.git
 	branch = italian
+[submodule "js/tooltipster"]
+	path = js/tooltipster
+	url = https://github.com/iamceege/tooltipster.git

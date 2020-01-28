@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/admin
- * @since 0.9.0
+ * @since 1.0.0
  */
 
 $reservation_id    = get_the_ID();
@@ -15,6 +15,7 @@ $phone             = get_post_meta( $reservation_id, 'wprb-phone', true );
 $people            = get_post_meta( $reservation_id, 'wprb-people', true );
 $table             = get_post_meta( $reservation_id, 'wprb-table', true );
 $date              = get_post_meta( $reservation_id, 'wprb-date', true );
+$get_locale        = explode( '_', get_locale() );
 $time              = get_post_meta( $reservation_id, 'wprb-time', true );
 $external          = get_post_meta( $reservation_id, 'wprb-external', true );
 $until             = get_post_meta( $reservation_id, 'wprb-until', true );
@@ -25,32 +26,32 @@ $last_minute_class = $last_minute ? ' last-minute' : '';
 $external_class    = $external ? ' external' : '';
 ?>
 
-<table class="wprb-reservation form-table<?php echo esc_html( $last_minute_class . $external_class ); ?>" data-date="<?php echo esc_attr( $date ); ?>" data-time="<?php echo esc_attr( $time ); ?>">
+<table class="wprb-reservation form-table<?php echo esc_html( $last_minute_class . $external_class ); ?>" data-date="<?php echo esc_attr( $date ); ?>" data-time="<?php echo esc_attr( $time ); ?>" data-people="<?php echo esc_attr( $people ); ?>">
 	<tr>
 		<th scope="row"><?php esc_html_e( 'First name', 'wp-restaurant-booking' ); ?></th>
 		<td>
-			<input type="text" name="wprb-first-name" class="wprb-first-name" value="<?php echo esc_attr( wp_unslash( $first_name ) ); ?>" placeholder="<?php esc_html_e( 'John', 'wp-restaurant-booking' ); ?>" required>
+			<input type="text" name="wprb-first-name" class="wprb-first-name" value="<?php echo esc_attr( wp_unslash( $first_name ) ); ?>" placeholder="<?php esc_html_e( 'John', 'wp-restaurant-booking' ); ?>">
 			<p class="description"><?php esc_html_e( 'The customer first name', 'wp-restaurant-booking' ); ?></p>
 		</td>
 	</tr>
 	<tr>
 		<th scope="row"><?php esc_html_e( 'Last name', 'wp-restaurant-booking' ); ?></th>
 		<td>
-			<input type="text" name="wprb-last-name" class="wprb-last-name" value="<?php echo esc_attr( wp_unslash( $last_name ) ); ?>" placeholder="<?php esc_html_e( 'Doe', 'wp-restaurant-booking' ); ?>" required>
+			<input type="text" name="wprb-last-name" class="wprb-last-name" value="<?php echo esc_attr( wp_unslash( $last_name ) ); ?>" placeholder="<?php esc_html_e( 'Doe', 'wp-restaurant-booking' ); ?>">
 			<p class="description"><?php esc_html_e( 'The customer last name', 'wp-restaurant-booking' ); ?></p>
 		</td>
 	</tr>
 	<tr>
 		<th scope="row"><?php esc_html_e( 'Email', 'wp-restaurant-booking' ); ?></th>
 		<td>
-			<input type="email" name="wprb-email" class="wprb-email" value="<?php echo esc_attr( wp_unslash( $email ) ); ?>" placeholder="<?php esc_html_e( 'john@doe.com', 'wp-restaurant-booking' ); ?>" required>
+			<input type="email" name="wprb-email" class="wprb-email" value="<?php echo esc_attr( wp_unslash( $email ) ); ?>" placeholder="<?php esc_html_e( 'john@doe.com', 'wp-restaurant-booking' ); ?>">
 			<p class="description"><?php esc_html_e( 'The customer email', 'wp-restaurant-booking' ); ?></p>
 		</td>
 	</tr>
 	<tr>
 		<th scope="row"><?php esc_html_e( 'Phone', 'wp-restaurant-booking' ); ?></th>
 		<td>
-			<input type="tel" name="wprb-phone" class="wprb-phone" value="<?php echo esc_attr( wp_unslash( $phone ) ); ?>" placeholder="00465688345" required>
+			<input type="tel" name="wprb-phone" class="wprb-phone" value="<?php echo esc_attr( wp_unslash( $phone ) ); ?>" placeholder="00465688345">
 			<p class="description"><?php esc_html_e( 'The customer phone number', 'wp-restaurant-booking' ); ?></p>
 		</td>
 	</tr>
@@ -71,7 +72,8 @@ $external_class    = $external ? ' external' : '';
 	<tr>
 		<th scope="row"><?php esc_html_e( 'Date', 'wp-restaurant-booking' ); ?></th>
 		<td>
-			<input type="date" name="wprb-date" class="wprb-date" min="<?php echo esc_html( wp_unslash( date( 'Y-m-d' ) ) ); ?>" value="<?php echo esc_attr( wp_unslash( $date ) ); ?>" required>
+			<input type="text" class="datepicker-here" placeholder="Select a date" value="" data-language="<?php echo esc_attr( $get_locale[0] ); ?>" required>
+			<input type="hidden" name="wprb-date" class="wprb-date" value="<?php echo esc_attr( wp_unslash( $date ) ); ?>">
 			<p class="description"><?php esc_html_e( 'The reservation date', 'wp-restaurant-booking' ); ?></p>
 		</td>
 	</tr>
@@ -85,7 +87,7 @@ $external_class    = $external ? ' external' : '';
 				<?php
 				if ( $time && $people ) {
 
-					WPRB_Reservation_Widget::hours_select_element( $people, $date, true, $last_minute, $external, $time );
+					WPRB_Reservation_Widget::hours_select_element( $people, $date, true, $last_minute, $external, $time, $people );
 
 				}
 				?>

@@ -3,7 +3,7 @@
  * 
  * @author ilGhera
  * @package wc-restaurant-booking/js
- * @since 0.9.0
+ * @since 1.0.0
  */
 
 var wprbAdminController = function() {
@@ -13,12 +13,16 @@ var wprbAdminController = function() {
 	self.onLoad = function() {
 
 		self.wprbPagination();
+		self.chosen();
 		self.tzCheckbox();
 		self.externalSeats();
 		self.addHours();
 		self.removeHours();
 		self.addLastMinute();
 		self.removeLastMinute();
+		self.addclosingPeriod();
+		self.removeClosingPeriod();
+		self.minDateClosingPeriodTo();
 		self.autoCompleteFields('internal');
 		self.autoCompleteFields('external');
 		self.autoCompleteFields('max');
@@ -76,6 +80,7 @@ var wprbAdminController = function() {
 	}
 
 
+
 	/**
 	 * Checkboxes
 	 */
@@ -96,19 +101,22 @@ var wprbAdminController = function() {
 
 		jQuery(function($){
 
-			$('.wprb-select').chosen({
-		
-				disable_search_threshold: 10,
-				width: '200px'
-			
-			});
+			var select = $('.wprb-select');
 
-			$('.wprb-select-large').chosen({
-		
-				disable_search_threshold: 10,
-				width: '290px'
+			if (destroy) {
+
+				$(select).chosen('destroy');
+
+			} else {
 			
-			});
+				$(select).chosen({
+			
+					disable_search_threshold: 10
+					// width: '200px'
+				
+				});
+
+			}
 
 		})
 
@@ -161,13 +169,15 @@ var wprbAdminController = function() {
 
 			$(document).on('click', '.add-hours-hover', function(){
 
-
-				var count = $('.hours-element').length;
-				var prev  = $('.wprb-hours-element-' + count);
-				var next  = count + 1;
-				var data  = {
+				var container = $(this).closest('.wprb-hours-container');
+				var day 	  = $(container).data('day'); 
+				var count     = $('.hours-element', container).length;
+				var prev      = $('.wprb-hours-element-' + count, container);
+				var next      = count + 1;
+				var data      = {
 					'action': 'wprb-add-hours',
 					'wprb-add-hours-nonce': wprbSettings.addHoursNonce,
+					'day': day,
 					'number': next
 				}
 
@@ -335,6 +345,75 @@ var wprbAdminController = function() {
 				var element = $(this).closest('.last-minute-element');
 
 				$(element).remove();
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Add a new closing period
+	 */
+	self.addclosingPeriod = function() {
+
+		jQuery(function($){
+
+			$(document).on('click', '.add-closing-period-hover', function(){
+
+				var count = $('.closing-period-element').length;
+				var prev  = $('.wprb-closing-period-element-' + ( count - 1 ) );
+				var next  = count;
+				var data  = {
+					'action': 'wprb-add-closing-period',
+					'wprb-add-closing-period-nonce': wprbSettings.addClosingPeriodNonce,
+					'number': next
+				}
+
+				$.post(ajaxurl, data, function(response){
+
+					$(prev).after(response);
+
+				})
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Remove a closing period
+	 */
+	self.removeClosingPeriod = function() {
+
+		jQuery(function($){
+
+			$(document).on('click', '.remove-closing-period-hover', function(){
+
+				var element = $(this).closest('.closing-period-element');
+
+				$(element).remove();
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Set closing period from date to "to" date min value
+	 */
+	self.minDateClosingPeriodTo = function() {
+
+		jQuery(function($){
+
+			$('#wprb-closing-period-from').on('change', function(){
+
+				$('#wprb-closing-period-to').attr('min', $(this).val());
 
 			})
 

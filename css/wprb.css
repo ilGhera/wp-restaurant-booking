@@ -3,7 +3,7 @@
  *
  * @author ilGhera
  * @package wc-restaurant-booking/css
- * @version 0.0.9
+ * @version 1.0.0
  */
 
 .padding-2 {
@@ -316,6 +316,26 @@ p.wprb-step-description.last-minute {
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 	text-align: center;
 	color: #212121;
+}
+
+.tooltip_templates {
+	display: none;
+}
+
+#until-message span {
+	display: inline-block;
+	padding: 5px 10px;
+	margin: 20px 5px 0 0;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+#until-message span.confirm {
+	background: #74b81f;
+}
+
+#until-message span.cancel {
+	background: red;
 }
 
 .booking-hours ul.last-minute li input {

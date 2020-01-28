@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/includes
- * @since 0.9.0
+ * @since 1.0.0
  */
 class WPRB_Reservations {
 
@@ -50,23 +50,49 @@ class WPRB_Reservations {
 
 			/*css*/
 			wp_enqueue_style( 'wprb-admin-style', WPRB_URI . 'css/wprb-admin.css' );
+			wp_enqueue_style( 'datepicker-css', WPRB_URI . 'js/air-datepicker/dist/css/datepicker.min.css' );
+			wp_enqueue_style( 'tooltipster-css', WPRB_URI . 'js/tooltipster/dist/css/tooltipster.bundle.min.css' );
 
 			/*js*/
 			wp_enqueue_script( 'wprb-edit-js', WPRB_URI . 'js/wprb-edit.js', array( 'jquery' ), '1.0', true );
+			wp_enqueue_script( 'datepicker-js', WPRB_URI . 'js/air-datepicker/dist/js/datepicker.min.js', array( 'jquery' ), '2.2.3', true );
+			wp_enqueue_script( 'datepicker-eng', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.en.js', array( 'jquery' ), '2.2.3', true );
+			wp_enqueue_script( 'datepicker-it', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.it.js', array( 'jquery' ), '2.2.3', true );
+			wp_enqueue_script( 'datepicker-options', WPRB_URI . 'js/wprb-datepicker-options.js', array( 'jquery' ), '2.2.3', true );
+			wp_enqueue_script( 'tooltipster', WPRB_URI . 'js/tooltipster/dist/js/tooltipster.bundle.min.js', array( 'jquery' ), '2.2.3', true );
 
 			/*Nonce*/
-			$change_status_nonce = wp_create_nonce( 'wprb-change-status' );
-			$change_date_nonce   = wp_create_nonce( 'wprb-change-date' );
-			$external_nonce      = wp_create_nonce( 'wprb-external' );
+			$change_status_nonce        = wp_create_nonce( 'wprb-change-status' );
+			$change_date_nonce          = wp_create_nonce( 'wprb-change-date' );
+			$external_nonce             = wp_create_nonce( 'wprb-external' );
+			$locale                     = str_replace( '_', '-', get_locale() );
+			$closing_days               = WPRB_Reservation_Widget::get_days_off();
+			$date_not_available_message = esc_html__( 'This date is not available', 'wp-restaurant-booking' );
+			$get_periods                = get_option( 'wprb-closing-periods' );
+			$closing_periods            = array();
+
+			if ( is_array( $get_periods ) ) {
+
+				foreach ( $get_periods as $period ) {
+
+					$closing_periods[] = json_encode( $period );
+
+				}
+
+			}
 
 			/*Pass data to the script file*/
 			wp_localize_script(
 				'wprb-edit-js',
 				'wprbSettings',
 				array(
-					'changeStatusNonce' => $change_status_nonce,
-					'changeDateNonce'   => $change_date_nonce,
-					'externalNonce'     => $external_nonce,
+					'changeStatusNonce'       => $change_status_nonce,
+					'changeDateNonce'         => $change_date_nonce,
+					'externalNonce'           => $external_nonce,
+					'locale'                  => $locale,
+					'dateNotAvailableMessage' => $date_not_available_message,
+					'closingDays'             => $closing_days,
+					'closingPeriods'          => $closing_periods,
 				)
 			);
 
@@ -220,13 +246,13 @@ class WPRB_Reservations {
 					),
 					array(
 						'key'     => 'wprb-until',
-						'value' => '',
+						'value'   => '',
 						'compare' => '=',
 					),
 				),
 				array(
 					'key'     => 'wprb-status',
-					'value' => 'expired',
+					'value'   => 'expired',
 					'compare' => '!=',
 				),
 			),
@@ -252,13 +278,17 @@ class WPRB_Reservations {
 				$time   = get_post_meta( $res->ID, 'wprb-time', true );
 				$people = get_post_meta( $res->ID, 'wprb-people', true );
 
-				if ( isset( $output[ $time ] ) ) {
+				if ( $people ) {
 
-					$output[ $time ] += $people;
+					if ( isset( $output[ $time ] ) ) {
 
-				} else {
+						$output[ $time ] += $people;
 
-					$output[ $time ] = $people;
+					} else {
+
+						$output[ $time ] = $people;
+
+					}
 
 				}
 
@@ -276,18 +306,19 @@ class WPRB_Reservations {
 	/**
 	 * Get the reservation hours set by the admin
 	 *
-	 * @param bool $every return the every value as key if true.
+	 * @param string $day the three letters name of the day.
+	 * @param bool   $every return the every value as key if true.
 	 * @return array
 	 */
-	public static function get_hours_set( $every = false ) {
+	public static function get_hours_set( $day, $every = false ) {
 
 		$output = array();
 
 		$hours = get_option( 'wprb-hours' );
 
-		if ( is_array( $hours ) ) {
+		if ( isset( $hours[ $day ] ) && is_array( $hours[ $day ] ) ) {
 
-			foreach ( $hours as $hour ) {
+			foreach ( $hours[ $day ] as $hour ) {
 
 				if ( isset( $hour['from'] ) && isset( $hour['to'] ) && isset( $hour['every'] ) ) {
 
@@ -335,11 +366,11 @@ class WPRB_Reservations {
 	 */
 	public static function get_initial_bookables( $date, $externals = false, $time = null ) {
 
-		$hours              = self::get_hours_set();
+		$day                = strtolower( date( 'D', strtotime( $date ) ) );
+		$hours              = self::get_hours_set( $day );
 		$values             = array();
 		$output             = array();
 		$get_bookable       = get_option( 'wprb-bookable' );
-		$day                = strtolower( date( 'D', strtotime( $date ) ) );
 		$external_activated = get_option( 'wprb-activate-external-seats' );
 		$bookable = ( $externals && $external_activated ) ? $get_bookable[ $day ]['externals'] : $get_bookable[ $day ]['bookable'];
 
@@ -378,12 +409,13 @@ class WPRB_Reservations {
 	/**
 	 * Get the interval time in a specific hour
 	 *
+	 * @param  string $day  the three letters name of the day.
 	 * @param  string $time the hour interested.
 	 * @return int
 	 */
-	public static function get_time_interval( $time ) {
+	public static function get_time_interval( $day, $time ) {
 
-		$hours = self::get_hours_set( true );
+		$hours = self::get_hours_set( $day, true );
 
 		if ( is_array( $hours ) && isset( $hours[ $time ] ) ) {
 
@@ -397,15 +429,24 @@ class WPRB_Reservations {
 	/**
 	 * The range of time influenced by the reservation
 	 *
+	 * @param  string $day  the three letters name of the day.
 	 * @param  string $hour the reservation time.
 	 * @return array the bookable hours interested.
 	 */
-	public static function get_temporal_space( $hour ) {
+	public static function get_temporal_space( $day, $hour ) {
 
 		$output = array();
 
 		$medium_time  = get_option( 'wprb-medium-time' ) ? get_option( 'wprb-medium-time' ) : 60;
-		$get_interval = self::get_time_interval( $hour );
+		$get_interval = self::get_time_interval( $day, $hour );
+
+		/*Medium time must be a multiple of the interval*/
+		if ( 0 !== $medium_time % $get_interval ) {
+
+			$medium_time = $get_interval * round( $medium_time / $get_interval );
+
+		}
+
 		$booked       = new DateTime( $hour );
 		$end          = new DateTime( $hour );
 		$begin        = new DateTime( $hour );
@@ -422,7 +463,7 @@ class WPRB_Reservations {
 		$begin->add( $margin );
 
 		if ( $get_interval ) {
-			
+
 			/*Create the interval*/
 			$interval = DateInterval::createFromDateString( $get_interval . ' min' ); // temp.
 
@@ -434,7 +475,7 @@ class WPRB_Reservations {
 				$output[] = $time->format( 'H:i' );
 
 			}
-			
+
 		}
 
 		return $output;
@@ -445,18 +486,22 @@ class WPRB_Reservations {
 	/**
 	 * Get the bookable hours available based on the date provided
 	 *
-	 * @param  string $date     the reservation date.
-	 * @param  string $time     the reservation time.
-	 * @param  int    $people   the reservation people.
-	 * @param  boool  $external get only external available hours.
+	 * @param  string $date        the reservation date.
+	 * @param  string $time        the reservation time.
+	 * @param  int    $people      the reservation people.
+	 * @param  string $res_people  the current booking people if editing an existing reservation.
+	 * @param  boool  $external    get only external available hours.
+	 * @param  boool  $is_external define is the current reservation is external.
+	 * @param  boool  $last_minute define is the current reservation is a last minute.
 	 * @return array time as key and bookables as value
 	 */
-	public static function get_available_hours( $date = null, $time = null, $people = null, $external = false, $is_external = false ) {
+	public static function get_available_hours( $date = null, $time = null, $people = null, $res_people = null, $external = false, $is_external = false, $last_minute = false ) {
 
 		$bookables = self::get_initial_bookables( $date, $external );
 
 		if ( $date ) {
 
+			$day              = strtolower( date( 'D', strtotime( $date ) ) );
 			$day_reservations = self::get_day_reservations( $date, $external );
 
 			if ( $day_reservations ) {
@@ -464,13 +509,13 @@ class WPRB_Reservations {
 				foreach ( $day_reservations as $key => $value ) {
 
 					/*Exclude current reservation if editing an existing one*/
-					if ( $time && $people ) {
+					if ( $time && $res_people && ! $last_minute ) {
 
 						if ( $key === $time && isset( $day_reservations[ $time ] ) ) {
 
 							if ( ( $external && $is_external ) || ! $external ) {
 
-								$value = $value - $people;
+								$value = $value - $res_people;
 
 							}
 
@@ -478,15 +523,27 @@ class WPRB_Reservations {
 
 					}
 
-					$temporal_space = self::get_temporal_space( $key );
+					$temporal_space = self::get_temporal_space( $day, $key );
 
 					if ( is_array( $temporal_space ) ) {
 
-						foreach ( $temporal_space as $time ) {
+						foreach ( $temporal_space as $the_time ) {
 
-							if ( isset( $bookables[ $time ] ) ) {
+							if ( isset( $bookables[ $the_time ] ) ) {
 
-								$bookables[ $time ] = max( $bookables[ $time ] - $value, 0 );
+								$people_check = ( $res_people && $res_people !== $people ) ? false : true;
+
+								if ( $time === $the_time && $people_check && ! $last_minute ) {
+
+									/*Not values less than people booked*/
+									$bookables[ $the_time ] = max( $bookables[ $the_time ] - $value, $res_people );
+
+								} else {
+
+									/*Not values less than zero*/
+									$bookables[ $the_time ] = max( $bookables[ $the_time ] - $value, 0 );
+
+								}
 
 							}
 
@@ -583,7 +640,7 @@ class WPRB_Reservations {
 			$output          = array();
 			$last_minute_el  = get_option( 'wprb-last-minute' );
 			$day_last_minute = self::get_day_last_minute( $date );
-			$day_bookables   = self::get_available_hours( $date, $time, $people );
+			$day_bookables   = self::get_available_hours( $date, $time, $people, false, false, false, $last_minute );
 
 			if ( $last_minute_el ) {
 
@@ -642,15 +699,16 @@ class WPRB_Reservations {
 	 * @param string $time        the reservation time.
 	 * @param int    $people      the number of people.
 	 * @param bool   $edit        true if called from edit reservation.
+	 * @param string $res_people  the current booking people if editing an existing reservation.
 	 * @param bool   $is_external define is the current reservation (back-end) is external.
 	 * @return array
 	 */
-	public static function get_available_externals_seats( $date, $time, $people, $edit = false, $is_external = false ) {
+	public static function get_available_externals_seats( $date, $time, $people, $edit = false, $res_people = false, $is_external = false ) {
 
 		if ( get_option( 'wprb-activate-external-seats' ) ) {
 
 			$externals     = self::get_initial_bookables( $date, true, $time );
-			$day_bookables = self::get_available_hours( $date, $time, $people, true );
+			$day_bookables = self::get_available_hours( $date, $time, $people, $res_people, true, $is_external );
 			$available     = isset( $day_bookables[ $time ] ) ? $day_bookables[ $time ] : 0;
 
 			return $available;
@@ -682,6 +740,7 @@ class WPRB_Reservations {
 			$people     = isset( $_POST['wprb-people'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-people'] ) ) : '';
 			$table      = isset( $_POST['wprb-table'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-table'] ) ) : '';
 			$date       = isset( $_POST['wprb-date'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-date'] ) ) : '';
+			$the_date   = date( 'Y-m-d', strtotime( $date ) );
 			$time       = isset( $_POST['wprb-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-time'] ) ) : '';
 			$until      = isset( $_POST['wprb-until'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-until'] ) ) : '';
 			$external   = isset( $_POST['wprb-external'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-external'] ) ) : '';
@@ -694,7 +753,7 @@ class WPRB_Reservations {
 			update_post_meta( $post_id, 'wprb-phone', $phone );
 			update_post_meta( $post_id, 'wprb-people', $people );
 			update_post_meta( $post_id, 'wprb-table', $table );
-			update_post_meta( $post_id, 'wprb-date', $date );
+			update_post_meta( $post_id, 'wprb-date', $the_date );
 			update_post_meta( $post_id, 'wprb-time', $time );
 			update_post_meta( $post_id, 'wprb-until', $until );
 			update_post_meta( $post_id, 'wprb-external', $external );
@@ -707,7 +766,7 @@ class WPRB_Reservations {
 				'email-field'      => $email,
 				'phone-field'      => $phone,
 				'people-field'     => $people,
-				'date-field'       => $date,
+				'date-field'       => $the_date,
 				'time-field'       => $time,
 				'notes-field'      => $notes,
 				'until-field'      => $until,
@@ -817,9 +876,10 @@ class WPRB_Reservations {
 		switch ( $column ) {
 
 			case 'day':
-				$day = get_post_meta( $post_id, 'wprb-date', true );
+				$day      = get_post_meta( $post_id, 'wprb-date', true );
+				$the_day = date( 'd-m-Y', strtotime( $day ) );
 
-				echo esc_html( $day );
+				echo esc_html( $the_day );
 
 				break;
 
@@ -868,7 +928,7 @@ class WPRB_Reservations {
 
 				if ( $notes ) {
 
-					echo '<img class="wprb-notes-icon" src="' . esc_url( WPRB_URI ) . 'images/notepad.png" title="' . esc_html( $notes ) . '">';
+					echo '<img class="wprb-notes-icon tooltip" src="' . esc_url( WPRB_URI ) . 'images/notepad.png" title="' . esc_html( $notes ) . '">';
 
 				}
 
@@ -1008,7 +1068,7 @@ class WPRB_Reservations {
 
 		$date = isset( $_REQUEST['wprb-date'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['wprb-date'] ) ) : '';
 
-		echo '<input type="date" name="wprb-date" class="wprb-date list" min="' . esc_html( date( 'Y-m-d' ) ) . '" value="' . esc_attr( $date ) . '">';
+		echo '<input type="date" name="wprb-date" class="wprb-date list" value="' . esc_attr( $date ) . '">';
 
 	}
 

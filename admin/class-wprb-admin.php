@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/admin
- * @since 0.9.0
+ * @since 1.0.0
  */
 class WPRB_Admin {
 
@@ -16,6 +16,8 @@ class WPRB_Admin {
 	 */
 	public function __construct( $init = false ) {
 
+		$this->saved_hours = get_option( 'wprb-hours' );
+
 		if ( $init ) {
 
 			add_action( 'admin_init', array( $this, 'save_reservations_settings' ) );
@@ -25,6 +27,7 @@ class WPRB_Admin {
 			add_action( 'admin_menu', array( $this, 'register_wprb_admin' ) );
 			add_action( 'wp_ajax_wprb-add-hours', array( $this, 'hours_element_callback' ) );
 			add_action( 'wp_ajax_wprb-add-last-minute', array( $this, 'last_minute_element_callback' ) );
+			add_action( 'wp_ajax_wprb-add-closing-period', array( $this, 'closing_period_element_callback' ) );
 
 			add_action(
 				'in_plugin_update_message-' . basename( WPRB_DIR ) . '/wp-restaurant-booking.php',
@@ -56,14 +59,17 @@ class WPRB_Admin {
 		if ( in_array( $admin_page->id, $pages ) ) {
 
 			/*css*/
+			wp_enqueue_style( 'chosen-style', WPRB_URI . '/vendor/harvesthq/chosen/chosen.min.css' );
 			wp_enqueue_style( 'modal-style', WPRB_URI . 'css/jquery.modal.min.css' );
 
 			/*js*/
+			wp_enqueue_script( 'chosen', WPRB_URI . '/vendor/harvesthq/chosen/chosen.jquery.min.js' );
 			wp_enqueue_script( 'modal-js', WPRB_URI . 'js/jquery.modal.min.js', array( 'jquery' ), '0.9.0', true );
 
 			/*Nonce*/
-			$add_hours_nonce       = wp_create_nonce( 'wprb-add-hours' );
-			$add_last_minute_nonce = wp_create_nonce( 'wprb-add-last-minute' );
+			$add_hours_nonce          = wp_create_nonce( 'wprb-add-hours' );
+			$add_last_minute_nonce    = wp_create_nonce( 'wprb-add-last-minute' );
+			$add_closing_period_nonce = wp_create_nonce( 'wprb-add-closing-period' );
 
 		}
 
@@ -82,8 +88,9 @@ class WPRB_Admin {
 				'wprb-admin-js',
 				'wprbSettings',
 				array(
-					'addHoursNonce'      => $add_hours_nonce,
-					'addLastMinuteNonce' => $add_last_minute_nonce,
+					'addHoursNonce'         => $add_hours_nonce,
+					'addLastMinuteNonce'    => $add_last_minute_nonce,
+					'addClosingPeriodNonce' => $add_closing_period_nonce,
 				)
 			);
 
@@ -215,7 +222,7 @@ class WPRB_Admin {
 	 *
 	 * @return array
 	 */
-	public function week() {
+	public static function week() {
 
 		return array(
 			'mon' => __( 'Monday', 'wp-restaurant-booking' ),
@@ -263,9 +270,10 @@ class WPRB_Admin {
 
 		if ( isset( $_POST['number'], $_POST['wprb-add-hours-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-add-hours-nonce'] ), 'wprb-add-hours' ) ) {
 
+			$day    = sanitize_text_field( wp_unslash( $_POST['day'] ) );
 			$number = sanitize_text_field( wp_unslash( $_POST['number'] ) );
 
-			$this->hours_element( $number );
+			$this->hours_element( $day, $number );
 
 		}
 
@@ -277,10 +285,11 @@ class WPRB_Admin {
 	/**
 	 * Display a single hours element
 	 *
-	 * @param int   $number the number of hours element.
-	 * @param array $data single element data coming from the db.
+	 * @param string $number the three letters name of the day.
+	 * @param int    $number the number of hours element.
+	 * @param array  $data single element data coming from the db.
 	 */
-	public function hours_element( $number = 1, $data = array() ) {
+	public function hours_element( $day, $number = 1, $data = array() ) {
 
 		$from  = isset( $data['from'] ) ? $data['from'] : '';
 		$to    = isset( $data['to'] ) ? $data['to'] : '';
@@ -290,13 +299,13 @@ class WPRB_Admin {
 		echo '<div class="wprb-hours-element-' . esc_attr( $number ) . ' hours-element">';
 
 			echo '<label for="wprb-bookable-hours-from">' . esc_html__( 'From', 'wp-restaurant-booking' ) . '</label>';
-			echo '<input type="time" name="wprb-bookable-hours-from-' . esc_attr( $number ) . '" id="wprb-bookable-hours-from" class="wprb-bookable-hours-from" min="12:00" max="23:00" value="' . esc_attr( $from ) . '" required' . $disabled . '>';
+			echo '<input type="time" name="wprb-' . esc_attr( $day ) . '-bookable-hours-from-' . esc_attr( $number ) . '" id="wprb-' . esc_attr( $day ) . '-bookable-hours-from" class="wprb-bookable-hours-from" min="12:00" max="23:00" value="' . esc_attr( $from ) . '" required' . $disabled . '>';
 
 			echo '<label for="wprb-bookable-hours-to">' . esc_html__( 'to', 'wp-restaurant-booking' ) . '</label>';
-			echo '<input type="time" name="wprb-bookable-hours-to-' . esc_attr( $number ) . '" id="wprb-bookable-hours-to" class="wprb-bookable-hours-to" min="12:00" max="23:00" value="' . esc_attr( $to ) . '" required' . $disabled . '>';
+			echo '<input type="time" name="wprb-' . esc_attr( $day ) . '-bookable-hours-to-' . esc_attr( $number ) . '" id="wprb-' . esc_attr( $day ) . '-bookable-hours-to" class="wprb-bookable-hours-to" min="12:00" max="23:00" value="' . esc_attr( $to ) . '" required' . $disabled . '>';
 
 			echo '<label for="wprb-bookable-hours-every">' . esc_html__( 'every (minutes)', 'wp-restaurant-booking' ) . '</label>';
-			echo '<input type="number" name="wprb-bookable-hours-every-' . esc_attr( $number ) . '" id="wprb-bookable-hours-every" class="wprb-bookable-hours-every" min="5" max="60" step="5" placeholder="15" value="' . esc_attr( $every ) . '" required' . $disabled . '>';
+			echo '<input type="number" name="wprb-' . esc_attr( $day ) . '-bookable-hours-every-' . esc_attr( $number ) . '" id="wprb-' . esc_attr( $day ) . '-bookable-hours-every" class="wprb-bookable-hours-every" min="5" max="60" step="5" placeholder="15" value="' . esc_attr( $every ) . '" required' . $disabled . '>';
 
 			if ( 1 === $number ) {
 
@@ -321,26 +330,24 @@ class WPRB_Admin {
 
 	/**
 	 * Display the hours element in the plugin admin area
+	 *
+	 * @param string $day three letters name of the day.
 	 */
-	public function display_hours_elements() {
+	public function display_hours_elements( $day ) {
 
-		$saved_hours = get_option( 'wprb-hours' );
+		echo '<div class="wprb-hours-container ' . esc_attr( $day ) . '" data-day="' . esc_attr( $day ) . '">';
 
-		if ( $saved_hours ) {
+			if ( $this->saved_hours && isset( $this->saved_hours[ $day ] )) {
 
-			$count = 1;
+				$this->hours_element( $day, 1, $this->saved_hours[ $day ][1] );
 
-			for ( $i = 1; $i <= $count; $i++ ) {
+			} else {
 
-				$this->hours_element( $i, $saved_hours[ $i ] );
+				$this->hours_element( $day );
 
 			}
 
-		} else {
-
-			$this->hours_element();
-
-		}
+		echo '</div>';
 
 	}
 
@@ -422,11 +429,80 @@ class WPRB_Admin {
 
 
 	/**
+	 * Return a single closing period element as ajax callback
+	 */
+	public function closing_period_element_callback() {
+
+		if ( isset( $_POST['number'], $_POST['wprb-add-closing-period-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-add-closing-period-nonce'] ), 'wprb-add-closing-period' ) ) {
+
+			$number = sanitize_text_field( wp_unslash( $_POST['number'] ) );
+
+			$this->closing_period( $number );
+
+		}
+
+		exit;
+
+	}
+
+
+	/**
+	 * Display a single closing period
+	 *
+	 * @param int   $number the number of closing period element.
+	 * @param array $data single element data coming from the db.
+	 */
+	public function closing_period( $number = 0, $data = array() ) {
+
+		$from   = null;
+		$to     = null;
+
+		echo '<div class="wprb-closing-period-element-' . esc_attr( $number ) . ' closing-period-element">';
+
+			echo '<label for="wprb-closing-period-from">' . esc_html__( 'From', 'wp-restaurant-booking' ) . '</label>';
+			echo '<input type="date" name="wprb-closing-period-from-' . esc_attr( $number ) . '" id="wprb-closing-period-from" class="wprb-closing-period-from" min="' . esc_html( date( 'Y-m-d' ) ) . '" value="' . esc_attr( $from ) . '">';
+			
+			echo '<label for="wprb-closing-period-to">' . esc_html__( 'to', 'wp-restaurant-booking' ) . '</label>';
+			echo '<input type="date" name="wprb-closing-period-to-' . esc_attr( $number ) . '" id="wprb-closing-period-to" class="wprb-closing-period-to" min="' . esc_html( date( 'Y-m-d' ) ) . '" value="' . esc_attr( $to ) . '">';
+
+			if ( 0 === $number ) {
+
+				echo '<div class="wprb-add-closing-period-container">';
+					echo '<img class="add-closing-period" src="' . esc_url( WPRB_URI . 'images/add-icon.png' ) . '">';
+					echo '<img class="add-closing-period-hover" src="' . esc_url( WPRB_URI . 'images/add-icon-hover.png' ) . '">';
+				echo '</div>';
+
+			} else {
+
+				echo '<div class="wprb-remove-closing-period-container">';
+					echo '<img class="remove-closing-period" src="' . esc_url( WPRB_URI . 'images/remove-icon.png' ) . '">';
+					echo '<img class="remove-closing-period-hover" src="' . esc_url( WPRB_URI . 'images/remove-icon-hover.png' ) . '">';
+				echo '</div>';
+
+			}
+
+		echo '</div>';
+
+	}
+
+
+	/**
+	 * Display the last minute element in the plugin admin area
+	 */
+	public function display_closing_period_elements() {
+
+		$this->closing_period();
+
+	}
+
+
+	/**
 	 * Save the serervation option in the db
 	 */
 	public function save_reservations_settings() {
 
-		if ( isset( $_POST['wprb-set-reservations-sent'], $_POST['wprb-set-reservations-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-set-reservations-nonce'] ), 'wprb-set-reservations' ) ) {
+		/*General settings*/
+		if ( isset( $_POST['wprb-set-generals-sent'], $_POST['wprb-set-generals-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-set-generals-nonce'] ), 'wprb-set-generals' ) ) {
 
 			/*Power on*/
 			$power_on = isset( $_POST['wprb-power-on'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-power-on'] ) ) : '';
@@ -440,6 +516,23 @@ class WPRB_Admin {
 			$display_number_availables = isset( $_POST['wprb-display-number-availables'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-display-number-availables'] ) ) : 0;
 			update_option( 'wprb-display-number-availables', $display_number_availables );
 
+			/*Margin time*/
+			$margin_time = isset( $_POST['wprb-margin-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-margin-time'] ) ) : '';
+			update_option( 'wprb-margin-time', $margin_time );
+
+			/*Medium time*/
+			$medium_time = isset( $_POST['wprb-medium-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-medium-time'] ) ) : '';
+			update_option( 'wprb-medium-time', $medium_time );
+
+			/*Expiration time*/
+			$expiration_time = isset( $_POST['wprb-expiration-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-expiration-time'] ) ) : '';
+			update_option( 'wprb-expiration-time', $expiration_time );
+
+		}
+
+		/*Bookables places*/
+		if ( isset( $_POST['wprb-set-bookables-sent'], $_POST['wprb-set-bookables-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-set-bookables-nonce'] ), 'wprb-set-bookables' ) ) {
+
 			/*External seats option*/
 			$external_seats = isset( $_POST['wprb-activate-external-seats'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-activate-external-seats'] ) ) : 0;
 			update_option( 'wprb-activate-external-seats', $external_seats );
@@ -447,7 +540,7 @@ class WPRB_Admin {
 			/*Bookable seats*/
 			$save_bookable = array();
 
-			$days = array_keys( $this->week() );
+			$days = array_keys( self::week() );
 
 			foreach ( $days as $day ) {
 
@@ -473,34 +566,31 @@ class WPRB_Admin {
 
 			update_option( 'wprb-bookable', $save_bookable );
 
-			/*Margin time*/
-			$margin_time = isset( $_POST['wprb-margin-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-margin-time'] ) ) : '';
-			update_option( 'wprb-margin-time', $margin_time );
+		}
 
-			/*Medium time*/
-			$medium_time = isset( $_POST['wprb-medium-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-medium-time'] ) ) : '';
-			update_option( 'wprb-medium-time', $medium_time );
-
-			/*Expiration time*/
-			$expiration_time = isset( $_POST['wprb-expiration-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-expiration-time'] ) ) : '';
-			update_option( 'wprb-expiration-time', $expiration_time );
+		/*Hours available*/
+		if ( isset( $_POST['wprb-set-hours-sent'], $_POST['wprb-set-hours-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-set-hours-nonce'] ), 'wprb-set-hours' ) ) {
 
 			/*Hours*/
 			$save_hours = array();
 
-			$from = isset( $_POST[ 'wprb-bookable-hours-from-1' ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-bookable-hours-from-1' ] ) ) : null;
+			foreach ( self::week() as $key => $value ) {
 
-			$to = isset( $_POST[ 'wprb-bookable-hours-to-1' ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-bookable-hours-to-1' ] ) ) : null;
+				$from = isset( $_POST[ 'wprb-' . $key . '-bookable-hours-from-1' ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-' . $key . '-bookable-hours-from-1' ] ) ) : null;
 
-			$every = isset( $_POST[ 'wprb-bookable-hours-every-1' ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-bookable-hours-every-1' ] ) ) : null;
+				$to = isset( $_POST[ 'wprb-' . $key . '-bookable-hours-to-1' ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-' . $key . '-bookable-hours-to-1' ] ) ) : null;
 
-			if ( $from && $to && $every ) {
+				$every = isset( $_POST[ 'wprb-' . $key . '-bookable-hours-every-1' ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'wprb-' . $key . '-bookable-hours-every-1' ] ) ) : null;
 
-				$save_hours[1] = array(
-					'from'  => $from,
-					'to'    => $to,
-					'every' => $every,
-				);
+				if ( $from && $to && $every ) {
+
+					$save_hours[ $key ][1] = array(
+						'from'  => $from,
+						'to'    => $to,
+						'every' => $every,
+					);
+
+				}
 
 			}
 
@@ -598,15 +688,39 @@ class WPRB_Admin {
 				/*Plugin options menu*/
 				echo '<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"><br></div>';
 				echo '<h2 id="wprb-admin-menu" class="nav-tab-wrapper woo-nav-tab-wrapper">';
-					echo '<a href="#" data-link="wprb-set-reservations" class="nav-tab nav-tab-active" onclick="return false;">' . esc_html( __( 'Reservations', 'wp-restaurant-booking' ) ) . '</a>';
+					echo '<a href="#" data-link="wprb-set-generals" class="nav-tab nav-tab-active" onclick="return false;">' . esc_html( __( 'General', 'wp-restaurant-booking' ) ) . '</a>';
+					echo '<a href="#" data-link="wprb-set-bookables" class="nav-tab" onclick="return false;">' . esc_html( __( 'Bookables places', 'wp-restaurant-booking' ) ) . '</a>';
+					echo '<a href="#" data-link="wprb-set-hours" class="nav-tab" onclick="return false;">' . esc_html( __( 'Hours available', 'wp-restaurant-booking' ) ) . '</a>';
+					echo '<a href="#" data-link="wprb-set-closing-days" class="nav-tab" onclick="return false;">' . esc_html( __( 'Closing days', 'wp-restaurant-booking' ) ) . '</a>';
 					echo '<a href="#" data-link="wprb-set-last-minute" class="nav-tab" onclick="return false;">' . esc_html( __( 'Last minute', 'wp-restaurant-booking' ) ) . '</a>';
 					echo '<a href="#" data-link="wprb-set-notifications" class="nav-tab" onclick="return false;">' . esc_html( __( 'Notifications', 'wp-restaurant-booking' ) ) . '</a>';
 				echo '</h2>';
 
-				/*Set reservations*/
-				echo '<div id="wprb-set-reservations" class="wprb-admin" style="display: block;">';
+				/*General settings*/
+				echo '<div id="wprb-set-generals" class="wprb-admin" style="display: block;">';
 
-					include( WPRB_ADMIN . 'wprb-set-reservations-template.php' );
+					include( WPRB_ADMIN . 'wprb-set-general-template.php' );
+
+				echo '</div>';
+
+				/*Set bookables per day*/
+				echo '<div id="wprb-set-bookables" class="wprb-admin">';
+
+					include( WPRB_ADMIN . 'wprb-set-bookables-template.php' );
+
+				echo '</div>';
+
+				/*Set hours reservations*/
+				echo '<div id="wprb-set-hours" class="wprb-admin">';
+
+					include( WPRB_ADMIN . 'wprb-set-hours-template.php' );
+
+				echo '</div>';
+
+				/*Set closing days*/
+				echo '<div id="wprb-set-closing-days" class="wprb-admin">';
+
+					include( WPRB_ADMIN . 'wprb-set-closing-days-template.php' );
 
 				echo '</div>';
 

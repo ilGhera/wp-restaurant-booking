@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/includes
- * @since 0.9.0
+ * @since 1.0.0
  */
 class WPRB_Reservation_Widget {
 
@@ -16,7 +16,7 @@ class WPRB_Reservation_Widget {
 	 */
 	public function __construct( $init = false ) {
 
-		$this->power_on           = get_option( 'wprb-power-on' );
+		$this->power_on = get_option( 'wprb-power-on' );
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'wprb_scripts' ) );
 		add_action( 'wp_head', array( $this, 'booking_button' ) );
@@ -40,6 +40,63 @@ class WPRB_Reservation_Widget {
 
 
 	/**
+	 * Return the two letters of locale useful for widget translation
+	 * @return string
+	 */
+	public function lang() {
+
+		return explode( '_', get_locale() )[0];
+
+	}
+
+
+	/**
+	 * Get the closing days in number format as day of the week
+	 * @return array
+	 */
+	public static function get_days_off() {
+
+		$output = array();
+		$days   = get_option( 'wprb-closing-days' );
+
+		if ( is_array( $days ) ) {
+			
+			foreach ( $days as $day ) {
+				
+				switch ( $day ) {
+					case 'sun':
+						$output[] = 0;
+						break;
+					case 'mon':
+						$output[] = 1;
+						break;
+					case 'tue':
+						$output[] = 2;
+						break;
+					case 'wed':
+						$output[] = 3;
+						break;
+					case 'thu':
+						$output[] = 4;
+						break;
+					case 'fri':
+						$output[] = 5;
+						break;
+					case 'sat':
+						$output[] = 6;
+						break;
+				}
+
+			}
+			
+		}
+
+		return $output;
+
+	}
+
+
+	/**
 	 * Scripts and style
 	 */
 	public function wprb_scripts() {
@@ -49,6 +106,7 @@ class WPRB_Reservation_Widget {
 		wp_enqueue_style( 'modal-style', WPRB_URI . 'css/jquery.modal.min.css' );
 		wp_enqueue_style( 'font-awesome', WPRB_URI . 'css/fontawesome/all.min.css' );
 		wp_enqueue_style( 'datepicker-css', WPRB_URI . 'js/air-datepicker/dist/css/datepicker.min.css' );
+		wp_enqueue_style( 'tooltipster-css', WPRB_URI . 'js/tooltipster/dist/css/tooltipster.bundle.min.css' );
 
 		/*js*/
 		wp_enqueue_script( 'modal-js', WPRB_URI . 'js/jquery.modal.min.js', array( 'jquery' ), '0.9.1', true );
@@ -56,26 +114,45 @@ class WPRB_Reservation_Widget {
 		wp_enqueue_script( 'datepicker-js', WPRB_URI . 'js/air-datepicker/dist/js/datepicker.min.js', array( 'jquery' ), '2.2.3', true );
 		wp_enqueue_script( 'datepicker-eng', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.en.js', array( 'jquery' ), '2.2.3', true );
 		wp_enqueue_script( 'datepicker-it', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.it.js', array( 'jquery' ), '2.2.3', true );
+		wp_enqueue_script( 'datepicker-options', WPRB_URI . 'js/wprb-datepicker-options.js', array( 'jquery' ), '2.2.3', true );
+		wp_enqueue_script( 'tooltipster', WPRB_URI . 'js/tooltipster/dist/js/tooltipster.bundle.min.js', array( 'jquery' ), '2.2.3', true );
 
-		$change_date_nonce      = wp_create_nonce( 'wprb-change-date' );
-		$external_nonce         = wp_create_nonce( 'wprb-external' );
-		$max_bookable_nonce     = wp_create_nonce( 'wprb-max-bookable' );
-		$save_reservation_nonce = wp_create_nonce( 'wprb-save-reservation' );
-		$date_first_message     = esc_html__( 'Please select a date first', 'wp-restaurant-booking' );
-		$locale                 = str_replace( '_', '-', get_locale() );
+		$change_date_nonce          = wp_create_nonce( 'wprb-change-date' );
+		$external_nonce             = wp_create_nonce( 'wprb-external' );
+		$max_bookable_nonce         = wp_create_nonce( 'wprb-max-bookable' );
+		$save_reservation_nonce     = wp_create_nonce( 'wprb-save-reservation' );
+		$date_first_message         = esc_html__( 'Please select a date first', 'wp-restaurant-booking' );
+		$date_not_available_message = esc_html__( 'This date is not available', 'wp-restaurant-booking' );
+		$locale                     = str_replace( '_', '-', get_locale() );
+		$closing_days               = self::get_days_off();
+		$get_periods                = get_option( 'wprb-closing-periods' );
+		$closing_periods            = array();
+
+		if ( is_array( $get_periods ) ) {
+
+			foreach ($get_periods as $period) {
+			
+				$closing_periods[] = json_encode( $period );
+			
+			}
+		
+		}
 
 		/*Pass data to the script file*/
 		wp_localize_script(
 			'wprb-js',
 			'wprbSettings',
 			array(
-				'ajaxURL'              => admin_url( 'admin-ajax.php' ),
-				'changeDateNonce'      => $change_date_nonce,
-				'externalNonce'        => $external_nonce,
-				'maxBookableNonce'     => $max_bookable_nonce,
-				'saveReservationNonce' => $save_reservation_nonce,
-				'dateFirstMessage'     => $date_first_message,
-				'locale'               => $locale,
+				'ajaxURL'                 => admin_url( 'admin-ajax.php' ),
+				'changeDateNonce'         => $change_date_nonce,
+				'externalNonce'           => $external_nonce,
+				'maxBookableNonce'        => $max_bookable_nonce,
+				'saveReservationNonce'    => $save_reservation_nonce,
+				'dateFirstMessage'        => $date_first_message,
+				'dateNotAvailableMessage' => $date_not_available_message,
+				'locale'                  => $locale,
+				'closingDays'             => $closing_days,
+				'closingPeriods'          => $closing_periods,
 			)
 		);
 
@@ -192,7 +269,7 @@ class WPRB_Reservation_Widget {
 
 			echo '<p class="wprb-step-description">' . esc_html__( 'Select the date', 'wp-restaurant-booking' ) . '</p>';
 
-			echo '<div class="datepicker-here" data-language="it" data-inline="true"></div>';
+			echo '<div class="datepicker-here" data-language="' . $this->lang() . '" data-inline="true"></div>'; // temp.
 
 		echo '</div>';
 
@@ -300,12 +377,13 @@ class WPRB_Reservation_Widget {
 	 * @param bool   $last_minute define is the current reservation (back-end) is a last minute.
 	 * @param bool   $external    define is the current reservation (back-end) is external.
 	 * @param string $time        the current booking time if editing an existing reservation.
+	 * @param string $res_people  the current booking people if editing an existing reservation.
 	 */
-	public static function hours_select_element( $people = 0, $date = null, $back_end = false, $last_minute = false, $external = false, $time = null ) {
+	public static function hours_select_element( $people = 0, $date = null, $back_end = false, $last_minute = false, $external = false, $time = null, $res_people = null ) {
 
 		/*Hours*/
-		$hours_available     = WPRB_Reservations::get_available_hours( $date, $time, $people );
-		$externals_available = WPRB_Reservations::get_available_hours( $date, $time, $people, true, $external );
+		$hours_available     = WPRB_Reservations::get_available_hours( $date, $time, $people, $res_people, false, $external, $last_minute );
+		$externals_available = WPRB_Reservations::get_available_hours( $date, $time, $people, $res_people, true, $external );
 
 		if ( is_array( $hours_available ) ) {
 
@@ -329,6 +407,7 @@ class WPRB_Reservation_Widget {
 
 					/*Check if it's too late*/
 					if ( $date ) {
+
 
 						if ( ( strtotime( $date . ' ' . $key ) - ( 60 * $margin_time ) ) < $now ) {
 
@@ -386,9 +465,21 @@ class WPRB_Reservation_Widget {
 				foreach ( $last_minute_av as $last ) {
 
 					/* Translators: %s: the time until the table booked will be available */
-					$title = sprintf( __( 'Available until %s', 'wp-restaurant-booking' ), $last['to'] );
+					$until_message = sprintf( __( 'Available until %s', 'wp-restaurant-booking' ), $last['to'] );
 
-					echo '<li class="wprb-hour' . esc_attr( $not_available ) . '" title="' . esc_attr( $title ) . '"><input type="button" class="last-minute" data-until="' . esc_attr( $last['to'] ) . '" value="' . esc_attr( $last['from'] ) . '"></li>';
+					echo '<li class="wprb-hour" data-tooltip-content="#until-message"><input type="button" class="last-minute" data-until="' . esc_attr( $last['to'] ) . '" value="' . esc_attr( $last['from'] ) . '"></li>';
+
+					/*Tooltip until message*/
+					echo '<div class="tooltip_templates">';
+						echo '<span id="until-message">';
+						echo esc_html( $until_message );
+						echo '<p>';
+							echo '<span class="confirm">' . esc_html( 'Confirm', 'wp-restaurant-booking' ) . '</span>';
+							echo '<span class="cancel">' . esc_html( 'Cancel', 'wp-restaurant-booking' ) . '</span>';
+						echo '</p>';
+						echo '</span>';
+					echo '</div>';
+
 
 				}
 
@@ -415,11 +506,12 @@ class WPRB_Reservation_Widget {
 			$people      = sanitize_text_field( wp_unslash( $_POST['people'] ) );
 			$date        = sanitize_text_field( wp_unslash( $_POST['date'] ) );
 			$back_end    = isset( $_POST['back-end'] ) ? sanitize_text_field( wp_unslash( $_POST['back-end'] ) ) : false;
+			$res_people  = isset( $_POST['res_people'] ) ? sanitize_text_field( wp_unslash( $_POST['res_people'] ) ) : null;;
 			$the_date    = date( 'Y-m-d', strtotime( $date ) );
 			$last_minute = isset( $_POST['last-minute'] ) ? sanitize_text_field( wp_unslash( $_POST['last-minute'] ) ) : null;
 			$time        = isset( $_POST['time'] ) ? sanitize_text_field( wp_unslash( $_POST['time'] ) ) : null;
 
-			$this->hours_select_element( $people, $the_date, $back_end, $last_minute, $time );
+			self::hours_select_element( $people, $the_date, $back_end, $last_minute, false, $time, $res_people );
 
 		}
 
@@ -458,10 +550,11 @@ class WPRB_Reservation_Widget {
 			$the_date    = date( 'Y-m-d', strtotime( $date ) );
 			$time        = sanitize_text_field( wp_unslash( $_POST['time'] ) );
 			$people      = sanitize_text_field( wp_unslash( $_POST['people'] ) );
+			$res_people  = sanitize_text_field( wp_unslash( $_POST['res_people'] ) );
 			$back_end    = isset( $_POST['back-end'] ) ? sanitize_text_field( wp_unslash( $_POST['back-end'] ) ) : '';
 			$is_external = isset( $_POST['is_external'] ) ? sanitize_text_field( wp_unslash( $_POST['is_external'] ) ) : '';
 
-			$bookable = WPRB_Reservations::get_available_externals_seats( $the_date, $time, $people, $back_end, $is_external );
+			$bookable = WPRB_Reservations::get_available_externals_seats( $the_date, $time, $people, $back_end, $res_people, $is_external );
 
 			echo esc_html( $bookable );
 

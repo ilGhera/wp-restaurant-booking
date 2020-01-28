@@ -3,7 +3,7 @@
  * 
  * @author ilGhera
  * @package wc-restaurant-booking/js
- * @since 0.9.0
+ * @since 1.0.0
  */
 
 var wprbEditController = function() {
@@ -15,11 +15,59 @@ var wprbEditController = function() {
 		self.people_element();
 		self.date_element();
 		self.hours_element();
+		self.last_minute_select();
 		self.external_element();
 		self.auto_change_reservation_status();
 		self.reservation_id_to_modal();
 		self.modal_status_label_activate();
 		self.modal_change_status();
+		self.wprb_tooltipser();
+
+	}
+
+	
+	/**
+	 * Tooltips
+	 */
+	self.wprb_tooltipser = function() {
+
+		jQuery(function($){
+
+            var targets = ['.wprb-hour.regular', 'ul.last-minute .wprb-hour'];
+            var action; 
+
+            /*Generic*/
+            $('.tooltip').tooltipster({
+
+        	   trigger: 'click'
+
+            });
+
+            for (var i = 0; i < targets.length; i++) {
+
+            	$('body').on('mouseenter', targets[i] + ':not(.tooltipstered)', function(){
+
+            		/*Using click or hover where required*/
+            		action = 'click';
+
+            		if ( ! $(this).hasClass('not-available') && $(this).hasClass('regular') ) {
+
+	            		action = 'hover';
+
+            		}
+
+		            $(this).tooltipster({
+
+		        	   trigger: action,
+					   interactive: true
+
+		            });
+
+	            });
+            	
+            }
+
+		})
 
 	}
 
@@ -38,6 +86,7 @@ var wprbEditController = function() {
 			var hours_tr    = $('.wprb-hours');
 			var last_minute = 0;
 			var reservation_time;
+			var reservation_people;
 
 			/*Delete until value*/
 			$('.until-field').val('');
@@ -52,7 +101,8 @@ var wprbEditController = function() {
 			/*Get current booking time if editing a reservation*/
 			if (back_end) {
 
-				reservation_time = $('table.wprb-reservation').data('time');
+				reservation_time   = $('table.wprb-reservation').data('time');
+				reservation_people = $('table.wprb-reservation').data('people');
 
 			}
 
@@ -60,6 +110,7 @@ var wprbEditController = function() {
 				'action': 'wprb-hours-available',
 				'wprb-change-date-nonce': wprbSettings.changeDateNonce,
 				'people': people,
+				'res_people': reservation_people,
 				'date': date,
 				'back-end': back_end,
 				'time': reservation_time,
@@ -113,26 +164,93 @@ var wprbEditController = function() {
 
 		jQuery(function($){
 
-			var hours_tr = $('.wprb-hours');
+			var hours_tr   = $('.wprb-hours');
+			var dateOnLoad = $('.wprb-date').val();
 			var people;
-			var data;
-
-			if('' != $('.wprb-date').val()) {
-				$(hours_tr).show();
+			var date;
+			var date_selected;
+			var display_date;
+			var dateOptions = {
+				day: '2-digit',
+				month: '2-digit', 
+				year: 'numeric'
 			}
 
-			$('.wprb-date').on('change', function(){
 
-				/*Not in the reservations page */
-				if ( $(this).hasClass('list') ) {
+			/*Editing an existing reservation*/
+			if('' != dateOnLoad) {
 
-					return;
+				/*Display hours*/
+				$(hours_tr).show();
+
+				/*Get reservation date*/
+				display_date = new Date( dateOnLoad );
+
+				/*Display formatted resevation date in the field*/
+				setTimeout( function(){
+					
+					$('.datepicker-here').attr( 'value', display_date.toLocaleString(wprbSettings.locale, dateOptions) );
+
+				}, 400)
+
+			}
+
+			$('.datepicker').on('click', function(){
+
+				if ( $('.datepicker--cell.-focus-', this).hasClass( '-disabled-' ) ) {
+
+					alert(wprbSettings.dateNotAvailableMessage);
 
 				}
-				
-				people = $('.wprb-people').val();
 
-				self.hours_element_update(people, $(this).val(), true);
+				date_selected = $('.datepicker-here').data('datepicker').selectedDates[0];
+
+				if ( date_selected ) {
+
+					date          = date_selected.toLocaleString('en-EN', dateOptions);
+					display_date  = date_selected.toLocaleString(wprbSettings.locale, dateOptions);
+
+					$('.wprb-date').attr( 'value', date );
+					$('.datepicker-here').attr( 'value', display_date );
+					
+					people = $('.wprb-people').val();
+
+					self.hours_element_update(people, date, true);
+
+				}
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Confirm the last minute hour selection from the tooltip
+	 */
+	self.last_minute_select = function() {
+
+		jQuery(function($){
+
+			var last_minute;
+			var input = $('input.wprb-time');
+			var until = $('input.wprb-until');
+
+
+			$('body').on('click', '#until-message span', function(){
+
+				last_minute = $('ul.last-minute .wprb-hour');
+				
+				if ($(this).hasClass('cancel')) {
+
+					$('input', last_minute).removeClass('active');
+					$(input).val('');
+					$(until).val('');
+
+				}
+
+				$(last_minute).tooltipster('close');
 
 			})
 
@@ -153,8 +271,8 @@ var wprbEditController = function() {
 			var input       = $('input.wprb-time');
 			var until       = $('input.wprb-until');
 			var current_val = $(input).val();
-			var date        = $('.wprb-date').val();;
-				
+			var date        = $('.wprb-date').val();
+
 			if ( '' != $(until).val() ) {
 
 				time_el = $('li.wprb-hour input.last-minute');
@@ -173,11 +291,15 @@ var wprbEditController = function() {
 
 			$(document).on('click', 'li.wprb-hour input', function(){
 
-				$('li.wprb-hour input').removeClass('active')
-				
-				$(this).addClass('active');
+				if ( ! $(this).parent('li').hasClass( 'not-available' ) ) {
 
-				$(input).val( $(this).val() );
+					$('li.wprb-hour input').removeClass('active')
+					
+					$(this).addClass('active');
+
+					$(input).val( $(this).val() );
+
+				}
 				
 				/*Last minute*/
 				if ($(this).hasClass('last-minute')) {
@@ -235,6 +357,7 @@ var wprbEditController = function() {
 
 			var is_external      = 0;
 			var people           = $('.wprb-people').val();
+			var reservation_people = $('table.wprb-reservation').data('people');
 			var input            = $('input.wprb-external');
 			var hour_selected    = $('.wprb-hour input.active');
 			var internals 	     = $(hour_selected).closest('li').data('internal');
@@ -261,6 +384,7 @@ var wprbEditController = function() {
 				'date': date,
 				'time': time,
 				'people': people,
+				'res_people': reservation_people,
 				'back-end': 1,
 				'is_external': is_external
 			}

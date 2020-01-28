@@ -3,7 +3,7 @@
  * 
  * @author ilGhera
  * @package wc-restaurant-booking/js
- * @since 0.9.0
+ * @since 1.0.0
  */
 
 var wprbController = function() {
@@ -12,30 +12,56 @@ var wprbController = function() {
 
 	self.onLoad = function() {
 
-		self.widget_options();
 		self.people_select();
 		self.date_select();
 		self.time_select();
+		self.last_minute_select(); //temp.
 		self.manual_step_navigation();
 		self.complete_reservation();
 		self.reset_fields();
+		self.wprb_tooltipser();
+
 	}
 
-	
+
 	/**
-	 * Set the modal widget options
+	 * Tooltips
 	 */
-	self.widget_options = function() {
+	self.wprb_tooltipser = function() {
 
 		jQuery(function($){
 
-			$('.datepicker-here').datepicker({
-				minDate: new Date()
-			})
+            var targets = ['.wprb-hour.regular', 'ul.last-minute .wprb-hour'];
+            var action; 
+            
+            for (var i = 0; i < targets.length; i++) {
+
+            	$('body').on('mouseenter', targets[i] + ':not(.tooltipstered)', function(){
+
+            		/*Using click or hover where required*/
+            		action = 'click';
+
+            		if ( ! $(this).hasClass('not-available') && $(this).hasClass('regular') ) {
+
+	            		action = 'hover';
+
+            		}
+
+		            $(this).tooltipster({
+
+		        	   trigger: action,
+					   interactive: true
+
+		            });
+
+	            });
+            	
+            }
 
 		})
 
 	}
+
 
 	/**
 	 * Update bookable based on people and date selections
@@ -87,47 +113,57 @@ var wprbController = function() {
 
 			$('.datepicker').on('click', function(){
 
+				if ( $('.datepicker--cell.-focus-', this).hasClass( '-disabled-' ) ) {
+
+					alert(wprbSettings.dateNotAvailableMessage);
+
+				}
+
 				date_selected = $('.datepicker-here').data('datepicker').selectedDates[0];
 
-				options = {
-					day: '2-digit',
-					month: 'short', 
-					year: 'numeric'
+				if ( date_selected ) {
+
+					options = {
+						day: '2-digit',
+						month: 'short', 
+						year: 'numeric'
+					}
+
+					date         = date_selected.toLocaleString('en-EN', options);
+					display_date = date_selected.toLocaleString(wprbSettings.locale, options);
+
+					/*Get the max bookable number*/
+					data = {
+						'action': 'wprb-get-max-bookable',
+						'wprb-max-bookable-nonce': wprbSettings.maxBookableNonce,
+						'date': date,
+					}
+
+					$.post(wprbSettings.ajaxURL, data, function(response){
+
+						$(people_select).html(response);
+
+					})
+
+					people_val = $('.people-field').val();
+
+					if ( people_val ) {
+
+						/*Update available hours*/
+						self.hours_available_update( people_val, date );
+
+					}
+
+					/*Add data*/
+					$('li.date .value').html(display_date); // temp.
+					$('.date-field').val(date);
+
+					/*Activate people element*/
+					$('.people').addClass('active');
+					$(people).addClass('active');
+					$(people_select).removeAttr('disabled');
+
 				}
-
-				date         = date_selected.toLocaleString('en-EN', options);
-				display_date = date_selected.toLocaleString(wprbSettings.locale, options);
-
-				/*Get the max bookable number*/
-				data = {
-					'action': 'wprb-get-max-bookable',
-					'wprb-max-bookable-nonce': wprbSettings.maxBookableNonce,
-					'date': date,
-				}
-
-				$.post(wprbSettings.ajaxURL, data, function(response){
-
-					$(people_select).html(response);
-
-				})
-
-				people_val = $('.people-field').val();
-
-				if ( people_val ) {
-
-					/*Update available hours*/
-					self.hours_available_update( people_val, date );
-
-				}
-
-				/*Add data*/
-				$('li.date .value').html(display_date); // temp.
-				$('.date-field').val(date);
-
-				/*Activate people element*/
-				$('.people').addClass('active');
-				$(people).addClass('active');
-				$(people_select).removeAttr('disabled');
 					
 			})
 			
@@ -299,6 +335,38 @@ var wprbController = function() {
 
 
 	/**
+	 * Confirm the last minute hour selection from the tooltip
+	 */
+	self.last_minute_select = function() {
+
+		jQuery(function($){
+
+			var last_minute;
+
+			$('body').on('click', '#until-message span', function(){
+
+				last_minute = $('.last-minute .wprb-hour');
+				
+				if ($(this).hasClass('confirm')) {
+
+					self.go_to_last_step();
+
+				} else {
+
+					$('input', last_minute).removeClass('active');
+
+				}
+				
+				$(last_minute).tooltipster('close');
+
+			})
+
+		})
+
+	}
+
+
+	/**
 	 * Widget time selection
 	 */
 	self.time_select = function() {
@@ -335,7 +403,7 @@ var wprbController = function() {
 					/*External not available*/
 					$('.wprb-external-container').slideUp();
 
-					self.go_to_last_step();
+					// self.go_to_last_step();
 				
 				} else if ( externals ) {
 
