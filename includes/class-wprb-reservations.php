@@ -441,9 +441,13 @@ class WPRB_Reservations {
 		$get_interval = self::get_time_interval( $day, $hour );
 
 		/*Medium time must be a multiple of the interval*/
-		if ( 0 !== $medium_time % $get_interval ) {
+		if ( $medium_time && $get_interval ) {
+			
+			if ( 0 !== $medium_time % $get_interval ) {
 
-			$medium_time = $get_interval * round( $medium_time / $get_interval );
+				$medium_time = $get_interval * round( $medium_time / $get_interval );
+
+			}
 
 		}
 
