@@ -180,7 +180,8 @@ form#wprb-premium-key input.button {
 
 .hours-element label,
 .last-minute-element label,
-.closing-period-element label {
+.closing-period-element label,
+.room-tables-element label {
 	padding: 0 0.5rem;
 }
 
@@ -207,7 +208,9 @@ input#wprb-last-minute-date {
 .wprb-add-last-minute-container,
 .wprb-remove-last-minute-container,
 .wprb-add-closing-period-container,
-.wprb-remove-closing-period-container {
+.wprb-remove-closing-period-container,
+.wprb-add-room-tables-container,
+.wprb-remove-room-tables-container {
 	display: inline;
 	position: relative;
 	top: 0.3rem;
@@ -219,7 +222,9 @@ input#wprb-last-minute-date {
 .add-last-minute-hover,
 .remove-last-minute-hover,
 .add-closing-period-hover,
-.remove-closing-period-hover {
+.remove-closing-period-hover,
+.add-room-tables-hover,
+.remove-room-tables-hover {
 	display: none;
 }
 
@@ -234,7 +239,11 @@ input#wprb-last-minute-date {
 .add-closing-period,
 .add-closing-period-hover,
 .remove-closing-period,
-.remove-closing-period-hover {
+.remove-closing-period-hover,
+.add-room-tables,
+.add-room-tables-hover,
+.remove-room-tables,
+.remove-room-tables-hover {
 	margin-left: 2px;
 }
 
@@ -243,7 +252,10 @@ input#wprb-last-minute-date {
 .wprb-add-last-minute-container:hover .add-last-minute,
 .wprb-remove-last-minute-container:hover .remove-last-minute,
 .wprb-add-closing-period-container:hover .add-closing-period,
-.wprb-remove-closing-period-container:hover .remove-closing-period {
+.wprb-remove-closing-period-container:hover .remove-closing-period,
+.wprb-add-room-tables-container:hover .add-room-tables,
+.wprb-remove-room-tables-container:hover .remove-room-tables {
+
 	display: none;
 }
 
@@ -252,7 +264,9 @@ input#wprb-last-minute-date {
 .wprb-add-last-minute-container:hover .add-last-minute-hover,
 .wprb-remove-last-minute-container:hover .remove-last-minute-hover,
 .wprb-add-closing-period-container:hover .add-closing-period-hover,
-.wprb-remove-closing-period-container:hover .remove-closing-period-hover {
+.wprb-remove-closing-period-container:hover .remove-closing-period-hover,
+.wprb-add-room-tables-container:hover .add-room-tables-hover,
+.wprb-remove-room-tables-container:hover .remove-room-tables-hover {
 	display: inline;
 }
 

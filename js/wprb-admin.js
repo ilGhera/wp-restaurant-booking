@@ -22,6 +22,8 @@ var wprbAdminController = function() {
 		self.removeLastMinute();
 		self.addclosingPeriod();
 		self.removeClosingPeriod();
+		self.addRoomTables();
+		self.removeRoomTables();
 		self.minDateClosingPeriodTo();
 		self.autoCompleteFields('internal');
 		self.autoCompleteFields('external');
@@ -414,6 +416,57 @@ var wprbAdminController = function() {
 			$('#wprb-closing-period-from').on('change', function(){
 
 				$('#wprb-closing-period-to').attr('min', $(this).val());
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Add a new room tables element
+	 */
+	self.addRoomTables = function() {
+
+		jQuery(function($){
+
+			$(document).on('click', '.add-room-tables-hover', function(){
+
+				var count = $('.room-tables-element').length;
+				var prev  = $('.wprb-room-tables-element-' + ( count - 1 ) );
+				var next  = count;
+				var data  = {
+					'action': 'wprb-add-room-tables',
+					'wprb-add-room-tables-nonce': wprbSettings.addRoomTablesNonce,
+					'number': next
+				}
+
+				$.post(ajaxurl, data, function(response){
+
+					$(prev).after(response);
+
+				})
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Remove a room tables element
+	 */
+	self.removeRoomTables = function() {
+
+		jQuery(function($){
+
+			$(document).on('click', '.remove-room-tables-hover', function(){
+
+				var element = $(this).closest('.room-tables-element');
+
+				$(element).remove();
 
 			})
 
