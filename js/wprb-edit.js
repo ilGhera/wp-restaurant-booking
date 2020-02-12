@@ -24,7 +24,7 @@ var wprbEditController = function() {
 		self.reservation_id_to_modal();
 		self.modal_status_label_activate();
 		self.modal_change_status();
-
+		self.update_archive_tables();
 
 	}
 
@@ -338,6 +338,39 @@ var wprbEditController = function() {
 				}
 
 			}
+
+		})
+
+	}
+
+
+	/**
+	 * Update reservation tables directly from the admin archive page
+	 */
+	self.update_archive_tables = function() {
+
+		jQuery(function($){
+
+			var row;
+			var args;
+			var tables;
+			var id;
+
+			$('tr.type-reservation .wprb-select').chosen().change(function(){
+				
+				row    = $(this).closest('tr.type-reservation');
+				id     = $(row).attr('id').split('-')[1];				
+				tables = $(this).val();
+				args   = {
+					'action': 'wprb-archive-update-tables',
+					'wprb-archive-tables-nonce': wprbSettings.archiveTablesNonce,
+					'reservation-id': id,
+					'tables': tables
+				}
+
+				$.post(ajaxurl, args);
+
+			})
 
 		})
 

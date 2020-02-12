@@ -28,6 +28,7 @@ class WPRB_Reservations {
 			add_action( 'admin_footer', array( $this, 'status_modal' ) );
 			add_action( 'wp_ajax_wprb-change-status', array( $this, 'wprb_change_status_callback' ) );
 			add_action( 'wp_ajax_wprb-available-tables', array( $this, 'wprb_available_tables_callback' ) );
+			add_action( 'wp_ajax_wprb-archive-update-tables', array( $this, 'update_reservation_tables_callback' ) );
 			add_action( 'restrict_manage_posts', array( $this, 'filter_reservations' ) );
 			add_filter( 'enter_title_here', array( $this, 'title_place_holder' ), 20, 2 );
 			add_filter( 'months_dropdown_results', array( $this, 'remove_post_date_filter' ), 10, 2 );
@@ -67,6 +68,7 @@ class WPRB_Reservations {
 			$change_date_nonce          = wp_create_nonce( 'wprb-change-date' );
 			$external_nonce             = wp_create_nonce( 'wprb-external' );
 			$tables_nonce               = wp_create_nonce( 'wprb-tables' );
+			$archive_tables_nonce       = wp_create_nonce( 'wprb-archive-tables' );
 			$locale                     = str_replace( '_', '-', get_locale() );
 			$closing_days               = WPRB_Reservation_Widget::get_days_off();
 			$date_not_available_message = esc_html__( 'This date is not available', 'wp-restaurant-booking' );
@@ -90,6 +92,7 @@ class WPRB_Reservations {
 					'changeStatusNonce'       => $change_status_nonce,
 					'changeDateNonce'         => $change_date_nonce,
 					'tablesNonce'             => $tables_nonce,
+					'archiveTablesNonce'      => $archive_tables_nonce,
 					'externalNonce'           => $external_nonce,
 					'locale'                  => $locale,
 					'dateNotAvailableMessage' => $date_not_available_message,
@@ -814,10 +817,10 @@ class WPRB_Reservations {
 		$day            = strtolower( date( 'D', strtotime( $date ) ) );
 		$temporal_space = self::get_temporal_space( $day, $time );
 
-		error_log( 'DAY: ' . $day . ' TIME: ' . $time );
-		error_log( 'SPACE: ' . print_r( self::get_temporal_space( $day, $time ), true ) );
-		error_log( 'INITIALS TABLES: ' . print_r( $initial_tables, true ) );
-		error_log( 'RESERVATIONS TABLES: ' . print_r( $res_tables, true ) );
+		// error_log( 'DAY: ' . $day . ' TIME: ' . $time );
+		// error_log( 'SPACE: ' . print_r( self::get_temporal_space( $day, $time ), true ) );
+		// error_log( 'INITIALS TABLES: ' . print_r( $initial_tables, true ) );
+		// error_log( 'RESERVATIONS TABLES: ' . print_r( $res_tables, true ) );
 
 		foreach ( $res_tables as $key => $value ) {
 
@@ -831,7 +834,7 @@ class WPRB_Reservations {
 			}
 		}
 
-		error_log( 'TABLES BOOKED: ' . print_r( $output, true ) );
+		// error_log( 'TABLES BOOKED: ' . print_r( $output, true ) );
 
 		return $output;
 
@@ -880,7 +883,7 @@ class WPRB_Reservations {
 
 						$table    = $key . '_' . ( $i + 1 );
 						$selected = ( is_array( $tables ) && in_array( $table, $tables ) ) ? ' selected="selected"' : '';
-						$disabled = in_array( $table, $booked_tables ) ? ' disabled' : '';
+						$disabled = in_array( $table, $booked_tables ) && ! in_array( $table, $tables ) ? ' disabled' : '';
 
 						echo '<option value="' . esc_attr( $table ) . '"' . esc_html( $selected ) . esc_html( $disabled ) . '>' . esc_html( $value[ $i ] ) . '</option>';
 
@@ -909,6 +912,45 @@ class WPRB_Reservations {
 				self::display_available_tables( null, $date, $time );
 
 			}
+		}
+
+		exit;
+
+	}
+
+
+	/**
+	 * Update the reservation tables in the db if modified in archive page
+	 *
+	 * @return void
+	 */
+	public function update_reservation_tables_callback() {
+
+		if ( isset( $_POST['wprb-archive-tables-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-archive-tables-nonce'] ), 'wprb-archive-tables' ) ) {
+
+			$reservation_id = isset( $_POST['reservation-id'] ) ? sanitize_text_field( wp_unslash( $_POST['reservation-id'] ) ) : '';
+			$tables         = array();
+
+			if ( $reservation_id ) {
+
+				if ( isset( $_POST['tables'] ) && is_array( $_POST['tables'] ) ) {
+
+					foreach ( $_POST['tables'] as $key => $value ) {
+
+						$tables[] = sanitize_text_field( wp_unslash( $value ) );
+
+					}
+
+					update_post_meta( $reservation_id, 'wprb-tables', $tables );
+
+				} else {
+
+					delete_post_meta( $reservation_id, 'wprb-tables' );
+
+				}
+
+			}
+
 		}
 
 		exit;
