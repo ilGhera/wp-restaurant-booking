@@ -316,6 +316,7 @@ var wprbEditController = function() {
 
 				var data = {
 					'action': 'wprb-available-tables',
+					'wprb-tables-nonce': wprbSettings.tablesNonce,
 					'date': date,
 					'time': time
 				}

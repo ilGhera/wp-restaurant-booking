@@ -66,6 +66,7 @@ class WPRB_Reservations {
 			$change_status_nonce        = wp_create_nonce( 'wprb-change-status' );
 			$change_date_nonce          = wp_create_nonce( 'wprb-change-date' );
 			$external_nonce             = wp_create_nonce( 'wprb-external' );
+			$tables_nonce               = wp_create_nonce( 'wprb-tables' );
 			$locale                     = str_replace( '_', '-', get_locale() );
 			$closing_days               = WPRB_Reservation_Widget::get_days_off();
 			$date_not_available_message = esc_html__( 'This date is not available', 'wp-restaurant-booking' );
@@ -88,6 +89,7 @@ class WPRB_Reservations {
 				array(
 					'changeStatusNonce'       => $change_status_nonce,
 					'changeDateNonce'         => $change_date_nonce,
+					'tablesNonce'             => $tablesNonce,
 					'externalNonce'           => $external_nonce,
 					'locale'                  => $locale,
 					'dateNotAvailableMessage' => $date_not_available_message,
@@ -717,7 +719,7 @@ class WPRB_Reservations {
 
 			foreach ( $rooms_tables as $room ) {
 
-				$room_number = 'room-' . $n++;
+				$room_number = 'room-' . ( $n++ );
 
 				if ( isset( $room['name'], $room['tables'] ) ) {
 
@@ -796,6 +798,13 @@ class WPRB_Reservations {
 	}
 
 
+	/**
+	 * Get the tables booked for the reservations of the given date and time
+	 *
+	 * @param  string $date the reservation date.
+	 * @param  string $time the reservation time.
+	 * @return array
+	 */
 	public static function get_tables_booked( $date, $time ) {
 
 		$output = array();
@@ -865,7 +874,9 @@ class WPRB_Reservations {
 
 				if ( is_array( $value ) ) {
 
-					for ( $i = 0; $i < count( $value ); $i++ ) {
+					$count = count( $value );
+
+					for ( $i = 0; $i < $count; $i++ ) {
 
 						$table    = $key . '_' . ( $i + 1 );
 						$selected = ( is_array( $tables ) && in_array( $table, $tables ) ) ? ' selected="selected"' : '';
@@ -883,15 +894,21 @@ class WPRB_Reservations {
 	}
 
 
+	/**
+	 * Display the available tables based on the date and time selected by the admin
+	 */
 	public static function wprb_available_tables_callback() {
 
-		$date = isset( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '';
-		$time = isset( $_POST['time'] ) ? sanitize_text_field( wp_unslash( $_POST['time'] ) ) : '';
+		if ( isset( $_POST['wprb-tables-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-tables-nonce'] ), 'wprb-tables' ) ) {
 
-		if ( $date && $time ) {
+			$date = isset( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '';
+			$time = isset( $_POST['time'] ) ? sanitize_text_field( wp_unslash( $_POST['time'] ) ) : '';
 
-			self::display_available_tables( null, $date, $time );
+			if ( $date && $time ) {
 
+				self::display_available_tables( null, $date, $time );
+
+			}
 		}
 
 		exit;
