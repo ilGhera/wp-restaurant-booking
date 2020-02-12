@@ -458,6 +458,10 @@ td.column-time span.last-minute {
 	color: red;
 }
 
+td.column-table #wprb_tables_chosen {
+	width: 100% !important;
+}
+
 tr.wprb-user-notification-field textarea {
 	height: 220px;
 }
@@ -531,6 +535,12 @@ span.external {
 
 #wprb-button-position {
 	width: 160px;
+}
+
+.old-table {
+	display: block;
+	color: #888;
+	margin-top: 5px;
 }
 
 @media screen and (max-width: 1000px) {

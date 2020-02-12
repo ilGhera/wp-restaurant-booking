@@ -1121,9 +1121,13 @@ class WPRB_Reservations {
 				break;
 
 			case 'table':
-				$table = get_post_meta( $post_id, 'wprb-table', true );
+				
+				// echo implode( ', ', $tables );
+				self::display_available_tables( $post_id );
 
-				echo $table ? esc_html( $table ) : esc_html__( 'No table assigned', 'wp-restaurant-booking' );
+				/*Backward compatibility*/
+				$table  = get_post_meta( $post_id, 'wprb-table', true );
+				echo $table ? '<span class="old-table">' . esc_html( $table ) . '</span>' : '';
 
 				break;
 

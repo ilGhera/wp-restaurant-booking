@@ -92,7 +92,18 @@ $external_class    = $external ? ' external' : '';
 		<td>
 			<!-- <input type="text" name="wprb-table" class="wprb-table" value="<?php //echo esc_attr( wp_unslash( $table ) ); ?>" placeholder="5A"> -->
 
-			<?php $tables_rooms = WPRB_Reservations::display_available_tables( $reservation_id ); ?>
+			<?php
+			$tables_rooms = WPRB_Reservations::display_available_tables( $reservation_id );
+
+			/*Backward compatibility*/
+			$old_table = get_post_meta( $reservation_id, 'wprb-table', true );
+			
+			if ( $old_table ) {
+				
+				echo $old_table ? '<span class="old-table">' . esc_html( $old_table ) . '</span>' : '';
+
+			}
+			?>
 
 			<p class="description"><?php esc_html_e( 'The table assigned to this reservation', 'wp-restaurant-booking' ); ?></p>
 		</td>
