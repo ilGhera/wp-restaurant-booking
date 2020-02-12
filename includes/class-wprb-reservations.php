@@ -89,7 +89,7 @@ class WPRB_Reservations {
 				array(
 					'changeStatusNonce'       => $change_status_nonce,
 					'changeDateNonce'         => $change_date_nonce,
-					'tablesNonce'             => $tablesNonce,
+					'tablesNonce'             => $tables_nonce,
 					'externalNonce'           => $external_nonce,
 					'locale'                  => $locale,
 					'dateNotAvailableMessage' => $date_not_available_message,
