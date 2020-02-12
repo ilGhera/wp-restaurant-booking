@@ -13,7 +13,6 @@ $last_name         = get_post_meta( $reservation_id, 'wprb-last-name', true );
 $email             = get_post_meta( $reservation_id, 'wprb-email', true );
 $phone             = get_post_meta( $reservation_id, 'wprb-phone', true );
 $people            = get_post_meta( $reservation_id, 'wprb-people', true );
-$table             = get_post_meta( $reservation_id, 'wprb-table', true );
 $date              = get_post_meta( $reservation_id, 'wprb-date', true );
 $get_locale        = explode( '_', get_locale() );
 $time              = get_post_meta( $reservation_id, 'wprb-time', true );
@@ -63,13 +62,6 @@ $external_class    = $external ? ' external' : '';
 		</td>
 	</tr>
 	<tr>
-		<th scope="row"><?php esc_html_e( 'Table', 'wp-restaurant-booking' ); ?></th>
-		<td>
-			<input type="text" name="wprb-table" class="wprb-table" value="<?php echo esc_attr( wp_unslash( $table ) ); ?>" placeholder="5A">
-			<p class="description"><?php esc_html_e( 'The table assigned to this reservation', 'wp-restaurant-booking' ); ?></p>
-		</td>
-	</tr>
-	<tr>
 		<th scope="row"><?php esc_html_e( 'Date', 'wp-restaurant-booking' ); ?></th>
 		<td>
 			<input type="text" class="datepicker-here" placeholder="Select a date" value="" data-language="<?php echo esc_attr( $get_locale[0] ); ?>" required>
@@ -93,6 +85,16 @@ $external_class    = $external ? ' external' : '';
 				?>
 			</div>
 			<p class="description"><?php esc_html_e( 'The time of the reservation', 'wp-restaurant-booking' ); ?></p>
+		</td>
+	</tr>
+	<tr class="wprb-tables">
+		<th scope="row"><?php esc_html_e( 'Table', 'wp-restaurant-booking' ); ?></th>
+		<td>
+			<!-- <input type="text" name="wprb-table" class="wprb-table" value="<?php //echo esc_attr( wp_unslash( $table ) ); ?>" placeholder="5A"> -->
+
+			<?php $tables_rooms = WPRB_Reservations::display_available_tables( $reservation_id ); ?>
+
+			<p class="description"><?php esc_html_e( 'The table assigned to this reservation', 'wp-restaurant-booking' ); ?></p>
 		</td>
 	</tr>
 	<tr>

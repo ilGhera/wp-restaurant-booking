@@ -12,6 +12,9 @@ var wprbEditController = function() {
 
 	self.onLoad = function() {
 
+		self.tables_element_update();
+		self.chosen();
+		self.wprb_tooltipser();
 		self.people_element();
 		self.date_element();
 		self.hours_element();
@@ -21,11 +24,41 @@ var wprbEditController = function() {
 		self.reservation_id_to_modal();
 		self.modal_status_label_activate();
 		self.modal_change_status();
-		self.wprb_tooltipser();
+
 
 	}
 
 	
+	/**
+	 * Fires Chosen
+	 * @param  {bool} destroy method distroy
+	 */
+	self.chosen = function(destroy = false) {
+
+		jQuery(function($){
+
+			var select = $('.wprb-select');
+
+			if (destroy) {
+
+				$(select).chosen('destroy');
+
+			} else {
+			
+				$(select).chosen({
+			
+					disable_search_threshold: 10
+					// width: '200px'
+				
+				});
+
+			}
+
+		})
+
+	}
+
+
 	/**
 	 * Tooltips
 	 */
@@ -215,7 +248,11 @@ var wprbEditController = function() {
 					
 					people = $('.wprb-people').val();
 
+					/*Update hours available*/
 					self.hours_element_update(people, date, true);
+
+					/*Update tables available*/
+					self.tables_element_update( date, $(this).val() );
 
 				}
 
@@ -253,6 +290,53 @@ var wprbEditController = function() {
 				$(last_minute).tooltipster('close');
 
 			})
+
+		})
+
+	}
+
+
+	/**
+	 * Display the tables field only if resDate and resTime are set.
+	 * Get tables available in a specified date and time.
+	 *
+	 * @param  {string} date the date
+	 * @param  {string} time the time
+	 * @return {string}      the field element
+	 */
+	self.tables_element_update = function( date = null, time = null ) {
+
+		jQuery(function($){
+
+			var tables_element = $('tr.wprb-tables');
+			var resDate        = $('.wprb-date').val()
+			var resTime        = $('.wprb-time').val();
+
+			if ( date && time ) {
+
+				var data = {
+					'action': 'wprb-available-tables',
+					'date': date,
+					'time': time
+				}
+
+				$.post(ajaxurl, data, function(response){
+
+					$('td', tables_element).html(response);
+					tables_element.show('slow');
+					self.chosen();
+
+				})
+
+			} else {
+
+				if ( ! resDate || ! resTime ) {
+
+					tables_element.hide();
+
+				}
+
+			}
 
 		})
 
@@ -318,6 +402,9 @@ var wprbEditController = function() {
 					self.external_element_update( date, $(this).val() );
 
 				}
+
+				/*Update tables available*/
+				self.tables_element_update( date, $(this).val() );
 
 			})
 
@@ -454,7 +541,7 @@ var wprbEditController = function() {
 
 			var status_field = $('.wprb-status')
 
-			$('.wprb-table').on('change', function(){
+			$('.wprb-tables').on('change', function(){
 
 				if( '' == $(this).val() ) {
 
