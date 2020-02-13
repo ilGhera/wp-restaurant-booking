@@ -843,56 +843,65 @@ class WPRB_Reservations {
 	 */
 	public static function display_available_tables( $reservation_id = null, $date = null, $time = null ) {
 
-		$reservation_id = $reservation_id ? $reservation_id : get_the_ID();
-		$tables         = get_post_meta( $reservation_id, 'wprb-tables', true );
-		$booked_tables  = self::get_tables_booked( $date, $time );
 		$tables_rooms   = self::get_initial_tables();
-		$status         = get_post_meta( $reservation_id, 'wprb-status', true );
 
-		/*Change status if the time limit is reached*/
-		if ( in_array( $status, array( 'received', 'managed' ) ) && self::time_limit_reached( $reservation_id ) ) {
+		if ( $tables_rooms ) {
+
+			$reservation_id = $reservation_id ? $reservation_id : get_the_ID();
+			$tables         = get_post_meta( $reservation_id, 'wprb-tables', true );
+			$booked_tables  = self::get_tables_booked( $date, $time );
+			$status         = get_post_meta( $reservation_id, 'wprb-status', true );
+
+			/*Change status if the time limit is reached*/
+			if ( in_array( $status, array( 'received', 'managed' ) ) && self::time_limit_reached( $reservation_id ) ) {
+				
+				$status = 'expired';
 			
-			$status = 'expired';
-		
-		}
-		
-		$disabled = in_array( $status, array( 'expired', 'completed' ) ) ? ' disabled' : '';
+			}
+			
+			$disabled = in_array( $status, array( 'expired', 'completed' ) ) ? ' disabled' : '';
 
-		if ( ! $date || ! $time ) {
+			if ( ! $date || ! $time ) {
 
-			$date = get_post_meta( $reservation_id, 'wprb-date', true );
-			$time = get_post_meta( $reservation_id, 'wprb-time', true );
+				$date = get_post_meta( $reservation_id, 'wprb-date', true );
+				$time = get_post_meta( $reservation_id, 'wprb-time', true );
 
-		} else {
+			} else {
 
-			$date = date( 'Y-m-d', strtotime( $date ) );
+				$date = date( 'Y-m-d', strtotime( $date ) );
 
-		}
+			}
 
-		echo '<select name="wprb-tables[]" id="wprb-tables" class="wprb-select" data-placeholder="' . esc_html__( 'Select one or more tables', 'wp-restaurant-booking' ) . '" multiple' . esc_html( $disabled ) . '>';
+			echo '<select name="wprb-tables[]" id="wprb-tables" class="wprb-select" data-placeholder="' . esc_html__( 'Select one or more tables', 'wp-restaurant-booking' ) . '" multiple' . esc_html( $disabled ) . '>';
 
-			if ( is_array( $tables_rooms ) ) {
+				if ( is_array( $tables_rooms ) ) {
 
-				foreach ( $tables_rooms as $key => $value ) {
+					foreach ( $tables_rooms as $key => $value ) {
 
-					if ( is_array( $value ) ) {
+						if ( is_array( $value ) ) {
 
-						$count = count( $value );
+							$count = count( $value );
 
-						for ( $i = 0; $i < $count; $i++ ) {
+							for ( $i = 0; $i < $count; $i++ ) {
 
-							$table    = $key . '_' . ( $i + 1 );
-							$selected = ( is_array( $tables ) && in_array( $table, $tables ) ) ? ' selected="selected"' : '';
-							$disabled = in_array( $table, $booked_tables ) && ! in_array( $table, $tables ) ? ' disabled' : '';
+								$table    = $key . '_' . ( $i + 1 );
+								$selected = ( is_array( $tables ) && in_array( $table, $tables ) ) ? ' selected="selected"' : '';
+								$disabled = in_array( $table, $booked_tables ) && ! in_array( $table, $tables ) ? ' disabled' : '';
 
-							echo '<option value="' . esc_attr( $table ) . '"' . esc_html( $selected ) . esc_html( $disabled ) . '>' . esc_html( $value[ $i ] ) . '</option>';
+								echo '<option value="' . esc_attr( $table ) . '"' . esc_html( $selected ) . esc_html( $disabled ) . '>' . esc_html( $value[ $i ] ) . '</option>';
 
+							}
 						}
 					}
 				}
-			}
 
-		echo '</select>';
+			echo '</select>';
+			
+		} else {
+
+			echo '<p class="description">' .  esc_html__( 'You haven\'t set any tables yet' , 'wp-restaurant-booking' ) . '</p>';
+
+		}
 
 	}
 
