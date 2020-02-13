@@ -848,8 +848,8 @@ class WPRB_Reservations {
 		if ( $tables_rooms ) {
 
 			$reservation_id = $reservation_id ? $reservation_id : get_the_ID();
-			$tables         = get_post_meta( $reservation_id, 'wprb-tables', true );
-			$booked_tables  = self::get_tables_booked( $date, $time );
+			$get_tables     = get_post_meta( $reservation_id, 'wprb-tables', true );
+			$tables         = $get_tables ? $get_tables : array(); 
 			$status         = get_post_meta( $reservation_id, 'wprb-status', true );
 
 			/*Change status if the time limit is reached*/
@@ -871,6 +871,8 @@ class WPRB_Reservations {
 				$date = date( 'Y-m-d', strtotime( $date ) );
 
 			}
+
+			$booked_tables  = self::get_tables_booked( $date, $time );
 
 			echo '<select name="wprb-tables[]" id="wprb-tables" class="wprb-select" data-placeholder="' . esc_html__( 'Select one or more tables', 'wp-restaurant-booking' ) . '" multiple' . esc_html( $disabled ) . '>';
 
