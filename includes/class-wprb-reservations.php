@@ -29,6 +29,7 @@ class WPRB_Reservations {
 			add_action( 'wp_ajax_wprb-change-status', array( $this, 'wprb_change_status_callback' ) );
 			add_action( 'wp_ajax_wprb-available-tables', array( $this, 'wprb_available_tables_callback' ) );
 			add_action( 'wp_ajax_wprb-archive-update-tables', array( $this, 'update_reservation_tables_callback' ) );
+			add_action( 'wp_ajax_wprb-get-archive-tables-available', array( $this, 'get_archive_tables_available_callback' ) );
 			add_action( 'restrict_manage_posts', array( $this, 'filter_reservations' ) );
 			add_filter( 'enter_title_here', array( $this, 'title_place_holder' ), 20, 2 );
 			add_filter( 'months_dropdown_results', array( $this, 'remove_post_date_filter' ), 10, 2 );
@@ -840,8 +841,9 @@ class WPRB_Reservations {
 	 * @param  int    $reservation_id the reservation id.
 	 * @param  string $date           the date.
 	 * @param  string $time           the time.
+	 * @param  bool   $only_options   returns only the select options if set to true.
 	 */
-	public static function display_available_tables( $reservation_id = null, $date = null, $time = null ) {
+	public static function display_available_tables( $reservation_id = null, $date = null, $time = null, $only_options = false ) {
 
 		$tables_rooms   = self::get_initial_tables();
 
@@ -874,30 +876,38 @@ class WPRB_Reservations {
 
 			$booked_tables  = self::get_tables_booked( $date, $time );
 
-			echo '<select name="wprb-tables[]" id="wprb-tables" class="wprb-select" data-placeholder="' . esc_html__( 'Select one or more tables', 'wp-restaurant-booking' ) . '" multiple' . esc_html( $disabled ) . '>';
+			if ( ! $only_options ) {
 
-				if ( is_array( $tables_rooms ) ) {
+				echo '<select name="wprb-tables[]" id="wprb-tables" class="wprb-select" data-placeholder="' . esc_html__( 'Select one or more tables', 'wp-restaurant-booking' ) . '" multiple' . esc_html( $disabled ) . '>';
 
-					foreach ( $tables_rooms as $key => $value ) {
+			}
 
-						if ( is_array( $value ) ) {
+			if ( is_array( $tables_rooms ) ) {
 
-							$count = count( $value );
+				foreach ( $tables_rooms as $key => $value ) {
 
-							for ( $i = 0; $i < $count; $i++ ) {
+					if ( is_array( $value ) ) {
 
-								$table    = $key . '_' . ( $i + 1 );
-								$selected = ( is_array( $tables ) && in_array( $table, $tables ) ) ? ' selected="selected"' : '';
-								$disabled = in_array( $table, $booked_tables ) && ! in_array( $table, $tables ) ? ' disabled' : '';
+						$count = count( $value );
 
-								echo '<option value="' . esc_attr( $table ) . '"' . esc_html( $selected ) . esc_html( $disabled ) . '>' . esc_html( $value[ $i ] ) . '</option>';
+						for ( $i = 0; $i < $count; $i++ ) {
 
-							}
+							$table    = $key . '_' . ( $i + 1 );
+							$selected = ( is_array( $tables ) && in_array( $table, $tables ) ) ? ' selected="selected"' : '';
+							$disabled = in_array( $table, $booked_tables ) && ! in_array( $table, $tables ) ? ' disabled' : '';
+
+							echo '<option value="' . esc_attr( $table ) . '"' . esc_html( $selected ) . esc_html( $disabled ) . '>' . esc_html( $value[ $i ] ) . '</option>';
+
 						}
 					}
 				}
+			}
 
-			echo '</select>';
+			if ( ! $only_options ) {
+
+				echo '</select>';
+
+			}
 			
 		} else {
 
@@ -923,6 +933,29 @@ class WPRB_Reservations {
 				self::display_available_tables( null, $date, $time );
 
 			}
+		
+		}
+
+		exit;
+
+	}
+
+
+	/**
+	 * Display the available tables based on the date and time selected by the admin
+	 */
+	public static function get_archive_tables_available_callback() {
+
+		if ( isset( $_POST['wprb-archive-tables-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-archive-tables-nonce'] ), 'wprb-archive-tables' ) ) {
+
+			$reservation_id = isset( $_POST['reservation-id'] ) ? sanitize_text_field( wp_unslash( $_POST['reservation-id'] ) ) : '';
+
+			if ( $reservation_id ) {
+
+				self::display_available_tables( $reservation_id, null, null, true );
+
+			}
+		
 		}
 
 		exit;
