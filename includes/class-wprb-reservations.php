@@ -817,11 +817,6 @@ class WPRB_Reservations {
 		$day            = strtolower( date( 'D', strtotime( $date ) ) );
 		$temporal_space = self::get_temporal_space( $day, $time );
 
-		// error_log( 'DAY: ' . $day . ' TIME: ' . $time );
-		// error_log( 'SPACE: ' . print_r( self::get_temporal_space( $day, $time ), true ) );
-		// error_log( 'INITIALS TABLES: ' . print_r( $initial_tables, true ) );
-		// error_log( 'RESERVATIONS TABLES: ' . print_r( $res_tables, true ) );
-
 		foreach ( $res_tables as $key => $value ) {
 
 			if ( in_array( $key, $temporal_space ) ) {
@@ -833,8 +828,6 @@ class WPRB_Reservations {
 				}
 			}
 		}
-
-		// error_log( 'TABLES BOOKED: ' . print_r( $output, true ) );
 
 		return $output;
 
@@ -851,6 +844,19 @@ class WPRB_Reservations {
 	public static function display_available_tables( $reservation_id = null, $date = null, $time = null ) {
 
 		$reservation_id = $reservation_id ? $reservation_id : get_the_ID();
+		$tables         = get_post_meta( $reservation_id, 'wprb-tables', true );
+		$booked_tables  = self::get_tables_booked( $date, $time );
+		$tables_rooms   = self::get_initial_tables();
+		$status         = get_post_meta( $reservation_id, 'wprb-status', true );
+
+		/*Change status if the time limit is reached*/
+		if ( in_array( $status, array( 'received', 'managed' ) ) && self::time_limit_reached( $reservation_id ) ) {
+			
+			$status = 'expired';
+		
+		}
+		
+		$disabled = in_array( $status, array( 'expired', 'completed' ) ) ? ' disabled' : '';
 
 		if ( ! $date || ! $time ) {
 
@@ -863,34 +869,28 @@ class WPRB_Reservations {
 
 		}
 
-		self::get_tables_booked( $date, $time );
+		echo '<select name="wprb-tables[]" id="wprb-tables" class="wprb-select" data-placeholder="' . esc_html__( 'Select one or more tables', 'wp-restaurant-booking' ) . '" multiple' . esc_html( $disabled ) . '>';
 
-		echo '<select name="wprb-tables[]" id="wprb-tables" class="wprb-select" data-placeholder="' . esc_html__( 'Select one or more tables', 'wp-restaurant-booking' ) . '" multiple>';
+			if ( is_array( $tables_rooms ) ) {
 
-			$tables        = get_post_meta( $reservation_id, 'wprb-tables', true );
-			$tables_rooms  = self::get_initial_tables();
-			$booked_tables = self::get_tables_booked( $date, $time );
+				foreach ( $tables_rooms as $key => $value ) {
 
-		if ( is_array( $tables_rooms ) ) {
+					if ( is_array( $value ) ) {
 
-			foreach ( $tables_rooms as $key => $value ) {
+						$count = count( $value );
 
-				if ( is_array( $value ) ) {
+						for ( $i = 0; $i < $count; $i++ ) {
 
-					$count = count( $value );
+							$table    = $key . '_' . ( $i + 1 );
+							$selected = ( is_array( $tables ) && in_array( $table, $tables ) ) ? ' selected="selected"' : '';
+							$disabled = in_array( $table, $booked_tables ) && ! in_array( $table, $tables ) ? ' disabled' : '';
 
-					for ( $i = 0; $i < $count; $i++ ) {
+							echo '<option value="' . esc_attr( $table ) . '"' . esc_html( $selected ) . esc_html( $disabled ) . '>' . esc_html( $value[ $i ] ) . '</option>';
 
-						$table    = $key . '_' . ( $i + 1 );
-						$selected = ( is_array( $tables ) && in_array( $table, $tables ) ) ? ' selected="selected"' : '';
-						$disabled = in_array( $table, $booked_tables ) && ! in_array( $table, $tables ) ? ' disabled' : '';
-
-						echo '<option value="' . esc_attr( $table ) . '"' . esc_html( $selected ) . esc_html( $disabled ) . '>' . esc_html( $value[ $i ] ) . '</option>';
-
+						}
 					}
 				}
 			}
-		}
 
 		echo '</select>';
 
@@ -1079,24 +1079,40 @@ class WPRB_Reservations {
 
 
 	/**
+	 * Check if the specified reservation has reached the time limit
+	 *
+	 * @param  int $post_id the reservation id.
+	 * @return bool
+	 */
+	public static function time_limit_reached( $post_id ) {
+
+		/*Reservations data*/
+		$get_date         = get_post_meta( $post_id, 'wprb-date', true );
+		$get_time         = get_post_meta( $post_id, 'wprb-time', true );
+		$expiration_time  = get_option( 'wprb-expiration-time' ) ? get_option( 'wprb-expiration-time' ) : 60;
+		$time_string      = $get_date . ' ' . $get_time;
+		$time_limit       = strtotime( $time_string ) + ( 60 * $expiration_time );
+		$now              = strtotime( 'now' );
+
+		if ( $now >= $time_limit ) {
+
+			return true;
+
+		}
+
+	}
+
+
+	/**
 	 * Get the reservation status and change it if expired
 	 *
 	 * @param  int $post_id the reservation id.
 	 */
 	public function get_filtered_status( $post_id ) {
 
-		/*Reservations data*/
-		$get_date        = get_post_meta( $post_id, 'wprb-date', true );
-		$get_time        = get_post_meta( $post_id, 'wprb-time', true );
-		$expiration_time = get_option( 'wprb-expiration-time' ) ? get_option( 'wprb-expiration-time' ) : 60;
-		$status          = get_post_meta( $post_id, 'wprb-status', true );
+		$status = get_post_meta( $post_id, 'wprb-status', true );
 
-		$time_string      = $get_date . ' ' . $get_time;
-		$reservation_time = date( 'Y-m-d H:i', strtotime( $time_string ) );
-		$time_limit       = strtotime( $time_string ) + ( 60 * $expiration_time );
-		$now              = strtotime( 'now' );
-
-		if ( in_array( $status, array( 'received', 'managed' ) ) && $now >= $time_limit ) {
+		if ( in_array( $status, array( 'received', 'managed' ) ) && self::time_limit_reached( $post_id ) ) {
 
 			$status = 'expired';
 			update_post_meta( $post_id, 'wprb-status', $status );
@@ -1163,8 +1179,6 @@ class WPRB_Reservations {
 				break;
 
 			case 'table':
-				
-				// echo implode( ', ', $tables );
 				self::display_available_tables( $post_id );
 
 				/*Backward compatibility*/

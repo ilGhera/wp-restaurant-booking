@@ -656,9 +656,13 @@ var wprbEditController = function() {
 				var bouble_container = $('.wprb.update-plugins');
 				var bouble           = $('.wprb.update-plugins span.update-count');
 				var bouble_val       = $(bouble).html() ? $(bouble).html() : 0;
-				var status_column    = $('.wprb-status-label.active').closest('td'); 
+				var status_column    = $('.wprb-status-label.active').closest('td');
+				var row              = $('.wprb-status-label.active').closest('tr');
+				var tables_select    = $('#wprb-tables', row);
 				var post_id          = $('.wprb-status-label.active').data('post-id');
 				var status           = $(this).data('status');
+				var disable_statuses = ['expired', 'completed'];
+				// 'received', 'managed', 'completed', 'expired'
 
 				if( $(this).hasClass('active') ) {
 
@@ -695,6 +699,20 @@ var wprbEditController = function() {
 
 						}
 
+						/*Disable tables select if necessary*/
+						if (disable_statuses.indexOf(status) >= 0) {
+
+							$(tables_select).attr('disabled', 'disabled');
+
+						} else {
+
+							$(tables_select).removeAttr('disabled');
+
+						}
+
+						self.chosen(true);
+						self.chosen();
+					
 					})
 
 				}
