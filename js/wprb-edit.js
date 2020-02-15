@@ -357,7 +357,6 @@ var wprbEditController = function() {
 			var args;
 			var id;
 
-			// $('tr.type-reservation .wprb-select').chosen().change(function(){
 			$('tr.type-reservation #wprb_tables_chosen').on('click', function(){
 				
 				row    = $(this).closest('tr.type-reservation');
@@ -391,24 +390,38 @@ var wprbEditController = function() {
 
 		jQuery(function($){
 
-			var row;
-			var args;
+			var status_column;
 			var tables;
+			var args;
+			var row;
 			var id;
 
 			$('tr.type-reservation .wprb-select').chosen().change(function(){
 				
-				row    = $(this).closest('tr.type-reservation');
-				id     = $(row).attr('id').split('-')[1];				
-				tables = $(this).val();
+				row           = $(this).closest('tr.type-reservation');
+				status_column = $('.status.column-status', row);
+				status        = $('a', status_column).data('status');
+				id            = $(row).attr('id').split('-')[1];				
+				tables        = $(this).val();
+
 				args   = {
 					'action': 'wprb-archive-update-tables',
 					'wprb-archive-tables-nonce': wprbSettings.archiveTablesNonce,
 					'reservation-id': id,
-					'tables': tables
+					'tables': tables,
+					'status': status
 				}
 
-				$.post(ajaxurl, args);
+				$.post(ajaxurl, args, function(response){
+
+					if ( response ) {
+
+						$(status_column).html(response);
+
+					}
+
+				});
+
 
 			})
 
@@ -615,9 +628,9 @@ var wprbEditController = function() {
 
 			var status_field = $('.wprb-status')
 
-			$('.wprb-tables').on('change', function(){
+			$('tr.wprb-tables #wprb-tables').chosen().change(function(){
 
-				if( '' == $(this).val() ) {
+				if( null == $(this).val() ) {
 
 					$('.wprb-status').val('received');
 

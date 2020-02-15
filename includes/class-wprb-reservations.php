@@ -973,6 +973,8 @@ class WPRB_Reservations {
 		if ( isset( $_POST['wprb-archive-tables-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wprb-archive-tables-nonce'] ), 'wprb-archive-tables' ) ) {
 
 			$reservation_id = isset( $_POST['reservation-id'] ) ? sanitize_text_field( wp_unslash( $_POST['reservation-id'] ) ) : '';
+			$status         = isset( $_POST['status'] ) ? sanitize_text_field( wp_unslash( $_POST['status'] ) ) : '';
+			$new_status     = null;
 			$tables         = array();
 
 			if ( $reservation_id ) {
@@ -985,13 +987,25 @@ class WPRB_Reservations {
 
 					}
 
+					$new_status = 'managed';
 					update_post_meta( $reservation_id, 'wprb-tables', $tables );
 
 				} else {
 
+					$new_status = 'received';
 					delete_post_meta( $reservation_id, 'wprb-tables' );
 
 				}
+				
+				if ( $new_status !== $status ) {
+
+					/*Change the status label*/
+					update_post_meta( $reservation_id, 'wprb-status', $new_status );
+					
+					echo $this->get_status_label( $new_status, $reservation_id, true );
+
+				}
+
 
 			}
 
