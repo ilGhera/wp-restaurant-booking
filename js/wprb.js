@@ -392,10 +392,16 @@ var wprbController = function() {
 
 					$('input', last_minute).removeClass('active');
 
+					/*Delete time if set */
+					$('.time-field').val('');
+					$('li.time .value').html(wprbSettings.timeLable);
+					$('.complete').removeClass('active');
+					$('.until-field').val('');
+
 				}
 				
 				$(last_minute).tooltipster('close');
-
+	
 			})
 
 		})
