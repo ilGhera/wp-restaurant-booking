@@ -20,12 +20,12 @@ var wprbEditController = function() {
 		self.hours_element();
 		self.last_minute_select();
 		self.external_element();
-		self.auto_change_reservation_status();
 		self.reservation_id_to_modal();
 		self.modal_status_label_activate();
 		self.modal_change_status();
 		self.update_archive_tables();
 		self.get_archive_tables_available();
+		self.auto_change_reservation_status();
 
 	}
 
@@ -298,6 +298,38 @@ var wprbEditController = function() {
 
 
 	/**
+	 * Auto-change the status when a table is assigned to the reservation
+	 */
+	self.auto_change_reservation_status = function() {
+
+		jQuery(function($){
+
+			console.log('yes!');
+
+			var status_field = $('.wprb-status')
+
+			$('tr.wprb-tables .wprb-select').chosen().change(function(){
+
+				console.log('test');
+
+				if( null == $(this).val() ) {
+
+					$('.wprb-status').val('received');
+
+				} else {
+
+					$('.wprb-status').val('managed');
+
+				}
+
+			})
+
+		})
+
+	}
+
+
+	/**
 	 * Display the tables field only if resDate and resTime are set.
 	 * Get tables available in a specified date and time.
 	 *
@@ -327,6 +359,9 @@ var wprbEditController = function() {
 					$('td', tables_element).html(response);
 					tables_element.show('slow');
 					self.chosen();
+
+					/*Auto-change the reservation status*/
+					self.auto_change_reservation_status();
 
 				})
 
@@ -609,34 +644,6 @@ var wprbEditController = function() {
 
 					$('.wprb-external-container').slideUp();
 					$('.wprb-external-container a').removeClass('active');
-
-				}
-
-			})
-
-		})
-
-	}
-
-
-	/**
-	 * Auto-change the status when a table is assigned to the reservation
-	 */
-	self.auto_change_reservation_status = function() {
-
-		jQuery(function($){
-
-			var status_field = $('.wprb-status')
-
-			$('tr.wprb-tables #wprb-tables').chosen().change(function(){
-
-				if( null == $(this).val() ) {
-
-					$('.wprb-status').val('received');
-
-				} else {
-
-					$('.wprb-status').val('managed');
 
 				}
 
