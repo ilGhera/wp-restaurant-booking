@@ -38,9 +38,9 @@ License: GPLv2
 == Changelog ==
 
 = 1.1.0 = 
-Release Date: xx February 2020
+Release Date: 17 February 2020
 
-* Enhancement: xxxx
+* Enhancement: New booking table management system
 
 
 = 1.0.0 = 
