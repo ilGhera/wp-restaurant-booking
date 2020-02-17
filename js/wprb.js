@@ -235,8 +235,8 @@ var wprbController = function() {
 				$(number).removeClass('active');
 				$(this).closest('li').addClass('active');
 
-				/*Activate date element*/
-				$('.date').addClass('active');
+				/*Activate time element*/
+				$('.time').addClass('active');
 
 				/*Activate the calendar*/
 				$(calendar).addClass('active');
