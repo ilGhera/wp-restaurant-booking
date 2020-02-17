@@ -304,13 +304,9 @@ var wprbEditController = function() {
 
 		jQuery(function($){
 
-			console.log('yes!');
-
 			var status_field = $('.wprb-status')
 
 			$('tr.wprb-tables .wprb-select').chosen().change(function(){
-
-				console.log('test');
 
 				if( null == $(this).val() ) {
 
