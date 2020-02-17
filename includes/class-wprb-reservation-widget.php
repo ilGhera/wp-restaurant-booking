@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/includes
- * @since 1.0.0
+ * @since 1.1.0
  */
 class WPRB_Reservation_Widget {
 
@@ -126,6 +126,7 @@ class WPRB_Reservation_Widget {
 		$locale                     = str_replace( '_', '-', get_locale() );
 		$closing_days               = self::get_days_off();
 		$get_periods                = get_option( 'wprb-closing-periods' );
+		$time_lable                 = __( 'Time', 'wp-restaurant-booking' );
 		$closing_periods            = array();
 
 		if ( is_array( $get_periods ) ) {
@@ -153,6 +154,7 @@ class WPRB_Reservation_Widget {
 				'locale'                  => $locale,
 				'closingDays'             => $closing_days,
 				'closingPeriods'          => $closing_periods,
+				'timeLable'               => $time_lable,
 			)
 		);
 
@@ -572,7 +574,11 @@ class WPRB_Reservation_Widget {
 	 */
 	public function step_2() {
 
-		echo '<div class="booking-step booking-hours"></div>';
+		echo '<div class="booking-step booking-hours">';
+
+			echo '<img class="loading" src="' . esc_url( WPRB_URI . 'images/loading.gif' ) . '">';
+
+		echo '</div>';
 
 	}
 

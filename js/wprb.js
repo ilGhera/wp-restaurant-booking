@@ -47,12 +47,16 @@ var wprbController = function() {
 
             		}
 
-		            $(this).tooltipster({
+	            	if ( '' != $(this).attr('title') ) {
 
-		        	   trigger: action,
-					   interactive: true
+			            $(this).tooltipster({
 
-		            });
+			        	   trigger: action,
+						   interactive: true
+
+			            });
+
+	            	}
 
 	            });
             	
@@ -90,6 +94,36 @@ var wprbController = function() {
 				$('.booking-step.booking-hours').html(response);
 
 			})
+
+		})
+
+	}
+
+
+	/**
+	 * Delete previous data changing the date
+	 */
+	self.reset_data = function() {
+
+		jQuery(function($){
+
+			var select   = $('.booking-people_numbers__number select');
+			var number   = $('.booking-people_numbers__number input');
+
+			$('.people-field').val('');
+			$('li.people .value').html('');
+
+			$('.time-field').val('');
+			$('li.time .value').html(wprbSettings.timeLable);
+			
+			$('.external-field').val('');
+			$('.until-field').val('');
+
+			$(select).closest('li').removeClass('active');
+			$(number).removeClass('active');
+
+			$('.time').removeClass('active');
+			$('.complete').removeClass('active');
 
 		})
 
@@ -153,6 +187,9 @@ var wprbController = function() {
 						self.hours_available_update( people_val, date );
 
 					}
+
+					/*Delete previous data set*/
+					self.reset_data();
 
 					/*Add data*/
 					$('li.date .value').html(display_date); // temp.
