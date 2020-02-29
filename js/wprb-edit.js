@@ -388,7 +388,7 @@ var wprbEditController = function() {
 			var args;
 			var id;
 
-			$('tr.type-reservation #wprb_tables_chosen').on('click', function(){
+			$('tr.type-reservation .wprb-select').on('chosen:showing_dropdown', function(){
 				
 				row    = $(this).closest('tr.type-reservation');
 				select = $('select.wprb-select', row);
