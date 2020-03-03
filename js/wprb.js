@@ -268,31 +268,35 @@ var wprbController = function() {
 
 			$(select).on('change', function(){
 
-				/*Activate only the number selected*/
-				$(number).removeClass('active');
-				$(this).closest('li').addClass('active');
+				if ( '' != $(this).val() && '+' != $(this).val() ) {
 
-				/*Activate time element*/
-				$('.time').addClass('active');
+					/*Activate only the number selected*/
+					$(number).removeClass('active');
+					$(this).closest('li').addClass('active');
 
-				/*Activate the calendar*/
-				$(calendar).addClass('active');
+					/*Activate time element*/
+					$('.time').addClass('active');
 
-				/*Add data*/
-				$('li.people .value').html($(this).val());
-				$('.people-field').val($(this).val());
+					/*Activate the calendar*/
+					$(calendar).addClass('active');
 
-				date = $('.date-field').val();
+					/*Add data*/
+					$('li.people .value').html($(this).val());
+					$('.people-field').val($(this).val());
 
-				if (date) {					
-					/*Get bookables*/
-					self.hours_available_update( $(this).val(), date );
+					date = $('.date-field').val();
+
+					if (date) {					
+						/*Get bookables*/
+						self.hours_available_update( $(this).val(), date );
+
+					}
+
+					/*Activate the hours step*/
+					$('.booking-step').removeClass('active');
+					$('.booking-hours').addClass('active');
 
 				}
-
-				/*Activate the hours step*/
-				$('.booking-step').removeClass('active');
-				$('.booking-hours').addClass('active');
 
 			})
 

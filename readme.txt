@@ -38,10 +38,11 @@ License: GPLv2
 == Changelog ==
 
 = 1.1.0 = 
-Release Date: 17 February 2020
+Release Date: 03 March 2020
 
-* Enhancement: New booking table management system
+* Enhancement: New booking tables management system
 * Bug Fix: Previously entered data not deleted at the change of booking date by the user 
+* Bug Fix: Reservation without numer of people possible with iOS 
 
 = 1.0.0 = 
 Release Date: 28 January 2020
