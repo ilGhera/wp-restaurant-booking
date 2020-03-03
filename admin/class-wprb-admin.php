@@ -22,6 +22,7 @@ class WPRB_Admin {
 
 			add_action( 'admin_init', array( $this, 'save_reservations_settings' ) );
 			add_action( 'admin_init', array( $this, 'save_last_minute_settings' ) );
+			add_action( 'admin_init', array( $this, 'save_rooms_tables_settings' ) );
 			add_action( 'admin_init', array( $this, 'save_notifications_settings' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'wprb_admin_scripts' ) );
 			add_action( 'admin_menu', array( $this, 'register_wprb_admin' ) );
@@ -350,6 +351,12 @@ class WPRB_Admin {
 
 			}
 
+			echo '<div class="go-premium">';
+
+				$this->go_premium();
+			
+			echo '</div>';
+	
 		echo '</div>';
 
 	}
@@ -439,8 +446,9 @@ class WPRB_Admin {
 	 */
 	public function room_tables( $number = 0, $data = array() ) {
 
-		$name   = isset( $data['name'] ) ? $data['name'] : '';
-		$tables = isset( $data['tables'] ) ? $data['tables'] : 0;
+		$name     = isset( $data['name'] ) ? $data['name'] : '';
+		$tables   = isset( $data['tables'] ) ? $data['tables'] : 0;
+		$disabled = 0 !== $number ? ' disabled' : '';
 
 		echo '<tr class="wprb-room-tables-element-' . esc_attr( $number ) . ' room-tables-element">';
 
@@ -449,10 +457,10 @@ class WPRB_Admin {
 			echo '<td>';
 
 				echo '<label>' . esc_html__( 'Name', 'wp-restaurant-booking' ) . '</label>';
-				echo '<input type="text" name="room-name-' . esc_attr( $number ) . '" value="' . esc_attr( $name ) . '" placeholder="' . sprintf( esc_attr( 'Room %d', 'wp-restaurant-booking' ), esc_attr( $number + 1 ) ) . '">';
+				echo '<input type="text" name="room-name-' . esc_attr( $number ) . '" value="' . esc_attr( $name ) . '" placeholder="' . sprintf( esc_attr( 'Room %d', 'wp-restaurant-booking' ), esc_attr( $number + 1 ) ) . '"' . $disabled . '>';
 
 				echo '<label>' . esc_html__( 'Tables', 'wp-restaurant-booking' ) . '</label>';
-				echo '<input type="number" name="tables-number-' . esc_attr( $number ) . '" min="1" value="' . esc_attr( $tables ) . '">';
+				echo '<input type="number" name="tables-number-' . esc_attr( $number ) . '" min="1" value="' . esc_attr( $tables ) . '"' . $disabled . '>';
 
 				if ( 0 === $number ) {
 

@@ -561,6 +561,10 @@ span.external {
 	color: #0073aa;
 }
 
+.go-premium {
+	display: none;
+}
+
 .old-table {
 	display: block;
 	color: #888;

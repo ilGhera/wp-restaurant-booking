@@ -13,6 +13,11 @@
 	<table class="form-table">
 
 		<?php $admin->display_rooms_tables_elements(); ?>
+
+		<tr class="go-premium">
+		   	<th></th>
+	    	<td><?php $admin->go_premium(); ?></td>
+		</tr>
 	
 	</table>
 

@@ -187,6 +187,9 @@ var wprbAdminController = function() {
 
 					$(prev).after(response);
 
+					/*Display go premium*/
+					$('.go-premium', container).show('slow');
+
 				})
 
 			})
@@ -205,9 +208,17 @@ var wprbAdminController = function() {
 
 			$(document).on('click', '.remove-hours-hover', function(){
 
-				var element = $(this).closest('.hours-element');
+				var container = $(this).closest('.wprb-hours-container');
+				var element   = $(this).closest('.hours-element');
 
 				$(element).remove();
+
+				/*Hide go premium*/
+				if ( $('.wprb-hours-element-2', container).length == 0 ) {
+
+					$('.go-premium', container).hide();
+
+				}
 
 			})
 
@@ -444,6 +455,9 @@ var wprbAdminController = function() {
 
 				$.post(ajaxurl, data, function(response){
 
+					/*Display go premium*/
+					$('.wprb-set-rooms-tables .go-premium').show('slow');
+					
 					$(prev).after(response);
 
 				})
@@ -467,6 +481,13 @@ var wprbAdminController = function() {
 				var element = $(this).closest('.room-tables-element');
 
 				$(element).remove();
+
+				/*Hide go premium*/
+				if ( $('.wprb-room-tables-element-1').length == 0 ) {
+
+					$('.wprb-set-rooms-tables .go-premium').hide();
+
+				}
 
 			})
 
