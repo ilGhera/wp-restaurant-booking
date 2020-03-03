@@ -3,7 +3,7 @@
  *
  * @author ilGhera
  * @package wc-restaurant-booking/css
- * @version 1.0.0
+ * @since 1.1.0
  */
 
 .padding-2 {
@@ -272,6 +272,14 @@ p.wprb-step-description.last-minute {
 
 .booking-date .datepicker {
 	margin: 0 auto;
+}
+
+.booking-hours {
+	text-align: center;
+}
+
+.booking-hours .loading {
+	margin-left: -10px;
 }
 
 .booking-hours ul {

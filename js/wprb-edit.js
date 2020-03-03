@@ -3,7 +3,7 @@
  * 
  * @author ilGhera
  * @package wc-restaurant-booking/js
- * @since 1.0.0
+ * @since 1.1.0
  */
 
 var wprbEditController = function() {
@@ -12,20 +12,54 @@ var wprbEditController = function() {
 
 	self.onLoad = function() {
 
+		self.tables_element_update();
+		self.chosen();
+		self.wprb_tooltipser();
 		self.people_element();
 		self.date_element();
 		self.hours_element();
 		self.last_minute_select();
 		self.external_element();
-		self.auto_change_reservation_status();
 		self.reservation_id_to_modal();
 		self.modal_status_label_activate();
 		self.modal_change_status();
-		self.wprb_tooltipser();
+		self.update_archive_tables();
+		self.get_archive_tables_available();
+		self.auto_change_reservation_status();
 
 	}
 
 	
+	/**
+	 * Fires Chosen
+	 * @param  {bool} destroy method distroy
+	 */
+	self.chosen = function(destroy = false) {
+
+		jQuery(function($){
+
+			var select = $('.wprb-select');
+
+			if (destroy) {
+
+				$(select).chosen('destroy');
+
+			} else {
+			
+				$(select).chosen({
+			
+					disable_search_threshold: 10
+					// width: '200px'
+				
+				});
+
+			}
+
+		})
+
+	}
+
+
 	/**
 	 * Tooltips
 	 */
@@ -215,7 +249,11 @@ var wprbEditController = function() {
 					
 					people = $('.wprb-people').val();
 
+					/*Update hours available*/
 					self.hours_element_update(people, date, true);
+
+					/*Update tables available*/
+					self.tables_element_update( date, $(this).val() );
 
 				}
 
@@ -251,6 +289,170 @@ var wprbEditController = function() {
 				}
 
 				$(last_minute).tooltipster('close');
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Auto-change the status when a table is assigned to the reservation
+	 */
+	self.auto_change_reservation_status = function() {
+
+		jQuery(function($){
+
+			var status_field = $('.wprb-status')
+
+			$('tr.wprb-tables .wprb-select').chosen().change(function(){
+
+				if( null == $(this).val() ) {
+
+					$('.wprb-status').val('received');
+
+				} else {
+
+					$('.wprb-status').val('managed');
+
+				}
+
+			})
+
+		})
+
+	}
+
+
+	/**
+	 * Display the tables field only if resDate and resTime are set.
+	 * Get tables available in a specified date and time.
+	 *
+	 * @param  {string} date the date
+	 * @param  {string} time the time
+	 * @return {string}      the field element
+	 */
+	self.tables_element_update = function( date = null, time = null ) {
+
+		jQuery(function($){
+
+			var tables_element = $('tr.wprb-tables');
+			var resDate        = $('.wprb-date').val()
+			var resTime        = $('.wprb-time').val();
+
+			if ( date && time ) {
+
+				var data = {
+					'action': 'wprb-available-tables',
+					'wprb-tables-nonce': wprbSettings.tablesNonce,
+					'date': date,
+					'time': time
+				}
+
+				$.post(ajaxurl, data, function(response){
+
+					$('td', tables_element).html(response);
+					tables_element.show('slow');
+					self.chosen();
+
+					/*Auto-change the reservation status*/
+					self.auto_change_reservation_status();
+
+				})
+
+			} else {
+
+				if ( ! resDate || ! resTime ) {
+
+					tables_element.hide();
+
+				}
+
+			}
+
+		})
+
+	}
+
+
+	/**
+	 * Get tables available directly from the admin archive page
+	 */
+	self.get_archive_tables_available = function() {
+
+		jQuery(function($){
+
+			var row;
+			var select;
+			var args;
+			var id;
+
+			$('tr.type-reservation .wprb-select').on('chosen:showing_dropdown', function(){
+				
+				row    = $(this).closest('tr.type-reservation');
+				select = $('select.wprb-select', row);
+				id     = $(row).attr('id').split('-')[1];
+
+				args   = {
+					'action': 'wprb-get-archive-tables-available',
+					'wprb-archive-tables-nonce': wprbSettings.archiveTablesNonce,
+					'reservation-id': id
+				}
+
+				$.post(ajaxurl, args, function(response){
+
+					$(select).html(response);
+					$(select).trigger('chosen:updated');
+
+				});
+
+			})
+
+		})
+
+	}
+
+	
+	/**
+	 * Update reservation tables directly from the admin archive page
+	 */
+	self.update_archive_tables = function() {
+
+		jQuery(function($){
+
+			var status_column;
+			var tables;
+			var args;
+			var row;
+			var id;
+
+			$('tr.type-reservation .wprb-select').chosen().change(function(){
+				
+				row           = $(this).closest('tr.type-reservation');
+				status_column = $('.status.column-status', row);
+				status        = $('a', status_column).data('status');
+				id            = $(row).attr('id').split('-')[1];				
+				tables        = $(this).val();
+
+				args   = {
+					'action': 'wprb-archive-update-tables',
+					'wprb-archive-tables-nonce': wprbSettings.archiveTablesNonce,
+					'reservation-id': id,
+					'tables': tables,
+					'status': status
+				}
+
+				$.post(ajaxurl, args, function(response){
+
+					if ( response ) {
+
+						$(status_column).html(response);
+
+					}
+
+				});
+
 
 			})
 
@@ -318,6 +520,9 @@ var wprbEditController = function() {
 					self.external_element_update( date, $(this).val() );
 
 				}
+
+				/*Update tables available*/
+				self.tables_element_update( date, $(this).val() );
 
 			})
 
@@ -444,34 +649,6 @@ var wprbEditController = function() {
 
 	}
 
-
-	/**
-	 * Auto-change the status when a table is assigned to the reservation
-	 */
-	self.auto_change_reservation_status = function() {
-
-		jQuery(function($){
-
-			var status_field = $('.wprb-status')
-
-			$('.wprb-table').on('change', function(){
-
-				if( '' == $(this).val() ) {
-
-					$('.wprb-status').val('received');
-
-				} else {
-
-					$('.wprb-status').val('managed');
-
-				}
-
-			})
-
-		})
-
-	}
-
 	
 	/**
 	 * Add class active to the status toggle clicked
@@ -535,9 +712,13 @@ var wprbEditController = function() {
 				var bouble_container = $('.wprb.update-plugins');
 				var bouble           = $('.wprb.update-plugins span.update-count');
 				var bouble_val       = $(bouble).html() ? $(bouble).html() : 0;
-				var status_column    = $('.wprb-status-label.active').closest('td'); 
+				var status_column    = $('.wprb-status-label.active').closest('td');
+				var row              = $('.wprb-status-label.active').closest('tr');
+				var tables_select    = $('#wprb-tables', row);
 				var post_id          = $('.wprb-status-label.active').data('post-id');
 				var status           = $(this).data('status');
+				var disable_statuses = ['expired', 'completed'];
+				// 'received', 'managed', 'completed', 'expired'
 
 				if( $(this).hasClass('active') ) {
 
@@ -574,6 +755,20 @@ var wprbEditController = function() {
 
 						}
 
+						/*Disable tables select if necessary*/
+						if (disable_statuses.indexOf(status) >= 0) {
+
+							$(tables_select).attr('disabled', 'disabled');
+
+						} else {
+
+							$(tables_select).removeAttr('disabled');
+
+						}
+
+						self.chosen(true);
+						self.chosen();
+					
 					})
 
 				}
