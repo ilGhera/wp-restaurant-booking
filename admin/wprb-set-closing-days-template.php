@@ -15,7 +15,7 @@
 		<tr>
 			<th scope="row"><?php esc_html_e( 'Week days', 'wp-restaurant-booking' ); ?></th>
 			<td>
-				<select name="wprb-closing-days[]" id="wprb-button-position" class="wprb-select" multiple>
+				<select name="wprb-closing-days[]" data-placeholder="<?php esc_html_e( 'Select some options', 'wp-restaurant-booking' ); ?>" id="wprb-button-position" class="wprb-select" multiple>
 					<?php
 					foreach ( WPRB_Admin::week() as $key => $value ) {
 						
