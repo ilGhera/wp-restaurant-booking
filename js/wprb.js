@@ -3,7 +3,7 @@
  * 
  * @author ilGhera
  * @package wc-restaurant-booking/js
- * @since 1.1.0
+ * @since 1.1.1
  */
 
 var wprbController = function() {
@@ -610,25 +610,32 @@ var wprbController = function() {
 
 				e.preventDefault();
 
-				var values = $(this).serializeArray();
+				if( !$(this).hasClass('sent') ) {
 
-				var data = {
-					'action': 'wprb-reservation',
-					'wprb-save-reservation-nonce': wprbSettings.saveReservationNonce,
-					'values': values
+					$(this).addClass('sent');
+
+					var values = $(this).serializeArray();
+
+					var data = {
+						'action': 'wprb-reservation',
+						'wprb-save-reservation-nonce': wprbSettings.saveReservationNonce,
+						'values': values
+					}
+
+					$.post(wprbSettings.ajaxURL, data, function(response){
+
+						$(container).html(response);
+
+						get_title = $('.booking-end').data('title');
+						
+						$(title).text(get_title);
+
+						$('.header-bar_steps li span').css('cursor', 'default');
+
+					})
+
 				}
 
-				$.post(wprbSettings.ajaxURL, data, function(response){
-
-					$(container).html(response);
-
-					get_title = $('.booking-end').data('title');
-					
-					$(title).text(get_title);
-
-					$('.header-bar_steps li span').css('cursor', 'default');
-
-				})
 
 			})
 
