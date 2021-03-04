@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/includes
- * @since 1.1.0
+ * @since 1.1.2
  */
 class WPRB_Reservation_Widget {
 
@@ -188,7 +188,7 @@ class WPRB_Reservation_Widget {
 
 			/*Change position if admin-bar is visible*/
 			$admin_bar = is_admin_bar_showing();
-			$class     = $admin_bar ? $class . ' admin-bar' : $class;
+			$class     = ( $class && $admin_bar ) ? $class . ' admin-bar' : $class;
 
 			if ( $class || $shortcode ) {
 
