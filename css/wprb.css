@@ -3,7 +3,7 @@
  *
  * @author ilGhera
  * @package wc-restaurant-booking/css
- * @since 1.1.0
+ * @since 1.1.2
  */
 
 .padding-2 {
@@ -18,6 +18,7 @@
 	border-radius: 5px;
 	cursor: pointer;
     pointer-events: auto;
+    line-height: 1;
     z-index: 999999;
 }
 
@@ -67,17 +68,27 @@
 	z-index: 9999999;
 }
 
+#wprb-booking-modal h2::before {
+    content: '';
+    padding: 0;
+    margin: 0;
+    height: 0;
+    background: none;
+}
+
 #wprb-booking-modal h2 {
 	text-align: center;
 	background: #f5b016;
 	margin: 0;
-	padding: 1rem;
+	padding: 40px 0 20px;
 	color: #fff;
+    font-size: 2em;
 	-webkit-border-radius: 8px 8px 0 0;
 	-moz-border-radius: 8px 8px 0 0;
 	-o-border-radius: 8px 8px 0 0;
 	-ms-border-radius: 8px 8px 0 0;
 	border-radius: 8px 8px 0 0;
+    line-height: 1;
 }
 
 .booking-label {
@@ -107,6 +118,7 @@
 	width: 25%;
 	text-align: center;
 	position: relative;
+    margin: 0;
 }
 
 .header-bar_steps li:first-child::before {
@@ -200,6 +212,7 @@ p.wprb-step-description.last-minute {
 	width: 30px;
 	height: 30px;
 	padding: 0;
+    color: #333;
 	background-color: #fff !important;
 	border-radius: 50% !important;
 	border: 1px solid #cdcdcd !important;
@@ -251,6 +264,7 @@ p.wprb-step-description.last-minute {
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 14px;
 	background-color: #fff;
+	background-image: none;
 	border: 1px solid #cdcdcd;
 }
 
@@ -279,7 +293,9 @@ p.wprb-step-description.last-minute {
 }
 
 .booking-hours .loading {
-	margin-left: -10px;
+    margin: 0 auto;
+    position: relative;
+    left: -6px;
 }
 
 .booking-hours ul {
@@ -440,6 +456,7 @@ p.wprb-step-description.last-minute {
 	text-transform: uppercase;
 	opacity: 0.8;
 	cursor: pointer;
+    height: auto;
 }
 
 #wprb-reservation input[type="submit"]:hover {
@@ -449,6 +466,7 @@ p.wprb-step-description.last-minute {
 #wprb-reservation textarea {
 	margin-bottom: 10px;
 	padding: 0.8rem;
+    font-size: 14px;
 }
 
 .wprb-confirmation-email {
