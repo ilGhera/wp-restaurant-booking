@@ -3,7 +3,7 @@ Contributors: ghera74
 Tags: booking, ticket, reservation, restaurant, bar, table, last minute, calendar, day, hour, outdor
 Version: 1.1.2
 Requires at least: 4.0
-Tested up to: 5.4
+Tested up to: 5.6
 License: GPLv2
 
 **WP Restaurant Booking** is a feature-rich and easy to use reservation system for bars and restaurants.
