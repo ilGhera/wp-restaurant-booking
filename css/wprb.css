@@ -224,6 +224,7 @@ p.wprb-step-description.last-minute {
 .booking-people_numbers__number input[type="button"]:hover,
 .booking-people_numbers__number input[type="button"].active {
 	background: #f5b016 !important;
+    text-decoration: none;
 	color: #fff; 	
 }
 
@@ -396,6 +397,7 @@ p.wprb-step-description.last-minute {
 .booking-hours ul li input:hover,
 .booking-hours ul li input.active {
 	color: #fff;
+    text-decoration: none;
 	background: #f5b016;
 }
 
@@ -447,52 +449,71 @@ p.wprb-step-description.last-minute {
 }
 
 #wprb-reservation input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    appearance:none;
     position: relative;
 	border: 1px solid #cdcdcd; /*temp*/
 	box-shadow: none;
 	width: 15px;
 	height: 15px;
+    overflow: hidden;
 	margin: 0 6px 0 0;
+    padding: 0;
 	cursor: pointer;
     top: 3px;
-    /* -webkit-appearance: checkbox !important; */
-    /* -moz-appearance: checkbox !important; */
-    /* -ms-appearance: checkbox !important; */
-    /* -o-appearance: checkbox !important; */
-    /* appearance: checkbox !important; */
-    /* filter: hue-rotate(140deg); */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -o-appearance: none;
-    appearance:none;
     background-color: #fff;
 }
 
 #wprb-reservation input[type="checkbox"]:checked {
     background-color: #f5b016;
-	margin: 0 6px 0 0;
-    top: 5px;
 }
 
 #wprb-reservation input[type="checkbox"]:checked:after {
     content: '✔';
     color: white;
     position: relative;
-    top: -4px;
+    top: -3px;
+    left: 1px;
+    border: 0;
+    transform: none;
+    display: block;
+	width: 15px;
+	height: 15px;
+    overflow: hidden;
+    text-align: left;
+}
+
+#wprb-reservation input[type="checkbox"]:checked:before {
+    content: '';
 }
 
 label[for="policy-field"] {
     display: block;
     margin: 20px 0;
 	color: #898989;	
+    font-size: 12px;
+    padding-left: 15px;
+    text-indent: -15px;
 }
 
 label[for="policy-field"] a {
     color: #666;
+    text-decoration: none;
 }
 
 #wprb-reservation input.error {
 	border: 1px solid red;	
+}
+
+#wprb-reservation input[type="submit"]:disabled {
+    opacity: 0.4;
+}
+
+#wprb-reservation input[type="submit"]:disabled:hover {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 #wprb-reservation input[type="submit"] {
