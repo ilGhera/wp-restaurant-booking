@@ -533,7 +533,9 @@ span.external {
 	margin-right: 6px;
 }
 
-#wprb-button-position {
+#wprb-button-position,
+#wprb-policy-page {
+
 	width: 160px;
 }
 

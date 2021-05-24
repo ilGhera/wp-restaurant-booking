@@ -709,6 +709,10 @@ class WPRB_Admin {
 			$button_position = isset( $_POST['wprb-button-position'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-button-position'] ) ) : '';
 			update_option( 'wprb-button-position', $button_position );
 
+			/*Policy page*/
+			$policy_page = isset( $_POST['wprb-policy-page'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-policy-page'] ) ) : '';
+			update_option( 'wprb-policy-page', $policy_page );
+
 			/*Display availables option*/
 			$display_number_availables = isset( $_POST['wprb-display-number-availables'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-display-number-availables'] ) ) : 0;
 			update_option( 'wprb-display-number-availables', $display_number_availables );

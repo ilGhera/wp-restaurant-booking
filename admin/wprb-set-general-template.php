@@ -14,6 +14,7 @@ $display_number_availables = get_option( 'wprb-display-number-availables' );
 $margin_time               = get_option( 'wprb-margin-time' );
 $medium_time               = get_option( 'wprb-medium-time' );
 $expiration_time           = get_option( 'wprb-expiration-time' );
+$policy_page               = get_option( 'wprb-policy-page' );
 ?>
 <!-- Form -->
 <form name="wprb-set-generals" class="wprb-set-generals wprb-form"  method="post" action="">
@@ -37,6 +38,33 @@ $expiration_time           = get_option( 'wprb-expiration-time' );
 				<p class="description"><?php esc_html_e( 'Booking button position. Custom position requires use of shortcode [booking-button].', 'wp-restaurant-booking' ); ?></p>
 			</td>
 		</tr>
+        <tr>
+            <th scope="row"><?php esc_html_e( 'Privacy policy', 'wp-restaurant-booking' ); ?></th>
+            <td>
+                <select name="wprb-policy-page" id="wprb-policy-page" class="wprb-select">
+                    <option value="0"><?php esc_html_e( 'No page', 'wp-restaurant-booking' ); ?></option>
+                    <?php
+                    $args = array(
+                        'post_type'      => 'page',
+                        'post_status'    => 'publish',
+                        'posts_per_page' => -1,
+                    );
+
+                    $pages = get_posts( $args );
+
+                    if ( is_array( $pages ) ) {
+                    
+                        foreach ( $pages as $page ) {
+
+                            echo '<option value="' . esc_attr( $page->ID ) . '">' . esc_html( $page->post_title ) . '</option>';
+
+                        }
+                    }
+                    ?>
+                </select>
+                <p class="description"><?php esc_html_e( 'Select the page to use for the privacy policy', 'wp-restaurant-booking' ) ?></p>
+            </td>
+        </tr>
 		<tr class="wprb-display-number-availables-field">
 			<th scope="row"><?php esc_html_e( 'Display number', 'wp-restaurant-booking' ); ?></th>
 			<td>

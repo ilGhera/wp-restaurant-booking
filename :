@@ -452,43 +452,25 @@ p.wprb-step-description.last-minute {
 	box-shadow: none;
 	width: 15px;
 	height: 15px;
-	margin: 0 6px 0 0;
+	margin-right: 6px;
 	cursor: pointer;
     top: 3px;
-    /* -webkit-appearance: checkbox !important; */
-    /* -moz-appearance: checkbox !important; */
-    /* -ms-appearance: checkbox !important; */
-    /* -o-appearance: checkbox !important; */
-    /* appearance: checkbox !important; */
-    /* filter: hue-rotate(140deg); */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -o-appearance: none;
-    appearance:none;
-    background-color: #fff;
+    -webkit-appearance: checkbox !important;
+    -moz-appearance: checkbox !important;
+    -ms-appearance: checkbox !important;
+    -o-appearance: checkbox !important;
+    appearance: checkbox !important;
+    background: red !important;
 }
 
-#wprb-reservation input[type="checkbox"]:checked {
+#wprb-reservation input[type="checkbox"]:checked ~ .checkmark {
     background-color: #f5b016;
-	margin: 0 6px 0 0;
-    top: 5px;
-}
-
-#wprb-reservation input[type="checkbox"]:checked:after {
-    content: '✔';
-    color: white;
-    position: relative;
-    top: -4px;
 }
 
 label[for="policy-field"] {
     display: block;
     margin: 20px 0;
 	color: #898989;	
-}
-
-label[for="policy-field"] a {
-    color: #666;
 }
 
 #wprb-reservation input.error {
