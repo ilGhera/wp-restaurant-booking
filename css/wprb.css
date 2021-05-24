@@ -219,6 +219,7 @@ p.wprb-step-description.last-minute {
 	font-size: 10px !important; 
 	font-weight: normal;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    cursor: pointer;
 }
 
 .booking-people_numbers__number input[type="button"]:hover,
@@ -527,6 +528,11 @@ label[for="policy-field"] a {
 
 #wprb-reservation input[type="submit"]:hover {
 	opacity: 1;
+}
+
+#wprb-reservation input::placeholder,
+#wprb-reservation textarea::placeholder {
+    color: #cacaca;
 }
 
 #wprb-reservation textarea {
