@@ -3,7 +3,7 @@
  * 
  * @author ilGhera
  * @package wc-restaurant-booking/js
- * @since 1.1.1
+ * @since 1.1.3
  */
 
 var wprbController = function() {
