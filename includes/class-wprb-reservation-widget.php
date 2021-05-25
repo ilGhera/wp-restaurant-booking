@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/includes
- * @since 1.1.2
+ * @since 1.1.3
  */
 class WPRB_Reservation_Widget {
 
@@ -609,7 +609,24 @@ class WPRB_Reservation_Widget {
 				echo '<input type="hidden" name="external-field" class="external-field" value="">';
 				echo '<input type="hidden" name="until-field" class="until-field" value="">';
 
-				echo '<input type="submit" class="wprb-complete-reservation" value="' . esc_attr__( 'Book now', 'wp-restaurant-booking' ) . '">';
+                $policy_page = get_option( 'wprb-policy-page' );
+
+                if ( $policy_page ) {
+
+                    $link = get_permalink( $policy_page );
+
+                    if ( $link ) {
+
+                        echo '<label for="policy-field">';
+                            echo '<input type="checkbox" name="policy-field" class="policy-field" value="1" checked>';
+                            echo sprintf( wp_kses_post( 'I agree with the <a href="%s" target="_blank">privacy policy</a>', 'wp-restaurant-booking' ), esc_url( $link ) );
+                        echo '</label>';
+
+                    }
+
+                }
+
+				echo '<input type="submit" class="wprb-complete-reservation" value="' . esc_attr__( 'book now', 'wp-restaurant-booking' ) . '">';
 
 			echo '</form>';
 
@@ -619,8 +636,8 @@ class WPRB_Reservation_Widget {
 
 
 	/**
-	 * Fourth step reservation
-	 * The End
+	 * fourth step reservation
+	 * the end
 	 *
 	 * @param string $first_name the customer first name.
 	 * @param string $email      the customer email.

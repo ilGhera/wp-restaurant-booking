@@ -3,7 +3,7 @@
  * 
  * @author ilGhera
  * @package wc-restaurant-booking/js
- * @since 1.1.1
+ * @since 1.1.3
  */
 
 var wprbController = function() {
@@ -17,6 +17,7 @@ var wprbController = function() {
 		self.time_select();
 		self.last_minute_select(); //temp.
 		self.manual_step_navigation();
+        self.privacy_policy();
 		self.complete_reservation();
 		self.reset_fields();
 		self.wprb_tooltipser();
@@ -569,7 +570,6 @@ var wprbController = function() {
 
 	/**
 	 * Delete widget hidden fields values
-	 * @return {[type]} [description]
 	 */
 	self.reset_fields = function() {
 
@@ -580,6 +580,44 @@ var wprbController = function() {
 		})
 
 	}
+
+    /**
+     * Privacy policy 
+     */
+    self.privacy_policy = function() {
+
+		jQuery(function($){
+            
+            var check    = $('.policy-field');
+            var complete = $('.wprb-complete-reservation');
+
+            if ( $(check).prop('checked') == false ) {
+
+                $(complete).attr('disabled', 'disabled');
+
+            } else {
+
+                $(complete).removeAttr('disabled');
+
+            }
+
+            $(check).on('change', function(){
+
+                if ( $(check).prop('checked') == false ) {
+
+                    $(complete).attr('disabled', 'disabled');
+
+                } else {
+
+                    $(complete).removeAttr('disabled');
+
+                }
+
+            })
+
+        })
+
+    }
 
 
 	/**

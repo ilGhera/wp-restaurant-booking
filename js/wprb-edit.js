@@ -3,7 +3,7 @@
  * 
  * @author ilGhera
  * @package wc-restaurant-booking/js
- * @since 1.1.0
+ * @since 1.1.3
  */
 
 var wprbEditController = function() {
@@ -603,15 +603,24 @@ var wprbEditController = function() {
 						$('.wprb-external-container.choise').slideUp();
 						$('.wprb-external-container.only').slideDown();
 
+                        // Save reservation not allowed if "only external" is not confermed
+                        $('#publish').attr('disabled', 'disabled');
+
 					} else if (  people <= parseInt(response) && people <= parseInt(internals) ) {
 
 						$('.wprb-external-container.only').slideUp();
 						$('.wprb-external-container.choise').slideDown();
 
+                        // Alllow save reservation
+                        $('#publish').removeAttr('disabled');
+
 					} else {
 
 						$('.wprb-external-container.only').slideUp();
 						$('.wprb-external-container.choise').slideUp();
+
+                        // Alllow save reservation
+                        $('#publish').removeAttr('disabled');
 
 					}
 
@@ -633,6 +642,9 @@ var wprbEditController = function() {
 						/*Add data*/
 						$(input).val(interested);
 
+                        // Alllow save reservation
+                        $('#publish').removeAttr('disabled');
+
 					})					
 
 
@@ -640,6 +652,9 @@ var wprbEditController = function() {
 
 					$('.wprb-external-container').slideUp();
 					$('.wprb-external-container a').removeClass('active');
+
+                    // Alllow save reservation
+                    $('#publish').removeAttr('disabled');
 
 				}
 

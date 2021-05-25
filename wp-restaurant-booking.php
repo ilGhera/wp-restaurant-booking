@@ -4,11 +4,10 @@
  * Plugin URI: https://www.ilghera.com/product/wordpress-restaurant-booking-premium
  * Description: A feature-rich and easy to use reservation system for bars and restaurants.
  * Author: ilGhera
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author URI: https://ilghera.com
  * Requires at least: 4.0
- * Tested up to: 5.6
- * WC tested up to: 4
+ * Tested up to: 5.7
  * Text Domain: wp-restaurant-booking
  * Domain Path: /languages
  */
