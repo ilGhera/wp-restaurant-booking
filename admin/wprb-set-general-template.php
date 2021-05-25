@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/admin
- * @since 1.1.3
+ * @since 1.1.4
  */
 
 $admin                     = new WPRB_Admin();
@@ -56,7 +56,9 @@ $policy_page               = get_option( 'wprb-policy-page' );
                     
                         foreach ( $pages as $page ) {
 
-                            echo '<option value="' . esc_attr( $page->ID ) . '">' . esc_html( $page->post_title ) . '</option>';
+                            echo '<option value="' . esc_attr( $page->ID ) . '"' . ( $page->ID === intval( $policy_page ) ? ' selected="selected"' : null ) . '>';
+                                echo esc_html( $page->post_title );
+                            echo '</option>';
 
                         }
                     }
