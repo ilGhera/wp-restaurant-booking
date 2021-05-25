@@ -1,7 +1,7 @@
 === WP Restaurant Booking ===
 Contributors: ghera74
 Tags: booking, ticket, reservation, restaurant, bar, table, last minute, calendar, day, hour, outdor
-Version: 1.1.4
+Version: 1.1.3
 Requires at least: 4.0
 Tested up to: 5.7
 License: GPLv2
@@ -58,17 +58,11 @@ License: GPLv2
 
 == Changelog ==
 
-= 1.1.4 = 
+= 1.1.3 = 
 Release Date: 25 May 2021
 
-* Bug Fix: Privacy policy option saved not shown in back-end.
-
-
-= 1.1.3 = 
-Release Date: 24 May 2021
-
 * Enhancement: Privacy policy option
-* Bug Fix: Reservation saved in back-end even without accepting only external table
+* Bug Fix: (Premium) Reservation saved in back-end even without accepting only external table
 
 
 = 1.1.2 = 
