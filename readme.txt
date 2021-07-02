@@ -27,6 +27,7 @@ License: GPLv2
 * Set an expiration time to consider a reservation as expired.
 * Admin and user email notifications.
 
+https://youtu.be/fAk2Hzm2E7k
 
 == Installation ==
 
