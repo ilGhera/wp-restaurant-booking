@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/includes
- * @since 1.1.0
+ * @since 1.1.5
  */
 class WPRB_Reservations {
 
