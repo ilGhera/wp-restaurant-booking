@@ -198,6 +198,7 @@ var wprbEditController = function() {
 
 		jQuery(function($){
 
+            var datepicker = $('.datepicker-here').datepicker().data('datepicker');
 			var hours_tr   = $('.wprb-hours');
 			var dateOnLoad = $('.wprb-date').val();
 			var people;
@@ -223,7 +224,11 @@ var wprbEditController = function() {
 				/*Display formatted resevation date in the field*/
 				setTimeout( function(){
 					
+                    // Set the date to the field value
 					$('.datepicker-here').attr( 'value', display_date.toLocaleString(wprbSettings.locale, dateOptions) );
+
+                    // Set the saved date
+                    datepicker.selectDate( new Date( display_date ) );
 
 				}, 400)
 
