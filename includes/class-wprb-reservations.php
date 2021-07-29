@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/includes
- * @since 1.1.0
+ * @since 1.1.5
  */
 class WPRB_Reservations {
 
@@ -51,6 +51,9 @@ class WPRB_Reservations {
 
 		if ( in_array( $admin_page->id, $pages ) ) {
 
+			$locale          = explode( '_', get_locale() );
+			$datepicker_lang = sprintf( '%sjs/air-datepicker/dist/js/i18n/datepicker.%s.js', WPRB_URI, $locale[0] );
+
 			/*css*/
 			wp_enqueue_style( 'wprb-admin-style', WPRB_URI . 'css/wprb-admin.css' );
 			wp_enqueue_style( 'datepicker-css', WPRB_URI . 'js/air-datepicker/dist/css/datepicker.min.css' );
@@ -59,8 +62,7 @@ class WPRB_Reservations {
 			/*js*/
 			wp_enqueue_script( 'wprb-edit-js', WPRB_URI . 'js/wprb-edit.js', array( 'jquery' ), '1.0', true );
 			wp_enqueue_script( 'datepicker-js', WPRB_URI . 'js/air-datepicker/dist/js/datepicker.min.js', array( 'jquery' ), '2.2.3', true );
-			wp_enqueue_script( 'datepicker-eng', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.en.js', array( 'jquery' ), '2.2.3', true );
-			wp_enqueue_script( 'datepicker-it', WPRB_URI . 'js/air-datepicker/dist/js/i18n/datepicker.it.js', array( 'jquery' ), '2.2.3', true );
+			wp_enqueue_script( 'datepicker-loc', $datepicker_lang, array( 'jquery' ), '2.2.3', true );
 			wp_enqueue_script( 'datepicker-options', WPRB_URI . 'js/wprb-datepicker-options.js', array( 'jquery' ), '2.2.3', true );
 			wp_enqueue_script( 'tooltipster', WPRB_URI . 'js/tooltipster/dist/js/tooltipster.bundle.min.js', array( 'jquery' ), '2.2.3', true );
 
@@ -189,7 +191,7 @@ class WPRB_Reservations {
 
 		echo '<div class="wrap">';
 
-			include( WPRB_INCLUDES . 'wprb-reservation-template.php' );
+			include WPRB_INCLUDES . 'wprb-reservation-template.php';
 
 		echo '</div>';
 
@@ -206,7 +208,7 @@ class WPRB_Reservations {
 	 */
 	public static function default_reservation_title( $post_id, $first_name, $last_name ) {
 
-		$post_title  = $first_name . ' ' . $last_name;
+		$post_title = $first_name . ' ' . $last_name;
 
 		$args = array(
 			'ID'         => $post_id,
@@ -372,7 +374,7 @@ class WPRB_Reservations {
 		$output             = array();
 		$get_bookable       = get_option( 'wprb-bookable' );
 		$external_activated = get_option( 'wprb-activate-external-seats' );
-		$bookable = ( $externals && $external_activated ) ? $get_bookable[ $day ]['externals'] : $get_bookable[ $day ]['bookable'];
+		$bookable           = ( $externals && $external_activated ) ? $get_bookable[ $day ]['externals'] : $get_bookable[ $day ]['bookable'];
 
 		/*The total bookable must include externals if activated*/
 		if ( $external_activated && ! $externals ) {
@@ -450,9 +452,9 @@ class WPRB_Reservations {
 			}
 		}
 
-		$booked       = new DateTime( $hour );
-		$end          = new DateTime( $hour );
-		$begin        = new DateTime( $hour );
+		$booked = new DateTime( $hour );
+		$end    = new DateTime( $hour );
+		$begin  = new DateTime( $hour );
 
 		$margin = new DateInterval( 'PT' . $medium_time . 'M' );
 
@@ -845,22 +847,22 @@ class WPRB_Reservations {
 	 */
 	public static function display_available_tables( $reservation_id = null, $date = null, $time = null, $only_options = false ) {
 
-		$tables_rooms   = self::get_initial_tables();
+		$tables_rooms = self::get_initial_tables();
 
 		if ( $tables_rooms ) {
 
 			$reservation_id = $reservation_id ? $reservation_id : get_the_ID();
 			$get_tables     = get_post_meta( $reservation_id, 'wprb-tables', true );
-			$tables         = $get_tables ? $get_tables : array(); 
+			$tables         = $get_tables ? $get_tables : array();
 			$status         = get_post_meta( $reservation_id, 'wprb-status', true );
 
 			/*Change status if the time limit is reached*/
 			if ( in_array( $status, array( 'received', 'managed' ) ) && self::time_limit_reached( $reservation_id ) ) {
-				
+
 				$status = 'expired';
-			
+
 			}
-			
+
 			$disabled = in_array( $status, array( 'expired', 'completed' ) ) ? ' disabled' : '';
 
 			if ( ! $date || ! $time ) {
@@ -874,7 +876,7 @@ class WPRB_Reservations {
 
 			}
 
-			$booked_tables  = self::get_tables_booked( $date, $time );
+			$booked_tables = self::get_tables_booked( $date, $time );
 
 			if ( ! $only_options ) {
 
@@ -908,10 +910,9 @@ class WPRB_Reservations {
 				echo '</select>';
 
 			}
-			
 		} else {
 
-			echo '<p class="description">' .  esc_html__( 'You haven\'t set any tables yet' , 'wp-restaurant-booking' ) . '</p>';
+			echo '<p class="description">' . esc_html__( 'You haven\'t set any tables yet', 'wp-restaurant-booking' ) . '</p>';
 
 		}
 
@@ -933,7 +934,6 @@ class WPRB_Reservations {
 				self::display_available_tables( null, $date, $time );
 
 			}
-		
 		}
 
 		exit;
@@ -955,7 +955,6 @@ class WPRB_Reservations {
 				self::display_available_tables( $reservation_id, null, null, true );
 
 			}
-		
 		}
 
 		exit;
@@ -996,19 +995,16 @@ class WPRB_Reservations {
 					delete_post_meta( $reservation_id, 'wprb-tables' );
 
 				}
-				
+
 				if ( $new_status !== $status ) {
 
 					/*Change the status label*/
 					update_post_meta( $reservation_id, 'wprb-status', $new_status );
-					
+
 					echo $this->get_status_label( $new_status, $reservation_id, true );
 
 				}
-
-
 			}
-
 		}
 
 		exit;
@@ -1044,13 +1040,13 @@ class WPRB_Reservations {
 				}
 			}
 
-			$date       = isset( $_POST['wprb-date'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-date'] ) ) : '';
-			$the_date   = date( 'Y-m-d', strtotime( $date ) );
-			$time       = isset( $_POST['wprb-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-time'] ) ) : '';
-			$until      = isset( $_POST['wprb-until'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-until'] ) ) : '';
-			$external   = isset( $_POST['wprb-external'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-external'] ) ) : '';
-			$notes      = isset( $_POST['wprb-notes'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-notes'] ) ) : '';
-			$status     = isset( $_POST['wprb-status'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-status'] ) ) : '';
+			$date     = isset( $_POST['wprb-date'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-date'] ) ) : '';
+			$the_date = date( 'Y-m-d', strtotime( $date ) );
+			$time     = isset( $_POST['wprb-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-time'] ) ) : '';
+			$until    = isset( $_POST['wprb-until'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-until'] ) ) : '';
+			$external = isset( $_POST['wprb-external'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-external'] ) ) : '';
+			$notes    = isset( $_POST['wprb-notes'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-notes'] ) ) : '';
+			$status   = isset( $_POST['wprb-status'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-status'] ) ) : '';
 
 			update_post_meta( $post_id, 'wprb-first-name', $first_name );
 			update_post_meta( $post_id, 'wprb-last-name', $last_name );
@@ -1145,12 +1141,12 @@ class WPRB_Reservations {
 	public static function time_limit_reached( $post_id ) {
 
 		/*Reservations data*/
-		$get_date         = get_post_meta( $post_id, 'wprb-date', true );
-		$get_time         = get_post_meta( $post_id, 'wprb-time', true );
-		$expiration_time  = get_option( 'wprb-expiration-time' ) ? get_option( 'wprb-expiration-time' ) : 60;
-		$time_string      = $get_date . ' ' . $get_time;
-		$time_limit       = strtotime( $time_string ) + ( 60 * $expiration_time );
-		$now              = strtotime( 'now' );
+		$get_date        = get_post_meta( $post_id, 'wprb-date', true );
+		$get_time        = get_post_meta( $post_id, 'wprb-time', true );
+		$expiration_time = get_option( 'wprb-expiration-time' ) ? get_option( 'wprb-expiration-time' ) : 60;
+		$time_string     = $get_date . ' ' . $get_time;
+		$time_limit      = strtotime( $time_string ) + ( 60 * $expiration_time );
+		$now             = strtotime( 'now' );
 
 		if ( $now >= $time_limit ) {
 
@@ -1196,7 +1192,7 @@ class WPRB_Reservations {
 		switch ( $column ) {
 
 			case 'day':
-				$day      = get_post_meta( $post_id, 'wprb-date', true );
+				$day     = get_post_meta( $post_id, 'wprb-date', true );
 				$the_day = date( 'd-m-Y', strtotime( $day ) );
 
 				echo esc_html( $the_day );
@@ -1240,7 +1236,7 @@ class WPRB_Reservations {
 				self::display_available_tables( $post_id );
 
 				/*Backward compatibility*/
-				$table  = get_post_meta( $post_id, 'wprb-table', true );
+				$table = get_post_meta( $post_id, 'wprb-table', true );
 				echo $table ? '<span class="old-table">' . esc_html( $table ) . '</span>' : '';
 
 				break;
