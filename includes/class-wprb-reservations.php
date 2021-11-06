@@ -1043,6 +1043,7 @@ class WPRB_Reservations {
 			$date     = isset( $_POST['wprb-date'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-date'] ) ) : '';
 			$the_date = date( 'Y-m-d', strtotime( $date ) );
 			$time     = isset( $_POST['wprb-time'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-time'] ) ) : '';
+            $time     = str_replace( 'h', ':', $time );
 			$until    = isset( $_POST['wprb-until'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-until'] ) ) : '';
 			$external = isset( $_POST['wprb-external'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-external'] ) ) : '';
 			$notes    = isset( $_POST['wprb-notes'] ) ? sanitize_text_field( wp_unslash( $_POST['wprb-notes'] ) ) : '';
