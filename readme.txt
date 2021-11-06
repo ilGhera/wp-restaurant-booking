@@ -1,7 +1,7 @@
 === WP Restaurant Booking ===
 Contributors: ghera74
 Tags: booking, ticket, reservation, restaurant, bar, table, last minute, calendar, day, hour, outdor
-Version: 1.1.4
+Version: 1.1.5
 Requires at least: 4.0
 Tested up to: 5.8
 License: GPLv2
@@ -43,7 +43,6 @@ https://youtu.be/fAk2Hzm2E7k
 * Activate WP Restaurant Booking from your Plugins page.
 * Once Activated, go to **WPRB** menu and set you preferences.
 
-
 == Screenshots ==
 
 1. Select date and number of people
@@ -58,6 +57,12 @@ https://youtu.be/fAk2Hzm2E7k
 
 
 == Changelog ==
+
+= 1.1.5 =
+Release Date: 6 November 2021
+
+* Bug Fix: Possible bad time format in reservations
+
 
 = 1.1.4 = 
 Release Date: 29 July 2021
