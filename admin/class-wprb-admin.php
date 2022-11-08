@@ -277,10 +277,10 @@ class WPRB_Admin {
 		echo '<div class="wprb-hours-element-' . esc_attr( $number ) . ' hours-element">';
 
 			echo '<label for="wprb-bookable-hours-from">' . esc_html__( 'From', 'wp-restaurant-booking' ) . '</label>';
-			echo '<input type="time" name="wprb-' . esc_attr( $day ) . '-bookable-hours-from-' . esc_attr( $number ) . '" id="wprb-' . esc_attr( $day ) . '-bookable-hours-from" class="wprb-bookable-hours-from" min="12:00" max="23:00" value="' . esc_attr( $from ) . '">';
+			echo '<input type="time" name="wprb-' . esc_attr( $day ) . '-bookable-hours-from-' . esc_attr( $number ) . '" id="wprb-' . esc_attr( $day ) . '-bookable-hours-from" class="wprb-bookable-hours-from"  max="23:59" value="' . esc_attr( $from ) . '">';
 
 			echo '<label for="wprb-bookable-hours-to">' . esc_html__( 'to', 'wp-restaurant-booking' ) . '</label>';
-			echo '<input type="time" name="wprb-' . esc_attr( $day ) . '-bookable-hours-to-' . esc_attr( $number ) . '" id="wprb-' . esc_attr( $day ) . '-bookable-hours-to" class="wprb-bookable-hours-to" min="12:00" max="23:00" value="' . esc_attr( $to ) . '">';
+			echo '<input type="time" name="wprb-' . esc_attr( $day ) . '-bookable-hours-to-' . esc_attr( $number ) . '" id="wprb-' . esc_attr( $day ) . '-bookable-hours-to" class="wprb-bookable-hours-to" max="23:59" value="' . esc_attr( $to ) . '">';
 
 			echo '<label for="wprb-bookable-hours-every">' . esc_html__( 'every (minutes)', 'wp-restaurant-booking' ) . '</label>';
 			echo '<input type="number" name="wprb-' . esc_attr( $day ) . '-bookable-hours-every-' . esc_attr( $number ) . '" id="wprb-' . esc_attr( $day ) . '-bookable-hours-every" class="wprb-bookable-hours-every" min="5" max="60" step="5" placeholder="15" value="' . esc_attr( $every ) . '">';
