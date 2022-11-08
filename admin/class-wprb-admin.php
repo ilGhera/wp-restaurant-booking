@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/admin
- * @since 1.1.3
+ * @since 1.1.7
  */
 class WPRB_Admin {
 
