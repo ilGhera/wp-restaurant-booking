@@ -60,7 +60,9 @@ add_action( 'plugins_loaded', 'load_wp_restaurant_booking_premium', 1 );
  * Update checker Builder
  */
 require( plugin_dir_path( __FILE__ ) . 'plugin-update-checker/plugin-update-checker.php' );
-$wprb_update_checker = Puc_v4_Factory::buildUpdateChecker(
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+$wprb_update_checker = PucFactory::buildUpdateChecker(
 	'https://www.ilghera.com/wp-update-server-2/?action=get_metadata&slug=wp-restaurant-booking-premium',
 	__FILE__,
 	'wp-restaurant-booking-premium'
