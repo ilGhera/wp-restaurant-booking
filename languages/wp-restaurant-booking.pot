@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP restaurant Booking 0.9.0\n"
-"POT-Creation-Date: 2022-11-24 09:09+0100\n"
+"POT-Creation-Date: 2022-11-25 18:08+0100\n"
 "PO-Revision-Date: 2019-11-04 21:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
@@ -473,12 +473,13 @@ msgid "Time"
 msgstr ""
 
 #: includes/class-wprb-reservation-widget.php:199
+#: includes/class-wprb-reservation-widget.php:631
 #: includes/class-wprb-reservation-widget.php:673
-msgid "Book now"
+msgid "book now"
 msgstr ""
 
 #: includes/class-wprb-reservation-widget.php:274
-msgid "Select the date"
+msgid "Select the day"
 msgstr ""
 
 #: includes/class-wprb-reservation-widget.php:285
@@ -566,10 +567,6 @@ msgstr ""
 
 #: includes/class-wprb-reservation-widget.php:606
 msgid "Add more details"
-msgstr ""
-
-#: includes/class-wprb-reservation-widget.php:631
-msgid "book now"
 msgstr ""
 
 #: includes/class-wprb-reservation-widget.php:649

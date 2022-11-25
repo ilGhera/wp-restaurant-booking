@@ -196,7 +196,7 @@ class WPRB_Reservation_Widget {
 
 				echo '<div class="wprb-booking-button' . esc_attr( $class ) . '">';
 
-					echo '<a href="#wprb-booking-modal" rel="modal:open">' . esc_html( wp_unslash( __( 'Book now', 'wp-restaurant-booking' ) ) ) . '</a>';
+					echo '<a href="#wprb-booking-modal" rel="modal:open">' . esc_html( ucfirst( __( 'book now', 'wp-restaurant-booking' ) ) ) . '</a>';
 
 				echo '</div>';
 
@@ -271,7 +271,7 @@ class WPRB_Reservation_Widget {
 		/*Date*/
 		echo '<div class="booking-step booking-date active">';
 
-			echo '<p class="wprb-step-description">' . esc_html__( 'Select the date', 'wp-restaurant-booking' ) . '</p>';
+			echo '<p class="wprb-step-description">' . esc_html__( 'Select the day', 'wp-restaurant-booking' ) . '</p>';
 
 			echo '<div class="datepicker-here" data-language="' . $this->lang() . '" data-inline="true"></div>'; // temp.
 
@@ -670,7 +670,7 @@ class WPRB_Reservation_Widget {
 
 		echo '<div id="wprb-booking-modal" class="wprb_modal">';
 
-			echo '<h2 class="wprb-widget-title">' . esc_html( wp_unslash( __( 'Book now', 'wp-restaurant-booking' ) ) ) . '</h2>';
+			echo '<h2 class="wprb-widget-title">' . esc_html( ucfirst( __( 'book now', 'wp-restaurant-booking' ) ) ) . '</h2>';
 
 			/*Header*/
 			echo '<div class="header-bar">';

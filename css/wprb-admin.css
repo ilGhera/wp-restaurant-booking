@@ -176,6 +176,7 @@ form#wprb-premium-key input.button {
 
 [class*="wprb-hours-element-"] {
 	display: block;
+    margin: 5px;
 }
 
 .hours-element input {
