@@ -37,7 +37,7 @@ $bookable       = get_option( 'wprb-bookable' );
 						}
 
 						/*The day*/
-						echo '<lable for="wprb-bookable-seats">' . esc_html( $value ) . '</lable><br>';
+						echo '<lable for="wprb-bookable-seats">' . esc_html( ucfirst( $value ) ) . '</lable><br>';
 
 						echo '<div class="wprb-col">';
 

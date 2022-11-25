@@ -20,7 +20,7 @@ $closing_days = get_option( 'wprb-closing-days' );
 					<?php
 					foreach ( WPRB_Admin::week() as $key => $value ) {
 						
-						echo '<option value="' . esc_attr( $key ) . '"' . ( is_array( $closing_days ) && in_array( $key , $closing_days) ? ' selected="selected"' : '' ) . '>' . esc_html( $value ) . '</option>';
+						echo '<option value="' . esc_attr( $key ) . '"' . ( is_array( $closing_days ) && in_array( $key , $closing_days) ? ' selected="selected"' : '' ) . '>' . esc_html( ucfirst( $value ) ) . '</option>';
 
 					}
 					?>

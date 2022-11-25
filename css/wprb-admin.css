@@ -178,6 +178,10 @@ form#wprb-premium-key input.button {
 	display: block;
 }
 
+.hours-element input {
+    width: 90px;
+}
+
 .hours-element label,
 .last-minute-element label,
 .closing-period-element label,
