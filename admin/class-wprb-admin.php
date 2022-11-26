@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/admin
- * @since 1.1.6
+ * @since 1.1.7
  */
 class WPRB_Admin {
 
@@ -229,13 +229,13 @@ class WPRB_Admin {
 	public static function week() {
 
 		return array(
-			'mon' => __( 'Monday', 'wp-restaurant-booking' ),
-			'tue' => __( 'Tuesday', 'wp-restaurant-booking' ),
-			'wed' => __( 'Wednesday', 'wp-restaurant-booking' ),
-			'thu' => __( 'Thursday', 'wp-restaurant-booking' ),
-			'fri' => __( 'Friday', 'wp-restaurant-booking' ),
-			'sat' => __( 'Saturday', 'wp-restaurant-booking' ),
-			'sun' => __( 'Sunday', 'wp-restaurant-booking' ),
+			'mon' => __( 'monday', 'wp-restaurant-booking' ),
+			'tue' => __( 'tuesday', 'wp-restaurant-booking' ),
+			'wed' => __( 'wednesday', 'wp-restaurant-booking' ),
+			'thu' => __( 'thursday', 'wp-restaurant-booking' ),
+			'fri' => __( 'friday', 'wp-restaurant-booking' ),
+			'sat' => __( 'saturday', 'wp-restaurant-booking' ),
+			'sun' => __( 'sunday', 'wp-restaurant-booking' ),
 		);
 
 	}

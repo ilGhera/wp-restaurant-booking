@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/admin
- * @since 1.0.0
+ * @since 1.1.7
  */
 
 ?>
@@ -19,7 +19,7 @@
 					<?php
 					foreach ( WPRB_Admin::week() as $key => $value ) {
 						
-						echo '<option value="' . esc_attr( $key ) . '">' . esc_html( $value ) . '</option>';
+						echo '<option value="' . esc_attr( $key ) . '">' . esc_html( ucfirst( $value ) ) . '</option>';
 
 					}
 					?>

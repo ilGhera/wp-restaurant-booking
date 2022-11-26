@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/admin
- * @since 1.0.0
+ * @since 1.1.8
  */
 
 $bookable       = get_option( 'wprb-bookable' );
@@ -37,7 +37,7 @@ $bookable       = get_option( 'wprb-bookable' );
 						}
 
 						/*The day*/
-						echo '<lable for="wprb-bookable-seats">' . esc_html( $value ) . '</lable><br>';
+						echo '<lable for="wprb-bookable-seats">' . esc_html( ucfirst( $value ) ) . '</lable><br>';
 
 						echo '<div class="wprb-col">';
 

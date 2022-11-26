@@ -1,7 +1,7 @@
 === WP Restaurant Booking ===
 Contributors: ghera74
 Tags: booking, ticket, reservation, restaurant, bar, table, last minute, calendar, day, hour, outdor
-Version: 1.1.6
+Version: 1.1.7
 Requires at least: 4.0
 Tested up to: 6.1
 License: GPLv2
@@ -57,6 +57,14 @@ https://youtu.be/fAk2Hzm2E7k
 
 
 == Changelog ==
+
+= 1.1.7 = 
+Release Date: 26 November 2022
+
+* Enhancement: Style implementation in hours settings 
+* Enhancement: Translation updated 
+* Bug fix: Incorrect text in the widget during the first stage of the booking process
+
 
 = 1.1.6 = 
 Release Date: 10 November 2022

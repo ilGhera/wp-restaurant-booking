@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/admin
- * @since 1.0.0
+ * @since 1.1.8
  */
 
 ?>
@@ -22,7 +22,7 @@
 				$class = 7 !== $n ? ' class=one-of' : '';
 				?>
 				<tr<?php echo esc_html( $class ); ?>>
-					<th scope="row"><?php echo esc_html( $value ); ?></th>
+					<th scope="row"><?php echo esc_html( ucfirst( $value ) ); ?></th>
 					<td>
 						<?php
 						$admin->display_hours_elements( $key );
