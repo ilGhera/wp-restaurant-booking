@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP Restaurant Booking - Stable (latest "
 "release)\n"
-"POT-Creation-Date: 2022-11-25 18:08+0100\n"
-"PO-Revision-Date: 2022-11-25 18:09+0100\n"
+"POT-Creation-Date: 2023-08-02 14:53+0200\n"
+"PO-Revision-Date: 2023-08-02 14:57+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: it\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Poedit-KeywordsList: __;esc_html__;esc_html_e;_e;esc_attr__;esc_attr_e\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -204,6 +204,32 @@ msgstr ""
 #: admin/class-wprb-admin.php:1116
 msgid "It seems like your <strong>Premium Key</strong> is not valid. "
 msgstr "Sembra che la tua <strong>chiave di licenza</strong> non sia valida. "
+
+#: admin/ilghera-notice/class-ilghera-notice.php:66
+msgid "Renew now"
+msgstr "Aggiorna ora"
+
+#: admin/ilghera-notice/class-ilghera-notice.php:66
+msgid "Get a license"
+msgstr "Ottieni una licenza"
+
+#: admin/ilghera-notice/class-ilghera-notice.php:107
+msgid "Your license is <u>expired</u> and you're unable to receive updates."
+msgstr ""
+"La licenza è <u>scaduta</u> e non sei in grado di ricevere aggiornamenti."
+
+#: admin/ilghera-notice/class-ilghera-notice.php:123
+msgid ""
+"It seems like your license is <u>not valid</u> and you're unable to receive "
+"updates."
+msgstr ""
+"Sembra che la licenza <u>non sia valida</u> e non sei in grado di ricevere "
+"aggiornamenti."
+
+#: admin/ilghera-notice/class-ilghera-notice.php:139
+msgid "You have not set up a license key and you cannot receive updates."
+msgstr ""
+"Non hai impostato una licenza e non sei in grado di ricevere aggiornamenti."
 
 #: admin/wprb-set-bookables-template.php:18
 #: admin/wprb-set-bookables-template.php:34
