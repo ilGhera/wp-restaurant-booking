@@ -8,3 +8,6 @@
 [submodule "js/tooltipster"]
 	path = js/tooltipster
 	url = https://github.com/iamceege/tooltipster.git
+[submodule "admin/ilghera-notice"]
+	path = admin/ilghera-notice
+	url = git@bitbucket.org:ilGhera/ilghera-notice.git

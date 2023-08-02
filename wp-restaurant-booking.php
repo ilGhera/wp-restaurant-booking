@@ -4,10 +4,10 @@
  * Plugin URI: https://www.ilghera.com/product/wordpress-restaurant-booking-premium
  * Description: A feature-rich and easy to use reservation system for bars and restaurants.
  * Author: ilGhera
- * Version: 1.1.8
+ * Version: 1.1.9
  * Author URI: https://ilghera.com
  * Requires at least: 4.0
- * Tested up to: 6.1
+ * Tested up to: 6.2
  * Text Domain: wp-restaurant-booking
  * Domain Path: /languages
  */
@@ -46,6 +46,7 @@ function load_wp_restaurant_booking_premium() {
 
 	/*Files required*/
 	require( WPRB_ADMIN . 'class-wprb-admin.php' );
+	require( WPRB_ADMIN . 'ilghera-notice/class-ilghera-notice.php' );
 	require( WPRB_INCLUDES . 'class-wprb-reservations.php' );
 	require( WPRB_INCLUDES . 'class-wprb-reservation-widget.php' );
 	require( WPRB_INCLUDES . 'class-wprb-notifications.php' );
