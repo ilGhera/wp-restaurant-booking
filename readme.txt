@@ -63,6 +63,7 @@ Release Date: 2 August 2023
 
 * Enhancement: (Premium) New admin notification for license expiration 
 * Update: (Premium) Plugin Update Checker
+* Update: Translations 
 
 
 = 1.1.7 = 
