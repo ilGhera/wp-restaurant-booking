@@ -397,7 +397,7 @@ class WPRB_Reservation_Widget {
 
 			}
 
-			echo '<ul>';
+			echo '<ul class="notranslate">';
 
 				/*The current hour*/
 				$now = current_time( 'timestamp' );
