@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/admin
- * @since 1.1.8
+ * @since 1.1.10
  */
 class WPRB_Admin {
 
@@ -1111,7 +1111,7 @@ class WPRB_Admin {
 				$message  = __( 'It seems like your <strong>Premium Key</strong> is expired. ', 'wp-restaurant-booking' );
 				$message .= __( 'Please, click <a href="https://www.ilghera.com/product/wp-restaurant-booking-premium/" target="_blank">here</a> for prices and details.', 'wp-restaurant-booking' );
 
-			} elseif ( ! isset( $decoded_key[2] ) || ( isset( $decoded_key[2] ) && 7302 !== $decoded_key[2] ) ) {
+			} elseif ( ! isset( $decoded_key[2] ) || ( isset( $decoded_key[2] ) && 7302 !== intval( $decoded_key[2] ) ) ) {
 
 				$message  = __( 'It seems like your <strong>Premium Key</strong> is not valid. ', 'wp-restaurant-booking' );
 				$message .= __( 'Please, click <a href="https://www.ilghera.com/product/wp-restaurant-booking-premium/" target="_blank">here</a> for prices and details.', 'wp-restaurant-booking' );
