@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP restaurant Booking 0.9.0\n"
-"POT-Creation-Date: 2023-08-02 14:53+0200\n"
+"POT-Creation-Date: 2023-11-11 19:55+0100\n"
 "PO-Revision-Date: 2019-11-04 21:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera\n"
@@ -403,77 +403,90 @@ msgstr ""
 msgid "Specify a different email message."
 msgstr ""
 
-#: includes/class-wprb-notifications.php:61
+#: includes/class-wprb-notifications.php:37
+msgid "Outdoor"
+msgstr ""
+
+#: includes/class-wprb-notifications.php:37
+msgid "Indoor"
+msgstr ""
+
+#: includes/class-wprb-notifications.php:71
 msgid "Thanks for your reservation [first-name]"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:75
+#: includes/class-wprb-notifications.php:87
 msgid ""
 "Hi [first-name],\n"
 "here are the details of your reservation:\n"
 "\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:76
+#: includes/class-wprb-notifications.php:88
 msgid "Day: [date]\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:77
+#: includes/class-wprb-notifications.php:89
 msgid "Time: [time]\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:81
-#: includes/class-wprb-notifications.php:119
+#: includes/class-wprb-notifications.php:93
+#: includes/class-wprb-notifications.php:140
 msgid ""
 "\n"
 "LAST MINUTE\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:82
-#: includes/class-wprb-notifications.php:120
+#: includes/class-wprb-notifications.php:94
+#: includes/class-wprb-notifications.php:141
 msgid ""
 "Until: [until]\n"
 "\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:86
-#: includes/class-wprb-notifications.php:124
+#: includes/class-wprb-notifications.php:98
+#: includes/class-wprb-notifications.php:145
 msgid "People: [people]\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:87
-#: includes/class-wprb-notifications.php:125
+#: includes/class-wprb-notifications.php:102
+#: includes/class-wprb-notifications.php:149
+msgid "Position: [in-outdoor]\n"
+msgstr ""
+
+#: includes/class-wprb-notifications.php:106
+#: includes/class-wprb-notifications.php:153
 msgid ""
 "Name: [first-name] [last-name]\n"
 "Email: [email]\n"
 "Phone: [phone]\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:91
-#: includes/class-wprb-notifications.php:129
+#: includes/class-wprb-notifications.php:110
+#: includes/class-wprb-notifications.php:157
 msgid ""
 "Notes: [notes]\n"
 "\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:99
+#: includes/class-wprb-notifications.php:118
 msgid "We are waiting for you!"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:114
+#: includes/class-wprb-notifications.php:135
 msgid ""
 "Hi,\n"
 "here are the details of the new reservation:\n"
 "\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:115
+#: includes/class-wprb-notifications.php:136
 msgid ""
 "Day: [date]\n"
 "Time: [time]\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:215
+#: includes/class-wprb-notifications.php:246
 #, php-format
 msgid "New reservation from %1$s for %2$s"
 msgstr ""
