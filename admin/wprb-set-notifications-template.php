@@ -4,7 +4,8 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/admin
- * @since 0.9.0
+ *
+ * @since 1.1.11
  */
 
 $admin_activate       = get_option( 'wprb-activate-admin-notification' );

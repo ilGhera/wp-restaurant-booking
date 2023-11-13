@@ -4,7 +4,8 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/includes
- * @since 0.9.0
+ *
+ * @since 1.1.11
  */
 class WPRB_Notifications {
 
