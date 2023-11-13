@@ -1,6 +1,6 @@
 === WP Restaurant Booking ===
 Contributors: ghera74
-Tags: booking, ticket, reservation, restaurant, bar, table, last minute, calendar, day, hour, outdor
+Tags: booking, ticket, reservation, restaurant, bar, table, last minute, calendar, day, hour, outdoor
 Version: 1.1.9
 Requires at least: 4.0
 Tested up to: 6.4
@@ -18,7 +18,7 @@ License: GPLv2
 * Booking widget position, even using the shortcode *[booking-button]*.
 * Set a number of bookable seats for each day of the week.
 * Define the time slots that can be booked every day
-* Outdor tables option (Premium).
+* Outdoor tables option (Premium).
 * Last minute table option (Premium).
 * Set time limit within which to book a table.
 * Set an average time of the customer at the table, useful for calculating availability.

@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - WP Restaurant Booking - Stable (latest "
 "release)\n"
-"POT-Creation-Date: 2023-11-13 15:50+0100\n"
-"PO-Revision-Date: 2023-11-13 15:51+0100\n"
+"POT-Creation-Date: 2023-11-13 16:56+0100\n"
+"PO-Revision-Date: 2023-11-13 16:57+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: it\n"
@@ -523,12 +523,12 @@ msgstr "POSTI DISPONIBILI\n"
 
 #: includes/class-wprb-reservation-widget.php:359
 #, php-format
-msgid "Indor: %d\n"
+msgid "Indoor: %d\n"
 msgstr "Interni: %d\n"
 
 #: includes/class-wprb-reservation-widget.php:362
 #, php-format
-msgid "Outdor: %d"
+msgid "Outdoor: %d"
 msgstr "Esterni: %d"
 
 #: includes/class-wprb-reservation-widget.php:396
@@ -696,7 +696,7 @@ msgid "Status"
 msgstr "Stato"
 
 #: includes/class-wprb-reservations.php:1219
-msgid "Outdor table"
+msgid "Outdoor table"
 msgstr "Tavolo esterno"
 
 #: includes/class-wprb-reservations.php:1219

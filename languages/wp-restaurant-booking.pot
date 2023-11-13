@@ -492,12 +492,12 @@ msgstr ""
 
 #: includes/class-wprb-reservation-widget.php:359
 #, php-format
-msgid "Indor: %d\n"
+msgid "Indoor: %d\n"
 msgstr ""
 
 #: includes/class-wprb-reservation-widget.php:362
 #, php-format
-msgid "Outdor: %d"
+msgid "Outdoor: %d"
 msgstr ""
 
 #: includes/class-wprb-reservation-widget.php:396
@@ -663,7 +663,7 @@ msgid "Status"
 msgstr ""
 
 #: includes/class-wprb-reservations.php:1219
-msgid "Outdor table"
+msgid "Outdoor table"
 msgstr ""
 
 #: includes/class-wprb-reservations.php:1219

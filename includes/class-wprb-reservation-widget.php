@@ -356,10 +356,10 @@ class WPRB_Reservation_Widget {
 					$title  = __( "AVAILABLE SEATS\n", 'wp-restaurant-booking' );
 
 					/* Translators: number of internals available */
-					$title .= sprintf( __( "Indor: %d\n", 'wp-restaurant-booking' ), $internals );
+					$title .= sprintf( __( "Indoor: %d\n", 'wp-restaurant-booking' ), $internals );
 
 					/* Translators: number of externals available */
-					$title .= sprintf( __( 'Outdor: %d', 'wp-restaurant-booking' ), $externals );
+					$title .= sprintf( __( 'Outdoor: %d', 'wp-restaurant-booking' ), $externals );
 
 				}
 

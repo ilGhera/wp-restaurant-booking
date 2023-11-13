@@ -1216,7 +1216,7 @@ class WPRB_Reservations {
 
 				} elseif ( $external ) {
 
-					echo esc_html( $time ) . '<span class="external" title="' . esc_attr__( 'Outdor table', 'wp-restaurant-booking' ) . '">' . esc_html__( 'EXT', 'wp-restaurant-booking' ) . '</span>';
+					echo esc_html( $time ) . '<span class="external" title="' . esc_attr__( 'Outdoor table', 'wp-restaurant-booking' ) . '">' . esc_html__( 'EXT', 'wp-restaurant-booking' ) . '</span>';
 
 				} else {
 
