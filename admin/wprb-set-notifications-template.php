@@ -4,7 +4,8 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/admin
- * @since 0.9.0
+ *
+ * @since 1.1.11
  */
 
 $admin_activate       = get_option( 'wprb-activate-admin-notification' );
@@ -70,7 +71,7 @@ $user_message         = null;
 					<?php
 					echo '<span class="shortcodes">';
 						echo '<code>[first-name]</code> <code>[last-name]</code> <code>[email]</code> <code>[phone]</code>';
-						echo '<code>[people]</code> <code>[date]</code> <code>[time]</code> <code>[until]</code> <code>[notes]</code>';
+						echo '<code>[people]</code> <code>[in-outdoor]</code> <code>[date]</code> <code>[time]</code> <code>[until]</code> <code>[notes]</code>';
 					echo '</span>';
 					esc_html_e( 'Specify a different email message.', 'wp-restaurant-booking' );
 					?>

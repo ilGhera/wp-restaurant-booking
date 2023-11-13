@@ -4,9 +4,17 @@
  *
  * @author ilGhera
  * @package wp-restaurant-booking/includes
- * @since 0.9.0
+ *
+ * @since 1.1.11
  */
 class WPRB_Notifications {
+
+    /**
+     * Is the external seats option activated?
+     *
+     * @var bool
+     */
+    public static $external_opt;
 
 
 	/**
@@ -16,7 +24,7 @@ class WPRB_Notifications {
 	 */
 	public function __construct( $values ) {
 
-		$this->values     = $values;
+        $this->values     = $values;
 		$this->first_name = isset( $values['first-name-field'] ) ? $values['first-name-field'] : '';
 		$this->last_name  = isset( $values['last-name-field'] ) ? $values['last-name-field'] : '';
 		$this->email      = isset( $values['email-field'] ) ? $values['email-field'] : '';
@@ -26,6 +34,16 @@ class WPRB_Notifications {
 		$this->time       = isset( $values['time-field'] ) ? $values['time-field'] : '';
 		$this->notes      = isset( $values['notes-field'] ) ? $values['notes-field'] : '';
 		$this->until      = isset( $values['until-field'] ) ? $values['until-field'] : '';
+
+        /* In-Outdoor */
+        self::$external_opt = get_option( 'wprb-activate-external-seats' );
+		$this->external     = __( 'Outdoor', 'wp-restaurant-booking' );
+
+        if ( isset( $values['external-field'] ) && 0 === intval( $values['external-field'] ) ) {
+
+            $this->external = __( 'Indoor', 'wp-restaurant-booking' );
+
+        }
 
 		$this->define_shortcodes();
 		$this->send_admin_notification();
@@ -47,6 +65,7 @@ class WPRB_Notifications {
 		add_shortcode( 'time', array( $this, 'render_shortcode' ) );
 		add_shortcode( 'notes', array( $this, 'render_shortcode' ) );
 		add_shortcode( 'until', array( $this, 'render_shortcode' ) );
+		add_shortcode( 'in-outdoor', array( $this, 'render_shortcode' ) );
 
 	}
 
@@ -71,6 +90,8 @@ class WPRB_Notifications {
 	 */
 	public static function default_user_message( $until = null, $notes = null ) {
 
+        self::$external_opt = get_option( 'wprb-activate-external-seats' );
+
 		$output  = __( "Hi [first-name],\nhere are the details of your reservation:\n\n", 'wp-restaurant-booking' );
 		$output .= __( "Day: [date]\n", 'wp-restaurant-booking' );
 		$output .= __( "Time: [time]\n", 'wp-restaurant-booking' );
@@ -83,6 +104,13 @@ class WPRB_Notifications {
 		}
 
 		$output .= __( "People: [people]\n", 'wp-restaurant-booking' );
+
+        if ( self::$external_opt ) {
+
+            $output .= __( "Position: [in-outdoor]\n", 'wp-restaurant-booking' );
+
+        }
+
 		$output .= __( "Name: [first-name] [last-name]\nEmail: [email]\nPhone: [phone]\n", 'wp-restaurant-booking' );
 
 		if ( $notes ) {
@@ -110,6 +138,8 @@ class WPRB_Notifications {
 	 */
 	public static function default_admin_message( $until = null, $notes = null ) {
 
+        self::$external_opt = get_option( 'wprb-activate-external-seats' );
+
 		$output  = __( "Hi,\nhere are the details of the new reservation:\n\n", 'wp-restaurant-booking' );
 		$output .= __( "Day: [date]\nTime: [time]\n", 'wp-restaurant-booking' );
 
@@ -121,6 +151,13 @@ class WPRB_Notifications {
 		}
 
 		$output .= __( "People: [people]\n", 'wp-restaurant-booking' );
+
+        if ( self::$external_opt ) {
+
+            $output .= __( "Position: [in-outdoor]\n", 'wp-restaurant-booking' );
+
+        }
+
 		$output .= __( "Name: [first-name] [last-name]\nEmail: [email]\nPhone: [phone]\n", 'wp-restaurant-booking' );
 
 		if ( $notes ) {
@@ -171,6 +208,9 @@ class WPRB_Notifications {
 				break;
 			case 'until':
 				return $this->until;
+				break;
+			case 'in-outdoor':
+                return $this->external;
 				break;
 		}
 

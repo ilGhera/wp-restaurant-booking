@@ -192,7 +192,7 @@ msgstr ""
 #: admin/wprb-set-closing-days-template.php:48
 #: admin/wprb-set-general-template.php:103 admin/wprb-set-hours-template.php:48
 #: admin/wprb-set-last-minute-template.php:51
-#: admin/wprb-set-notifications-template.php:86
+#: admin/wprb-set-notifications-template.php:87
 #: admin/wprb-set-tables-template.php:27
 msgid "Save settings"
 msgstr ""
@@ -320,113 +320,126 @@ msgstr ""
 msgid "Last minute time and people details."
 msgstr ""
 
-#: admin/wprb-set-notifications-template.php:26
+#: admin/wprb-set-notifications-template.php:27
 msgid "Admin notifications"
 msgstr ""
 
-#: admin/wprb-set-notifications-template.php:29
+#: admin/wprb-set-notifications-template.php:30
 msgid "Activate email notifications for the admin."
 msgstr ""
 
-#: admin/wprb-set-notifications-template.php:48
+#: admin/wprb-set-notifications-template.php:49
 msgid "Add all the recipients necessary divided by a comma."
 msgstr ""
 
-#: admin/wprb-set-notifications-template.php:52
+#: admin/wprb-set-notifications-template.php:53
 msgid "User notifications"
 msgstr ""
 
-#: admin/wprb-set-notifications-template.php:55
+#: admin/wprb-set-notifications-template.php:56
 msgid "Activate email notifications for the user."
 msgstr ""
 
-#: admin/wprb-set-notifications-template.php:59
+#: admin/wprb-set-notifications-template.php:60
 msgid "Object"
 msgstr ""
 
-#: admin/wprb-set-notifications-template.php:62
+#: admin/wprb-set-notifications-template.php:63
 msgid "Specify a different email object."
 msgstr ""
 
-#: admin/wprb-set-notifications-template.php:66
+#: admin/wprb-set-notifications-template.php:67
 msgid "Message"
 msgstr ""
 
-#: admin/wprb-set-notifications-template.php:75
+#: admin/wprb-set-notifications-template.php:76
 msgid "Specify a different email message."
 msgstr ""
 
-#: includes/class-wprb-notifications.php:60
+#: includes/class-wprb-notifications.php:40
+msgid "Outdoor"
+msgstr ""
+
+#: includes/class-wprb-notifications.php:44
+msgid "Indoor"
+msgstr ""
+
+#: includes/class-wprb-notifications.php:79
 msgid "Thanks for your reservation [first-name]"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:74
+#: includes/class-wprb-notifications.php:95
 msgid ""
 "Hi [first-name],\n"
 "here are the details of your reservation:\n"
 "\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:75
+#: includes/class-wprb-notifications.php:96
 msgid "Day: [date]\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:76
+#: includes/class-wprb-notifications.php:97
 msgid "Time: [time]\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:80
-#: includes/class-wprb-notifications.php:118
+#: includes/class-wprb-notifications.php:101
+#: includes/class-wprb-notifications.php:148
 msgid ""
 "\n"
 "LAST MINUTE\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:81
-#: includes/class-wprb-notifications.php:119
+#: includes/class-wprb-notifications.php:102
+#: includes/class-wprb-notifications.php:149
 msgid ""
 "Until: [until]\n"
 "\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:85
-#: includes/class-wprb-notifications.php:123
+#: includes/class-wprb-notifications.php:106
+#: includes/class-wprb-notifications.php:153
 msgid "People: [people]\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:86
-#: includes/class-wprb-notifications.php:124
+#: includes/class-wprb-notifications.php:110
+#: includes/class-wprb-notifications.php:157
+msgid "Position: [in-outdoor]\n"
+msgstr ""
+
+#: includes/class-wprb-notifications.php:114
+#: includes/class-wprb-notifications.php:161
 msgid ""
 "Name: [first-name] [last-name]\n"
 "Email: [email]\n"
 "Phone: [phone]\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:90
-#: includes/class-wprb-notifications.php:128
+#: includes/class-wprb-notifications.php:118
+#: includes/class-wprb-notifications.php:165
 msgid ""
 "Notes: [notes]\n"
 "\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:98
+#: includes/class-wprb-notifications.php:126
 msgid "We are waiting for you!"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:113
+#: includes/class-wprb-notifications.php:143
 msgid ""
 "Hi,\n"
 "here are the details of the new reservation:\n"
 "\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:114
+#: includes/class-wprb-notifications.php:144
 msgid ""
 "Day: [date]\n"
 "Time: [time]\n"
 msgstr ""
 
-#: includes/class-wprb-notifications.php:214
+#: includes/class-wprb-notifications.php:254
 #, php-format
 msgid "New reservation from %1$s for %2$s"
 msgstr ""

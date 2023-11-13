@@ -1,9 +1,9 @@
 === WP Restaurant Booking ===
 Contributors: ghera74
 Tags: booking, ticket, reservation, restaurant, bar, table, last minute, calendar, day, hour, outdor
-Version: 1.1.8
+Version: 1.1.9
 Requires at least: 4.0
-Tested up to: 6.2
+Tested up to: 6.4
 License: GPLv2
 
 **WP Restaurant Booking** is a feature-rich and easy to use reservation system for bars and restaurants.
@@ -57,6 +57,16 @@ https://youtu.be/fAk2Hzm2E7k
 
 
 == Changelog ==
+
+= 1.1.9 = 
+Release Date: 13 October 2023
+
+* Enhancement: In-Outdoor reserversion specified in admin email message
+* Enhancement: (Premium) In-Outdoor reserversion specified in user email message
+* Update: (Premium) Plugin Update Checker 
+* Update: Translations
+* Update: Tooltipster 
+
 
 = 1.1.8 = 
 Release Date: 2 August 2023
