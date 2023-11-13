@@ -42,6 +42,8 @@ Release Date: 13 October 2023
 
 * Enhancement: In-Outdoor reserversion specified in admin and user email messages 
 * Update: Translations
+* Update: Plugin Update Checker 
+* Update: Tooltipster 
 
 
 = 1.1.10 = 
